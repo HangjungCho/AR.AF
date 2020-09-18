@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonApplication2", "PythonApplication2\PythonApplication2.pyproj", "{6DEB5BAA-5847-45B8-BA20-4BDA737BA5DB}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Notebook_Network", "Notebook_Network\Notebook_Network.pyproj", "{38EC71FC-52FC-4C0A-A00E-BEFD1912EBD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +11,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6DEB5BAA-5847-45B8-BA20-4BDA737BA5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DEB5BAA-5847-45B8-BA20-4BDA737BA5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38EC71FC-52FC-4C0A-A00E-BEFD1912EBD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38EC71FC-52FC-4C0A-A00E-BEFD1912EBD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {580A9AE4-C212-453F-867D-2574229BE649}
+		SolutionGuid = {E13084AA-0BD0-4FFE-BC63-3087E38C6900}
 	EndGlobalSection
 EndGlobal
