@@ -1,5 +1,4 @@
 print('test')
 print('js test')
-'2616'
-
+a=1
 b=2
