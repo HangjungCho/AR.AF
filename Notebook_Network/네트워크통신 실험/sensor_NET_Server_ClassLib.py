@@ -3,7 +3,7 @@ from multiprocessing import Process, Queue
 
 import time
 import socket
-import sqlite3
+#import sqlite3
 import sys
 
 class SensorReceptionProcess( Process ):
@@ -86,11 +86,11 @@ class ClientProcess( Process ):
                         len( time_data ) >= self.TIME_BUFSIZE ):
                         data = date_data, time_data, kind_data, value_data
 
-                        conn = sqlite3.connect( 'sensor.db' )
-                        with conn:
-                            cursor = conn.cursor()
-                            cursor.execute( 'INSERT INTO sensor_measure( date, time, kind, measurevalue ) VALUES ( ?, ?, ?, ? )', data )
-                            conn.commit()
+                        #conn = sqlite3.connect( 'sensor.db' )
+                        #with conn:
+                        #    cursor = conn.cursor()
+                        #    cursor.execute( 'INSERT INTO sensor_measure( date, time, kind, measurevalue ) VALUES ( ?, ?, ?, ? )', data )
+                        #    conn.commit()
                         print( "{0} {1} {2} {3}\ninsert complete...\n".format( kind_data, date_data, time_data, value_data ) )
                 else:
                     loop = False
