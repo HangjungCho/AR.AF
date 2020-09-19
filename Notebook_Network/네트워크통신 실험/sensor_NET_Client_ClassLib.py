@@ -1,6 +1,5 @@
 # sensor_NET_Client_ClassLib.py
 from multiprocessing import Process, Queue
-from sensor_NET_ClassLib import USonicProcess, TempHumiProcess, LightProcess
 
 import sqlite3
 import socket
