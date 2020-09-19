@@ -47,11 +47,10 @@ class SensorReceptionProcess( Process ):
 class ClientProcess( Process ):
     def __init__( self, c_sock, c_address ):
         Process.__init__( self, name = "ClientProcess" )
-
-        self.DATE_BUFSIZE = 10
-        self.TIME_BUFSIZE = 8
-        self.KIND_BUFSIZE = 5
-        self.VALUE_BUFSIZE = 11
+        self.KIND_BUFSIZE = 50
+        #self.DATE_BUFSIZE = 10
+        #self.TIME_BUFSIZE = 8
+        #self.VALUE_BUFSIZE = 11
 
         self.client_sock = c_sock
         self.client_address = c_address
@@ -71,27 +70,28 @@ class ClientProcess( Process ):
                 print( "receiving waiting...\n" )
                 recv_kind = self.client_sock.recv( self.KIND_BUFSIZE )
                 if ( recv_kind != 'END'):
-                    recv_date = self.client_sock.recv( self.DATE_BUFSIZE )
-                    recv_time = self.client_sock.recv( self.TIME_BUFSIZE )
-                    recv_value = self.client_sock.recv( self.VALUE_BUFSIZE )
+                    #recv_date = self.client_sock.recv( self.DATE_BUFSIZE )
+                    #recv_time = self.client_sock.recv( self.TIME_BUFSIZE )
+                    #recv_value = self.client_sock.recv( self.VALUE_BUFSIZE )
                     print( "receiving complete..." )
-
-                    date_data = recv_date.decode()
-                    time_data = recv_time.decode()
                     kind_data = recv_kind.decode()
-                    value_data = float( recv_value.decode() )
+                    print(kind_data)
+                    #date_data = recv_date.decode()
+                    #time_data = recv_time.decode()
+                    #kind_data = recv_kind.decode()
+                    #value_data = float( recv_value.decode() )
 
-                    if ( len( kind_data ) >= self.KIND_BUFSIZE and
-                        len( date_data ) >= self.DATE_BUFSIZE and
-                        len( time_data ) >= self.TIME_BUFSIZE ):
-                        data = date_data, time_data, kind_data, value_data
+                    #if ( len( kind_data ) >= self.KIND_BUFSIZE and
+                    #    len( date_data ) >= self.DATE_BUFSIZE and
+                    #    len( time_data ) >= self.TIME_BUFSIZE ):
+                    #    data = date_data, time_data, kind_data, value_data
 
                         #conn = sqlite3.connect( 'sensor.db' )
                         #with conn:
                         #    cursor = conn.cursor()
                         #    cursor.execute( 'INSERT INTO sensor_measure( date, time, kind, measurevalue ) VALUES ( ?, ?, ?, ? )', data )
                         #    conn.commit()
-                        print( "{0} {1} {2} {3}\ninsert complete...\n".format( kind_data, date_data, time_data, value_data ) )
+                        #print( "{0} {1} {2} {3}\ninsert complete...\n".format( kind_data, date_data, time_data, value_data ) )
                 else:
                     loop = False
 
