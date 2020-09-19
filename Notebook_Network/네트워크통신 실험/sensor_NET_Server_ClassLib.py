@@ -93,7 +93,7 @@ class ClientProcess( Process ):
                         #    conn.commit()
                         #print( "{0} {1} {2} {3}\ninsert complete...\n".format( kind_data, date_data, time_data, value_data ) )
                 else:
-                    loop = False
+                    continue
 
         except FileNotFoundError:
             pass

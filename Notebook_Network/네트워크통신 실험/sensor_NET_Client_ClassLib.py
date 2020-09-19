@@ -45,7 +45,7 @@ class SensorClientProcess( Process, NetClient ):
         Process.__init__( self, name = "SensorProcess" )
         NetClient.__init__( self, hostIP, hostPort )
         
-        self.value = 30
+        self.value = 1
         self.host = hostIP
         self.port = hostPort
 
