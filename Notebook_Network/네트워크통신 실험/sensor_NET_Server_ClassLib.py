@@ -106,7 +106,7 @@ class ClientProcess( Process ):
             sys.exit()
 
 def main():
-    sensorManageProcess = SensorReceptionProcess( '192.168.43.143', 9000 )
+    sensorManageProcess = SensorReceptionProcess( '172.20.10.14', 9000 )
     sensorManageProcess.start()
     sensorManageProcess.join()
     print( "Stop Main Process..." )
