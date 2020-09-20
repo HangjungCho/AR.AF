@@ -1,10 +1,16 @@
-# sensor_NET_Client_ClassLib.py
+# Network_Client.py
+from tensorflow.keras.models import load_model
 from multiprocessing import Process, Queue
+
+import tensorflow as tf
+import cv2
+import numpy as np 
 
 import sqlite3
 import socket
 import time, datetime
 import sys
+import math
 
 class NetClient():
     def __init__( self, hostIP, hostPort ):
