@@ -6,9 +6,9 @@ import socket
 #import sqlite3
 import sys
 
-class SensorReceptionProcess( Process ):
+class ReceptionProcess( Process ):
     def __init__( self, ip, port ):
-        Process.__init__( self, name = "SensorReceptionProcess" )
+        Process.__init__( self, name = "ReceptionProcess" )
 
         self.server_ip = ip
         self.server_port = port
@@ -48,9 +48,6 @@ class ClientProcess( Process ):
     def __init__( self, c_sock, c_address ):
         Process.__init__( self, name = "ClientProcess" )
         self.KIND_BUFSIZE = 50
-        #self.DATE_BUFSIZE = 10
-        #self.TIME_BUFSIZE = 8
-        #self.VALUE_BUFSIZE = 11
 
         self.client_sock = c_sock
         self.client_address = c_address
@@ -61,39 +58,22 @@ class ClientProcess( Process ):
         self.client_sock.close()
 
 
-
     def run( self ):
-        loop = True
-
         try:
+            loop = True
             while ( loop ):
                 print( "receiving waiting...\n" )
                 recv_kind = self.client_sock.recv( self.KIND_BUFSIZE )
-                if ( recv_kind != 'END'):
-                    #recv_date = self.client_sock.recv( self.DATE_BUFSIZE )
-                    #recv_time = self.client_sock.recv( self.TIME_BUFSIZE )
-                    #recv_value = self.client_sock.recv( self.VALUE_BUFSIZE )
-                    print( "receiving complete..." )
+                print("recv : {}".format(recv_kind))
+                if ( recv_kind != b'END'):
                     kind_data = recv_kind.decode()
-                    print(kind_data)
-                    #date_data = recv_date.decode()
-                    #time_data = recv_time.decode()
-                    #kind_data = recv_kind.decode()
-                    #value_data = float( recv_value.decode() )
-
-                    #if ( len( kind_data ) >= self.KIND_BUFSIZE and
-                    #    len( date_data ) >= self.DATE_BUFSIZE and
-                    #    len( time_data ) >= self.TIME_BUFSIZE ):
-                    #    data = date_data, time_data, kind_data, value_data
-
-                        #conn = sqlite3.connect( 'sensor.db' )
-                        #with conn:
-                        #    cursor = conn.cursor()
-                        #    cursor.execute( 'INSERT INTO sensor_measure( date, time, kind, measurevalue ) VALUES ( ?, ?, ?, ? )', data )
-                        #    conn.commit()
-                        #print( "{0} {1} {2} {3}\ninsert complete...\n".format( kind_data, date_data, time_data, value_data ) )
+                    print('kind : {}'.format(kind_data))
+                    print( "receiving complete..." )
+                    time.sleep(1)
+ 
                 else:
-                    continue
+                    loop = False
+                    sys.exit()
 
         except FileNotFoundError:
             pass
@@ -106,7 +86,7 @@ class ClientProcess( Process ):
             sys.exit()
 
 def main():
-    sensorManageProcess = SensorReceptionProcess( '172.20.10.14', 9000 )
+    sensorManageProcess = ReceptionProcess( '192.168.25.20', 9000 )
     sensorManageProcess.start()
     sensorManageProcess.join()
     print( "Stop Main Process..." )
