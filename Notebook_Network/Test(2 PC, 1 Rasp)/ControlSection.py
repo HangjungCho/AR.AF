@@ -4,9 +4,8 @@ import time
 distance = 0 # global
 
 class USonicThread(Thread):
-    def __init__(self, insert_flag):
+    def __init__(self):
         Thread.__init__(self, name='UsonicThread')
-        self.insert_flag = insert_flag
         self.ports = (0,1)
         self.direction = ( 'out', 'in' )
         self.usonic = USONIC( self.ports, self.direction )
@@ -15,18 +14,16 @@ class USonicThread(Thread):
         print( "Closing UsosnicThread" )
 
     def run(self):
-        insert_flag = 1
-        if True:
-            while True:
-                global distance
-                self.usonic.USONIC_send()
-                self.usonic.USONIC_receive()
-                distance = self.usonic.USONIC_getDistance()
-                distance = round(distance,2)
-                print('Distance : {:.2f}cm'.format(distance))
+        while True:
+            global distance
+            self.usonic.USONIC_send()
+            self.usonic.USONIC_receive()
+            distance = self.usonic.USONIC_getDistance()
+            distance = round(distance,2)
+            print('Distance : {:.2f}cm'.format(distance))
 
 class DCMotorThread(Thread):
-    def __init__(self, insert_flag):
+    def __init__(self):
         Thread.__init__(self, name='DCMotorThread')
         self.insert_flag = insert_flag
         self.ports = (4,25,12)
@@ -37,14 +34,13 @@ class DCMotorThread(Thread):
         print( "Closing DCMotorThread" )
 
     def run(self):
-        if True:
-            while True:
-                global distance
+        while True:
+            global distance
 
-                if distance <= 9.00:
-                    self.dcmotor.DCMOTOR_stop()
-                    time.sleep(0.5)
-                else:
-                    self.dcmotor.DCMOTOR_forward()
-                    time.sleep(0.5)
+            if distance <= 9.00:
+                self.dcmotor.DCMOTOR_stop()
+                time.sleep(0.5)
+            else:
+                self.dcmotor.DCMOTOR_forward()
+                time.sleep(0.5)
 

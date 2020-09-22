@@ -89,7 +89,7 @@ class MachineVisionProcess( Process, NetClient ):
             width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-            model = load_model('04-0.0781.hdf5')  
+            model = load_model('09-0.0604.hdf5')  
 
             while loop:
 
