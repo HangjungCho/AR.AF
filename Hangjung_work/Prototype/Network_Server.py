@@ -6,7 +6,7 @@ import time
 import socket
 #import sqlite3
 import sys
-insert_flag = 0
+
 class ReceptionProcess( Process ):
     def __init__( self, ip, port ):
         Process.__init__( self, name = "ReceptionProcess" )
@@ -29,7 +29,6 @@ class ReceptionProcess( Process ):
         self.server_sock.close() 
 
     def run( self ):
-        global insert_flag
         while True:
             try:
                 client_sock, address = self.server_sock.accept()
@@ -62,7 +61,6 @@ class ClientProcess( Process ):
 
     def run( self ):
         try:
-            global insert_flag
             loop = True
             while ( loop ):
                 print( "receiving waiting...\n" )
