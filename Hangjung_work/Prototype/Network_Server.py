@@ -93,7 +93,7 @@ class ClientProcess( Process ):
 
 
 if __name__ == '__main__':
-    server_ip = '192.168.0.10'
+    server_ip = '192.168.0.2'
     server_port = 9000
     sensorManageProcess = ReceptionProcess( server_ip, server_port )
     sensorManageProcess.start()
