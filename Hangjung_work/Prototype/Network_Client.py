@@ -3,9 +3,8 @@ from Machine_Vision import MachineVisionProcess
 from multiprocessing import Process, Queue
 import sys
 
-#import sqlite3
-#import socket
-#import time, datetime
+import sqlite3
+import time, datetime
 #import math
 
 class MvisionNetProcess( Process ):

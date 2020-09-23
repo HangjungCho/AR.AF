@@ -3,6 +3,8 @@ import cv2
 import numpy as np 
 import math
 import socket
+import time, datetime
+import sqlite3
 from tensorflow.keras.models import load_model
 from multiprocessing import Process, Queue
 
@@ -39,6 +41,28 @@ class NetClient():
         except Exception as e:
             print( "Other exception: %s" %str(e) )
         return receiveData
+    
+    def measureCycle( self, product_type ):
+        # 테스트용 코드
+        # -------------
+        conn = sqlite3.connect( 'araf.db' )
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute( 'SELECT num FROM Count WHERE type = ?', (product_type, ))
+            count = cursor.fetchall()
+  
+        count = count[0][0] + 1
+        conn = sqlite3.connect( 'araf.db' )
+        now = datetime.datetime.now()
+        realdate = now.strftime( '%Y-%m-%d' )
+        realtime = now.strftime( '%H:%M:%S' )
+        cal = 'ADD'3.
+        data = product_type, cal,count,realdate, realtime
+        with conn:
+            cursor = conn.cursor()
+            cursor.execute( 'INSERT INTO Quantity(type, cal, count, date, time) VALUES(?, ?, ?, ?, ?)', data )
+            cursor.execute( 'UPDATE  Count SET num = ? WHERE type = ? ', (count, product_type) )
+            conn.commit()
 
 class MachineVisionProcess( Process, NetClient ):
     def __init__( self,  host, port):
@@ -116,9 +140,12 @@ class MachineVisionProcess( Process, NetClient ):
 
                         with tf.compat.v1.Session() as sess:
                             print(tf.argmax(predictions, 1).eval())
+
                         data = str(tf.argmax(predictions,1))
                         print(data[11:12])
                         self.sendData(data[11:12])
+                        self.measureCycle(data[11:12])
+
                         cv2.imshow('img_roi', img_roi)
                 #         cv2.waitKey(0)
                 except ZeroDivisionError:
