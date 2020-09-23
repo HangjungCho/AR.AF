@@ -42,7 +42,7 @@ class NetClient():
             print( "Other exception: %s" %str(e) )
         return receiveData
     
-    def measureCycle( self, product_type ):
+    def Insert_db( self, product_type ):
         # 테스트용 코드
         # -------------
         conn = sqlite3.connect( 'araf.db' )
@@ -144,7 +144,7 @@ class MachineVisionProcess( Process, NetClient ):
                         data = str(tf.argmax(predictions,1))
                         print(data[11:12])
                         self.sendData(data[11:12])
-                        self.measureCycle(data[11:12])
+                        self.Insert_db(data[11:12])
 
                         cv2.imshow('img_roi', img_roi)
                 #         cv2.waitKey(0)
