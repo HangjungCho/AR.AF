@@ -24,7 +24,7 @@ class MvisionNetProcess( Process ):
 
         
 if __name__ == '__main__':
-    server_ip = input( "Input Server IP address : " )
-    server_port = int( input( "Input Server Port number : " ) )
+    server_ip = '192.168.0.2'
+    server_port = 9000
     sensorClientProcess = MvisionNetProcess( server_ip, server_port )
     sensorClientProcess.start()

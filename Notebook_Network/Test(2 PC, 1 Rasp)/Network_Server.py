@@ -6,7 +6,7 @@ import time
 import socket
 #import sqlite3
 import sys
-
+insert_flag = 0
 class ReceptionProcess( Process ):
     def __init__( self, ip, port ):
         Process.__init__( self, name = "ReceptionProcess" )
@@ -29,6 +29,7 @@ class ReceptionProcess( Process ):
         self.server_sock.close() 
 
     def run( self ):
+        global insert_flag
         while True:
             try:
                 client_sock, address = self.server_sock.accept()
@@ -37,10 +38,6 @@ class ReceptionProcess( Process ):
 
                 clientProcess = ClientProcess( client_sock, address )
                 clientProcess.start()
-                usonic = USonicThread()
-                usonic.start()
-                dcmotor = DCMotorThread()
-                dcmotor.start()
 
             except Exception as e:
                 print( e )
@@ -65,6 +62,7 @@ class ClientProcess( Process ):
 
     def run( self ):
         try:
+            global insert_flag
             loop = True
             while ( loop ):
                 print( "receiving waiting...\n" )
@@ -74,6 +72,10 @@ class ClientProcess( Process ):
                     kind_data = recv_kind.decode()
                     print('kind : {}'.format(kind_data))
                     print( "receiving complete..." )
+                    usonic = USonicThread()
+                    usonic.start()
+                    dcmotor = DCMotorThread()
+                    dcmotor.start()
                     time.sleep(1)
                 else:
                     loop = False
@@ -91,7 +93,7 @@ class ClientProcess( Process ):
 
 
 if __name__ == '__main__':
-    server_ip = '192.168.0.10'
+    server_ip = '192.168.0.2'
     server_port = 9000
     sensorManageProcess = ReceptionProcess( server_ip, server_port )
     sensorManageProcess.start()
