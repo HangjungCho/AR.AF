@@ -6,7 +6,6 @@ distance = 0 # global
 class USonicThread(Thread):
     def __init__(self):
         Thread.__init__(self, name='UsonicThread')
-        self.insert_flag = insert_flag
         self.ports = (0,1)
         self.direction = ( 'out', 'in' )
         self.usonic = USONIC( self.ports, self.direction )
@@ -26,7 +25,6 @@ class USonicThread(Thread):
 class DCMotorThread(Thread):
     def __init__(self):
         Thread.__init__(self, name='DCMotorThread')
-        self.insert_flag = insert_flag
         self.ports = (4,25,12)
         self.direction = ( 'p', 'n', 'en' )
         self.dcmotor = DCMOTOR( self.ports, self.direction )
