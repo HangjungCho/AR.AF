@@ -56,7 +56,7 @@ class NetClient():
         now = datetime.datetime.now()
         realdate = now.strftime( '%Y-%m-%d' )
         realtime = now.strftime( '%H:%M:%S' )
-        cal = 'ADD'3.
+        cal = 'ADD'
         data = product_type, cal,count,realdate, realtime
         with conn:
             cursor = conn.cursor()
