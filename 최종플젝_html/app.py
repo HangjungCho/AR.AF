@@ -45,11 +45,15 @@ class Product(db.Model):
 def format_datetime(timestamp):
     return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H-%M')
 
-
+session ["logged_in"] = False
 
 @app.route("/")
 def main():
-    return render_template("main.html")
+    if session["logged_in"]==True:
+        return render_template("main.html")
+    else:
+        return render_template("login.html")
+
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
