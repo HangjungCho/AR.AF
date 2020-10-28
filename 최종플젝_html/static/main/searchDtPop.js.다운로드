@@ -1,0 +1,92 @@
+/*
+*   게시판 기간검색 콤보팝
+*   required :: jQuery 1.4, EgovCalPopup.js
+*   수정 20151127
+*   required :: jQuery 1.4, jquery-ui.js
+*/
+
+jQuery(function($) {
+	// 콤보박스 포지션
+	var p = $("#searchDt").position();
+	var isNone = false;
+	$(document).click(function(e){
+		if(!isNone){
+			$("#sch_dt").css('display', 'none');
+		}
+		isNone = false;
+    });
+
+      
+	$("#sch_dt li").bind({
+		mouseover : function(){
+		    //$("#sch_dt li button").css('font-weight', 'normal');
+		    $("#sch_dt li").css({'background-color' : '#FFF', 'font-weight': 'normal'});
+		    
+		    $(this).css({
+			    'background-color' : '#F5F5F5',
+			    'font-weight' : 'bold'
+			});
+		},
+		click     : function(){
+			/*20190613(s)*/
+			if($(this).index() == 0){
+			    $("#searchDt").val($(this).find("a").text());
+			    $("#searchDtTyp").val("");
+				$("#sch_dt").css('display', 'none');
+			}else if($(this).index() == 1){
+			    $("#searchDt").val($(this).find("a").text());
+			    $("#searchDtTyp").val("0");
+				$("#sch_dt").css('display', 'none');
+			}else if($(this).index() == 2){
+			    $("#searchDt").val($(this).find("a").text());
+			    $("#searchDtTyp").val("1");
+				$("#sch_dt").css('display', 'none');
+			}
+			isNone = true;
+			/*20190613(e)*/
+		}
+	});
+
+	$("#btnSchDtSet").click(function(){
+		var bgn = $("#schBgnDt").val();
+		var end = $("#schEndDt").val();
+		if(end < bgn){
+			alert("종료일이 시작일 보다 클수 없습니다.");
+			return;
+		}
+		//$("#searchDt").val(bgn.substring(5, bgn.length) + " ~ " + end.substring(5, end.length));
+		$("#searchDt").val(bgn + " ~ " + end);
+		
+		$("#searchDtTyp").val("2");
+		$("#sch_dt").css('display', 'none');
+    });
+	
+	$("#searchDt").bind({
+		click : function(){
+		    $("#sch_dt").css('display', 'block');
+		    isNone = true;
+	    }
+    });
+	
+	$( "#searchDt" ).focus(function() {
+		$("#sch_dt").css('display', 'block');
+		isNone = true;
+    });
+	$( "#btnSchDtSet" ).focusout(function() {
+		$("#sch_dt").css('display', 'none');
+    });
+	 
+
+	$(document).ready(function(){
+		if ($("#searchDt").position() != "undefined" && $("#searchDt").position() != null){
+			$("#sch_dt").css({'top' : (p.top+$("#searchDt").height()+5)+'px', 'left' : p.left+'px'});
+		}
+		
+		$("#ui-datepicker-div").on("click", function () {
+		    $("#sch_dt").css('display', 'block');
+		    isNone = true;
+		});
+
+		
+	});
+});

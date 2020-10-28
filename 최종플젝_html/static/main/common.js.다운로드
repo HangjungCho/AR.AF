@@ -1,0 +1,304 @@
+
+/*
+프로젝트 : 개인정보보호 포털 
+작성자 : 강정민 
+최종 업데이트일자 : 2020.10.07
+
+required 라이브러리
+: jquery-3.3.1.min.js (https://jquery.com/)
+: jquery-migrate1.4.1.min.js (https://jquery.com/download/)
+: jquery-ui (https://jqueryui.com/)
+
+IE 하위버전 맞춤
+: html5shiv.js  (HTML5태그 사용)
+: matchMedia.js (matchMedia기능 사용)
+: matchMedia.addListener.js (matchMedia기능 사용)
+*/
+
+$(document).ready(function() {
+
+	//Dom 호출
+    initDom();
+    
+    //반응형, 기기 사이즈별
+    checkPosition();
+    userAgentCheck();
+    
+    //gnb 이벤트
+    gnbEvent();
+    //snb 이벤트
+    subSnbEvent();
+    
+    //tab이벤트
+    $tabControl_li.on('click',function(){
+        var tab_index = $(this).index();
+       tabControl(tab_index);
+       tabContent(tab_index);
+    });
+    /*20201007(s) */
+    $tabControl2_li.on('click',function(e){
+        var tab_index = $(this).index();
+       tabControl2(tab_index,e);
+       tabContent2(tab_index,e);
+    });
+    /*20201007(e) */
+    $tabControl3_li.on('click',function(){
+        var tab_index = $(this).index();
+       tabControl3(tab_index);
+       tabContent3(tab_index);
+    });
+
+    //태블릿,모바일사이즈 햄버거메뉴 클릭
+    $mbMenuBtn.on('click',function(){  
+        mbMenuBtnEvent(this);
+    });
+    //태블릿,모바일사이즈 검색버튼 클릭
+    $mbSchBtn.on('click',function(){
+        mbSchBtnEvent(this);
+    });
+
+     //윈도우 사이즈별 ui변경
+     $(window).resize(function(event) {
+        checkPosition();
+    });
+   
+    
+
+});//document.ready
+
+
+//init
+var winW,winH;
+var $layer_back,$body,class_on;
+var $header,$gnb,$gnb_in,$gnbAllMenu,$gnb_li,$d2_nav,$depth2_la,$gnb_all,$gnb_all_close;
+var didScroll,headerH;
+var $tabControl_li,$tabContent,$tabControl2_li,$tabContent2,$tabControl3_li,$tabContent3;
+var $mbMenuBtn,$mbSchBtn,$mbSchForm;
+var $snb_li_a,$snb_depth3,$snb_li_on;
+var textDepth2;
+//dom초기화
+function initDom(){
+    winW = $(window).innerWidth();
+	$layer_back = $('.layer_back');
+	$body = $('body');
+	class_on = 'on';
+	$header = $('#header');
+    headerH = $header.outerHeight();
+    $gnb = $('#gnb');
+    $gnb_in = $('#gnb .gnb_in');
+    $gnb_li = $('#gnb .depth1>li');
+    $gnbAllMenu = $('#gnb .allMenu');
+    $d2_nav = $('.d2_nav');
+    $depth2_la = $('.depth2 .la');
+    $gnb_all = $('.gnb_all');
+    $gnb_all_close = $('.gnb_all .btn_close');
+    $snb_li_on = $('#snb>ul>li.on');
+    $snb_li_a = $('#snb>ul>li>a');
+    $snb_depth3 = $('#snb>ul>li .depth3');
+    $sub_content = $('.sub_wrap .cont');
+	$tab_wrp_li = $('.tab_wrp li');
+    $tab_con = $('.tab_con');
+    $tabControl_li = $('.tabControl li');
+    $tabContent = $('.tabContent');
+    $tabControl2_li = $('.tabControl2 li');
+    $tabContent2 = $('.tabContent2');
+    $tabControl3_li = $('.tabControl3 li');
+    $tabContent3 = $('.tabContent3');
+    $mbMenuBtn = $('header .hd_top .mb .menu_btn');
+    $mbSchBtn = $('header .hd_top .mb .sch_btn');
+    $mbSchForm = $('header .hd_top .mb .sb_search');
+}
+
+/* ===GNB EVENT(s)=== */
+function gnbEventPc(){ // gnb1024 이상 작동 : pc
+    $mbMenuBtn.removeClass(class_on);
+    $gnb.css('height','auto');
+    $gnb.removeClass(class_on);
+	$gnb_li.on('mouseenter focusin',function(){
+        $d2_nav.removeClass(class_on);
+        $d2_nav.addClass(class_on);     
+        $(this).addClass(class_on);
+        var bgMax = 0;
+        var gnbBg; 
+        for(var i=0;i<$d2_nav.size();i++){
+            gnbBg = $gnb_li.eq(i).find('.d2_nav').outerHeight();
+            bgMax = Math.max(bgMax,gnbBg);
+        }
+        $gnb.append('<div class="gnb_bg" style="height:'+bgMax+'px;">');
+        $d2_nav.css('height',bgMax);
+    });
+    for(var i =0; i<$gnb_li.length;i++){// SNB h2 텍스트와 GNB li 텍스트 비교해서 같을 경우 on
+        if($('#snb>h2').text()==$gnb_li.eq(i).find('a').text().slice(0,4)){
+            $gnb_li.removeClass(class_on);
+            $gnb_li.find('.d2_nav').removeClass(class_on);
+            $gnb_li.eq(i).addClass(class_on);
+        }
+    }  
+}
+
+function gnbEventMb(){ // gnb 1024 이하 작동 : 태블릿,모바일
+    $gnb.css('height',winH-headerH);
+	$gnb_li.on('mouseenter focusin',function(){
+        $d2_nav.removeClass(class_on);    
+        $(this).addClass(class_on);
+        $(this).find('.d2_nav').addClass(class_on);
+    });
+    for(var i =0; i<$gnb_li.length;i++){ // SNB h2 텍스트와 GNB li 텍스트 비교해서 같을 경우 on
+        if($('#snb>h2').text()==$gnb_li.eq(i).find('a').text().slice(0,4)){
+            $gnb_li.removeClass(class_on);
+            $gnb_li.find('.d2_nav').removeClass(class_on);
+            $gnb_li.eq(i).addClass(class_on);
+            $gnb_li.eq(i).find('.d2_nav').addClass(class_on);
+        }
+    }     
+}
+
+function gnbEvent(){ //gnb pc , mb 공통사항
+    $gnb_li.on('mouseleave focusout',function(){
+        textDepth2 = $(this).find('a').text().slice(0,4);
+        if($('#snb>h2').text()==textDepth2){//현재페이지 snb 타이틀 == gnb마우스 오버한 텍스트가 동일한가?
+          //  console.log('같음!');
+            $(this).addClass(class_on);
+        }else{
+          //  console.log('다름!');
+            $d2_nav.css('height','auto');
+            $(this).removeClass(class_on);
+        }
+    });
+    $gnb_in.on('mouseleave',function(){
+        $d2_nav.removeClass(class_on);
+        $('.gnb_bg').remove();
+    });
+    $gnb.on('mouseleave',function(){
+        $d2_nav.removeClass(class_on);
+        $('.gnb_bg').remove();
+    });
+    $depth2_la.on('focusout',function(){
+        $d2_nav.removeClass(class_on);
+        $('.gnb_bg').remove();
+    });
+    $gnbAllMenu.on('mouseenter focusin' ,function(){
+        $d2_nav.removeClass(class_on);
+        $('.gnb_bg').remove();
+    });
+    $gnbAllMenu.on('click',function(){
+        $gnb_all.toggleClass(class_on);
+        $layer_back.toggleClass(class_on);
+    });
+    $gnb_all_close.on('click',function(){
+        $gnb_all.removeClass(class_on);
+        $layer_back.removeClass(class_on);
+    });
+}
+
+function mbMenuBtnEvent(path){//1024이하 햄버거메뉴 클릭
+    $(path).toggleClass(class_on);
+    $gnb.toggleClass(class_on);
+    $layer_back.toggleClass(class_on);
+}
+function mbSchBtnEvent(path){ //1024 이하 검색버튼 클릭
+    $(path).toggleClass(class_on);
+    $mbSchForm.toggleClass(class_on);  
+}
+/* ===GNB EVENT(e)=== */
+
+function subSnbEvent(){
+    $snb_li_on.find('.depth3').slideDown(0);
+    $snb_li_a.on('click',function(){
+        if($(this).closest('li').hasClass(class_on)){
+            $snb_li_a.closest('li').removeClass(class_on);
+            $(this).closest('li').removeClass(class_on);
+        }else{
+            $snb_li_a.closest('li').removeClass(class_on);
+            $(this).closest('li').addClass(class_on);
+        }
+        $snb_depth3.slideUp();
+        if($(this).next().is(':hidden')){
+            $(this).next().slideDown();
+        }
+    });   
+}
+function userAgentMbMinHeight(){ // 태블릿이하 사이즈 : sub_content min-height 계산
+    footerH = $('#footer').outerHeight();
+    locationWrapH = $('.location_wrap').outerHeight();
+    subWrapPaddingTH = $('.sub_wrap').css('padding-top');
+    subWrapPaddingBH = $('.sub_wrap').css('padding-bottom');
+    subWrapPaddingTH = parseInt(subWrapPaddingTH);
+    subWrapPaddingBH = parseInt(subWrapPaddingBH);
+    $sub_content.css('min-height',winH-(headerH+footerH+locationWrapH+subWrapPaddingTH+subWrapPaddingBH));
+}
+
+function userAgentPcMinHeight(){ // pc 사이즈 : sub_content min-height:계산
+    subContentH = $sub_content.css('min-height');
+    subContentH = parseInt(subContentH);
+    $sub_content.css('min-height',subContentH);
+}
+
+/* tab 이벤트(s) */
+function tabControl(tabIndex){
+    $tabControl_li.removeClass(class_on);
+    $tabControl_li.eq(tabIndex).addClass(class_on);
+}
+function tabContent(tabIndex){
+    $tabContent.removeClass(class_on).hide();
+    $tabContent.eq(tabIndex).fadeIn().addClass(class_on);
+}
+/*20201007(s) */
+function tabControl2(tabIndex,e){
+    if($t(this).find('a').hasClass('disabled')){
+        e.preventDefault();
+        e.stopPropagation();
+    }else{
+        $tabControl2_li.removeClass(class_on);
+        $tabControl2_li.eq(tabIndex).addClass(class_on);
+    }
+}
+/*20201007(e) */
+function tabContent2(tabIndex){
+    $tabContent2.removeClass(class_on).hide();
+    $tabContent2.eq(tabIndex).fadeIn().addClass(class_on);
+}
+function tabControl3(tabIndex){
+    $tabControl3_li.removeClass(class_on);
+    $tabControl3_li.eq(tabIndex).addClass(class_on);
+}
+function tabContent3(tabIndex){
+    $tabContent3.removeClass(class_on).hide();
+    $tabContent3.eq(tabIndex).fadeIn().addClass(class_on);
+}
+/* tab 이벤트(e) */
+
+
+//반응형 미디어쿼리 체크 포인트!
+function checkPosition(){
+    if (window.matchMedia('screen and (max-width: 1024px)').matches) {//1024이하(태블릿,모바일)
+        console.log('match');
+        winH = $(window).innerHeight();
+        headerH = $header.outerHeight();
+        gnbEventMb();
+    } else {//1024이상 (PC)
+        gnbEventPc(); 
+       $layer_back.removeClass(class_on);
+   }
+
+}
+
+//기기별 체크. 스크립트 실행(처음 들어왔을 때 기기체크)
+function userAgentCheck(){
+	if(navigator.userAgent.match(/Android|Mobile|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
+      //모바일(스마트폰+태블릿)일 때 실행 될 스크립트
+      imgViewBox(); // ui.js 
+      userAgentMbMinHeight();
+	}
+	if(navigator.userAgent.match(/Mobile|iP(hone|od)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
+      //스마트폰일 때 실행 될 스크립트
+	}
+	if(!navigator.userAgent.match(/Mobile|iP(hone|od)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){         
+      //태블릿,PC에서만 실행 될 스크립트
+	}
+	if(!navigator.userAgent.match(/Android|Mobile|iP(hone|od|ad)|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/)){
+      //PC에서만 실행 될 스크립트
+      userAgentPcMinHeight();
+	}
+
+}

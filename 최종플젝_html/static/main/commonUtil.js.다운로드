@@ -1,0 +1,47 @@
+/*--------------------------------------------------------------//
+//  공통  JavaScript
+//-------------------------------------------------------------*/
+
+/*= FORM CONTROL =============================================================
+
+ ============================================================================*/
+
+function valCheck(id,text) {
+
+	var str = document.getElementById(id);
+
+	if (str.value == '' || str.value == null) {
+		alert(text+'을 입력해주세요');
+		return false;
+	}
+
+	var blank_pattern = /^\s+|\s+$/g;
+	if (str.value.replace(blank_pattern, '') == "") {
+		alert(text+'에 공백만 입력되었습니다.');
+		return false;
+	}
+
+	//공백 금지
+	// var blank_pattern = /^\s+|\s+$/g;(/\s/g
+	/*
+	var blank_pattern = /[\s]/g;
+	if (blank_pattern.test(str.value) == true) {
+		alert(text+'에 공백은 사용할 수 없습니다.');
+		return false;
+	}
+	*/
+	var special_pattern = /[`~!#$%^&*|\\\'\";:\/?]/gi;
+
+	if (special_pattern.test(str.value) == true) {
+		alert(text+'에 특수문자는 사용할 수 없습니다.');
+		return false;
+	}
+
+	// alert('최종 : ' + str.value);
+
+	/*
+	 * if( str.value.search(/\W|\s/g) > -1 ){ alert( '특수문자 또는 공백을 입력할 수 없습니다.' );
+	 * str.focus(); return false; }
+	 */
+	return true;
+}

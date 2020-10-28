@@ -1,0 +1,35 @@
+<!doctype HTML>
+<head>
+	<meta charset="UTF-8">
+	<title>ARAF 로그인</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='login/style.css') }}">
+	
+	<script src="https://kit.fontawesome.com/51db22a717.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="main-container">
+		<div class="main-wrap">
+		<header>
+			<div class="logo-wrap">
+				<img src="{{ url_for('static', filename='login/logo.png') }}">
+			</div>
+		</header>
+		<section class="login-input-section-wrap">
+			<div class="login-input-wrap">	
+				<input placeholder="Username" type="text"></input>
+			</div>
+			<div class="login-input-wrap password-wrap">	
+				<input placeholder="Password" type="password"></input>
+			</div>
+			<div class="login-button-wrap">
+				<button>Sign in</button>
+			</div>
+		</section>
+		<footer>
+			<div class="copyright-wrap">
+			<span>	<img src="{{ url_for('static', filename='login/logo.png') }}"> Copyright © ARAF Corp. All Rights Reserved.</span>
+			</div>
+		</footer>
+		</div>
+	</div>
+</body>

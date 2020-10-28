@@ -1,0 +1,75 @@
+@charset "utf-8";
+
+/* 
+NotoSans(https://www.google.com/get/noto/#/)는 
+Google과 어도비가 합작해 개발한 웹폰트입니다. 
+라이센스는 Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)입니다.
+
+NotoSans 경량화 폰트 사용 다운로드.
+https://github.com/UYEONG/NotoSans-subset
+*/
+
+
+
+/*
+프로젝트 : 개인정보보호 포털 
+작성자 : 강정민 
+최종 업데이트일자 : 2020.04.04((주)포뎁스 - 강정민)
+
+font-family: 'NotoSansKR'; --- 한글 본고딕 사용.
+font-weight: 100; --- Light
+font-weight: 300; --- Resular
+font-weight: 500; --- Medium
+font-weight: 700; --- Bold
+
+기본 굵기 : 300 (Regular)로 지정중.
+기본 크기 : 15px.
+*/
+
+
+
+@font-face {
+  font-family: 'NotoSansKR';
+  src : local(※),
+        url('font/NotoSans-Light.otf'),
+        url('font/NotoSans-Light.eot?#iefix') format('embedded-opentype'),
+        url('font/NotoSans-Light.woff') format('woff'),
+        url('font/NotoSans-Light.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+
+}
+@font-face {
+  font-family: 'NotoSansKR';
+  src : local(※),
+        url('font/NotoSans-Regular.otf'),
+        url('font/NotoSans-Regular.eot?#iefix') format('embedded-opentype'),
+        url('font/NotoSans-Regular.woff') format('woff'),
+        url('font/NotoSans-Regular.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NotoSansKR';
+  src : local(※),
+        url('font/NotoSans-Medium.otf'),
+        url('font/NotoSans-Medium.eot?#iefix') format('embedded-opentype'),
+        url('font/NotoSans-Medium.woff') format('woff'),
+        url('font/NotoSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NotoSansKR';
+  src : local(※),
+        url('font/NotoSans-Bold.otf'),
+        url('font/NotoSans-Bold.eot?#iefix') format('embedded-opentype'),
+        url('font/NotoSans-Bold.woff') format('woff'),
+        url('font/NotoSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+*{font-family: 'NotoSansKR','NanumGothic','나눔고딕','NanumBarunGothic','나눔바른고딕','Malgun Gothic','맑은고딕',sans-serif;font-weight: 300;font-size:15px;}
+

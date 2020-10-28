@@ -1,0 +1,589 @@
+@charset "utf-8";
+
+/*
+프로젝트 : 개인정보보호 포털
+작성자 : 강정민
+최종 업데이트일자 : 2020.08.10
+*/
+
+/*
+    sub.css : 서브페이지 스타일.
+    안내페이지 등
+*/
+
+
+/*================미디어 쿼리 시작============*/
+/*=====================
+모바일 퍼스트 : min-width / 데스크탑 퍼스트 : max-width
+=======================*/
+@media all and (max-width:1600px){/* PC사이즈 1600 이하*/
+
+/*동영상 iframe*/
+.videoMediaquery{height:800px !important;}
+}
+@media all and (max-width:1400px){/* PC사이즈 1400 이하*/
+
+}
+@media all and (max-width:1253px){/* 디폴트 사이즈 이하 (PC사이즈) */
+
+}
+
+@media all and (max-width:1224px){/*데스크탑 브라우저 가로*/
+  /* 내정보 지킴이 캠페인 히스토리*/
+  /* 20201005(s) */
+.history_list .history_box .poster_box>div{width:100%;}
+/* 20201005(e) */
+}
+
+@media all and (max-width:1024px){/*태블릿 가로*/
+  /* 검색 */
+  .searchList_cont.box2 .wcpPip_inner.compName,
+  .searchList_cont.box2 .wcpPip_inner.fileName,
+  .searchList_cont.box2 .wcpPip_inner.searchClearNo,
+  .searchList_cont.box2 .wcpPip_inner.searchManNm,
+  .searchList_cont.box3 .wcpPip_inner.searchTeaName,
+  .searchList_cont.box3 .wcpPip_inner.searchPosition,
+  .searchList_cont.box3 .wcpPip_inner.searchAreaGroup{display: block;margin:10px 0;width:100%;}
+  .searchList_cont.box2 .wcpPip_inner.compName input[type="text"],
+  .searchList_cont.box2 .wcpPip_inner.fileName input[type="text"],
+  .searchList_cont.box2 .wcpPip_inner.searchClearNo input[type="text"],
+  .searchList_cont.box2 .wcpPip_inner.searchManNm input[type="text"],
+  .searchList_cont.box3 .wcpPip_inner.searchTeaName input[type="text"],
+  .searchList_cont.box3 .wcpPip_inner.searchPosition select,
+  .searchList_cont.box3 .wcpPip_inner.searchAreaGroup select{width:70%;}
+  .searchList_cont .wcpPip_inner .sch_label{display: inline-block; width:60px;}
+  .searchList_cont.box2 .wcpPip_inner .man_btn{margin:0;}
+  .searchList_cont.personalInfoFile .wcpPip_inner{margin-right:0;width:49%;}
+  .searchList_cont.personalInfoFile div input[type="text"]{width:85% !important;}
+  .searchList_cont.personalInfoFile .man_btn{display:block;padding:20px 0 0 0;float:inherit !important;text-align:center;}
+  /* 게시판 첨부파일 */
+  .title_file_view{right:0;}
+
+  /* 기본탭 tab_btn */
+
+
+  /* ismsp */
+  .panel_step{padding:10px;}
+  .panel_step>.left{width:30%;}
+  .panel_step>.right{width:70%;}
+  .intro_layout_box .lay_box.ismsp_online,.intro_layout_box .lay_box.ismsp_offline{background-size:95px;}
+  .intro_layout_box .lay_box.ismsp_online, .intro_layout_box .lay_box.ismsp_offline{background-position: right 20px;background-size: 80px;}
+  /* 안내페이지 : 컨텐츠 이미지 */
+  /* 비식별 조치 전문기관 */
+  .edu_inf_con2{height:283px;background-size:100%;}
+  /* 이용자 개인정보보호 이용수칙 */
+  .man_harm{height:380px;background-size:100%;}
+  /* 개인정보집단분쟁 */
+  .bg_DclGrpPttRegist{height:970px;background-size: 100%;}
+  /* 캠페인 */
+  .card_news_list .card_img{height:auto;max-height: 300px;}
+  .card_news_list .card_box .detail_go p{padding:10px 40px 10px 10px;font-size:13px;}
+
+  /* 사이트맵 */
+  .sitemap_wrap .tit_site{width:120px;font-size:25px;}
+  .sitemap_wrap .sitemap_box > div{width:calc(100% - 120px);}
+
+  .cont .old_file_go{display: block;}
+
+
+}
+
+@media all and (max-width:900px){
+  /* 안내페이지 : 컨텐츠 이미지 */
+  /* 비식별 조치 전문기관 */
+  .edu_inf_con2{height:235px;}
+  .bg_DclInvPttRegist{height:938px;background-size: 100%;}
+  /* 개인정보 열람등 요구 안내 */
+  .bg_pernalInfo{background-size: 100%;}
+   /* 개인정보집단분쟁 */
+   .bg_DclGrpPttRegist{height:870px;}
+  /* 캠페인 */
+  .card_news_list .card_img{max-height: 248px;}
+   .webtoon_box img{max-width: auto;width:100%;}
+   /* 20200925 (s)*/
+  /*지킬앤가이드 캐릭터 페이지*/
+  .character_intro_wrap .intro_title img{height:100px}
+  .character_intro_wrap .intro_img img{height:300px}
+  .character_intro_wrap > p{font-size:15px;}
+  .character_list .img_area{padding:0;width:40%;text-align: center;}
+  .character_list .img_area img{width:70%;}
+  .character_list .txt_area{width:60%}
+  .character_list .txt_area b{font-size:20px;}
+  .character_list .txt_area h4{font-size:15px;}
+  /*20200925(e)*/
+}
+
+@media all and (max-width:768px){/*태블릿 세로*/
+  /* 검색 */
+  .searchList_cont.box2 .wcpPip_inner.compName input[type="text"],
+  .searchList_cont.box2 .wcpPip_inner.fileName input[type="text"],
+  .searchList_cont.box2 .wcpPip_inner.searchClearNo input[type="text"],
+  .searchList_cont.box2 .wcpPip_inner.searchManNm input[type="text"]{width:60%;}
+  .searchList_cont.personalInfoFile .wcpPip_inner{width:80%}
+  /* panel_box , list*/
+  .list > li .label1{display: block;width:auto;}
+  .list > li .label1:after{display: none;}
+  .list > li .label2{display: block;width:auto;}
+  .list > li .label2:after{display: none;}
+  /* dese */
+  .desc {margin: 10px 0 10px 150px;}
+  .spot_sub .spot_img{padding-left: 20px;}
+  /* 일정비율로 나눔 list_card */
+
+  /* 기본탭 tab_btn */
+  .tab_btn li a strong{font-size:13px;}
+
+  /* step 틀 */
+  .list_card li{float:inherit;width:100% !important;}
+  .list_card li:after,.list_card li:before{line-height: 0;display: table;content:'';}
+  .list_card li:after{clear: both;}
+  .list_card.has_img li{text-align: left;}
+  .list_card.has_img li img{float:left;margin:0 10px 0 0;height:75px;}
+  .list_card li p br{display: none;}
+  /* 법정대리인 동의 확인방법 step */
+  .agent_step li{margin-bottom:60px;text-align:center;}
+  .agent_step li:last-of-type{margin-bottom:0;}
+  .agent_step li:after{top:auto;bottom:-40px;right:auto;left:50%;transform: translateX(-50%);background:url('/images/sub/scommon/bg_arr_down.gif')no-repeat}
+  /* 자율규제 단체 지정 절차 */
+  .list_proc_center{text-align: left;}
+  .list_proc1 li:after{right:-20px;}
+  /* 개인정보 열람등 요구 step */
+  .list_proc2 li{margin-top:4px;width:80px;height:80px;line-height: 80px;}
+  .list_proc2 li:after{right:-20px;}
+  .list_proc2 li span{padding:0 !important; line-height: 18px; background-image: none !important;}
+  .list_proc2 li.p6 span{padding-top:22px !important;}
+  /* label + input정렬 */
+  /* 개인정보 열람등 요구 ,개인정보처리방침 만들기 */
+  .wcpStep_list li input[type=text]{margin-top:5px;width:100%;}
+  .wcpStep_list li input[name=handleName]{width:80%;vertical-align:middle}
+  /* 개인정보 보호조치 진단 step*/
+  .list_step3 > ul > li,.list_step3 > ul > li>*{font-size:13px;}
+  .list_step3 > ul > li ul li{padding:12px 0;}
+  /* 안내페이지 : 컨텐츠 이미지 */
+  /* 비식별 조치 전문기관 */
+  .edu_inf_con2{height:222px;}
+  .bg_DclInvPttRegist{height:798px;}
+  /* 이용자 개인정보보호 이용수칙 */
+  .man_harm{height:315px;}
+  /* 개인정보집단분쟁 */
+  .bg_DclGrpPttRegist{height:750px;}
+  /* 개인정보 열람등 요구 안내 */
+  .bg_pernalInfo{height:685px;}
+  /* 개인정보보호 관리체계 ISMS */
+  .intro_isms li{padding:10px;}
+  .intro_isms li>div,.left_right_div>ul>li>div{padding:10px 5px;float: inherit;width:100% !important;}
+	.left_right_div>ul>li>div img,.left_right_div>ul>li>div ul{
+margin:0 !important;}
+	.intro_isms .left{margin-bottom: 10px;}
+	.intro_isms li>div h3{margin-bottom:10px !important;font-size:20px;}
+  /*   .animation_wrp .ani_s .ani_thum .ani_thum_img{height:auto;}  20200917 */
+  .intro_layout_box .lay_box.ismsp_online,.intro_layout_box .lay_box.ismsp_offline{float:inherit;border-right:1px solid #e0e0e0; width:100%;height:auto;background-size: 100px;background-position: right bottom;}
+  /* 캠페인 */
+  .card_news_list li{width:50%;}
+  .card_news_list .card_img{max-height: 300px;}
+  .card_news_list li:nth-child(2n) .card_box{margin-right:0;}
+  .card_news_list li:nth-child(3n) .card_box{margin-right:15px;}
+  .video_wrp .ani_thum_img{height:190px;}/*20201005*/
+
+  /*캠페인 히스토리*/
+  /* 20201005(s) */
+  .history_list .history_box .poster_box{padding-left:0;padding-right:0;width:40%;}
+  .history_list .history_box .txt_box{padding-left: 15px;padding-right:15px;width:60%;}
+  .history_list .history_box>div{padding-right:0;padding-left:0;}
+  .history_list .history_box .right{border:0;}
+  .history_list .history_box .right:before{display:none;}
+  /* 20201005(e) */
+
+  /* 교육수강 팝업 */
+  .lecturePopup{padding:0;}
+  .lecturePopup .bx_lecturePopup{margin-top: 20px;}
+  .lecturePopup .bx_lecturePopup .lecture_cont{padding:20px;}
+  .lecturePopup .bx_lecturePopup h1{font-size:18px;}
+  .lecturePopup .bx_lecturePopup h1:before{width:20px;height:20px;}
+  .lecturePopup .bx_lecturePopup .lecture_cont .lectureInfo_img{float:auto;}
+  .lecturePopup .bx_lecturePopup .lecture_cont .lectureTxt{width:100%;}
+  .lecturePopup .bx_lecturePopup .lecture_cont .lectureTxt .lectureCheck ul li{margin-bottom: 10px;font-size:14px;}
+  .lectureHeader a{position: relative;top:inherit;right:inherit;margin:10px 0 0 0;}
+  /* 단체 온라인 교육 */
+  .groupOnlinePop{width:90%;}
+
+  /* 전문강사 제도 안내 */
+  .map_left{display: block; margin: 20px 0;}
+  .map_left>div{padding:20px;width:100%;box-sizing: border-box;}
+  .map_right{display:block;}
+
+  /* 사이트맵 */
+  .sitemap_wrap .sitemap_box{margin-bottom:0;border-bottom:2px solid #666;}
+  .sitemap_wrap .tit_site{float:auto;padding:10px;width:100%;background: #333;color:#fff; font-size:20px;}
+  .sitemap_wrap .sitemap_box > div{float:auto;width:100%;}
+  .sitemap_wrap .s3 .list_site>li.h170{height:220px;}
+  /* 개인정보처리방침 */
+  .per_rule_wrap>*,.per_rule_wrap li,.per_rule_wrap dt,.per_rule_wrap dd ,.per_rule_wrap p,.per_rule_wrap strong,.per_rule_wrap b,.per_rule_wrap .tit_rule{font-size: 13px;}
+  /* 웹접근성 정책 */
+  .web_acc_wrap li{font-size:13px;}
+  /* 뷰어모음 */
+  .list_viewer li dt,.list_viewer li dd{font-size:13px;}
+
+  /*동영상 iframe*/
+.videoMediaquery{height:500px !important;}
+}
+
+
+@media all and (max-width:640px){/*모바일 가로*/
+    /* 텍스트 */
+  .sub_wrap .cont p{font-size:13px;}
+  .sub_wrap .cont p strong,.sub_wrap .cont p b{font-size: inherit;}
+  .tit_main.tell_num br{display: block;}
+  .list li,.list li>*{font-size:13px;}
+  .list_indent li,.list_indent li > * ,
+  .list_indent2 li,.list_indent2 li > *,
+  .list_indent3 li,.list_indent3 li > * {font-size:13px;}
+  .list > li .label1,.list > li .label2{font-size:13px;}
+  .list_indent.lineHeight2 li{margin:0 0 10px 0;line-height: 1.7;}
+  /* panel_box */
+  .law_agreement>*{font-size:13px;}
+  /* desc */
+  .desc {margin: 20px 0 10px 0;}
+  .desc li, .desc p,.desc p strong,.desc p b{font-size:13px;}
+  .desc dt,.desc dd{font-size:13px;}
+  .desc li.tt{font-size:15px;}
+  .desc.none_title{margin-bottom: 0;}
+  .spot_sub .spot_img{float:inherit; padding-left:0;}
+  /* panel_box */
+  textarea.panel_box{font-size:13px;}
+  .panel_box{padding:20px 10px;}
+  .panel_box.report {padding: 20px 10px;}
+  .panel_box.report .or {display: block;margin:20px auto;float:inherit;width: 60%;text-align: center;}
+  .panel_box.report .area {float:inherit;margin:0 auto;width: 60%;}
+  .panel_box.report .area .floatL{float:inherit !important;}
+  .panel_box.report .area p{font-size:13px;}
+  .panel_box.report .area ol {font-size:13px;}
+  .panel_box.panel_law .tit_panel{font-size:15px;}
+  .panel_box.panel_law .ft16{font-size:16px;}
+  .panel_box.panel_law .ft17{font-size:17px;}
+
+  /* 기본탭 tab_btn */
+  .tab_btn.box6 li{width:33.33%;}
+  .tab_btn.box6 li a{padding:8px 0;height:60px;}
+  .tab_btn.box6 li a.pdt25 {padding:18px 0 0 0 !important;}
+  .tab_btn.box6 li:nth-child(3n){border-right:1px solid #ddd}
+  .tab_btn.search_area_tab li a{height:auto;}
+  .tab_btn.search_area_tab li a strong{font-size:14px;}
+
+  /* 게시판,게시글 */
+  table .long,table .email{width:100%;}
+  table .tell_inp{width:53px;}
+  .tb_board td .chkradio label{font-size: 13px;}
+  .tb_board .cell_file a,.file_icon{font-size:13px;}
+
+
+  /* 검색 */
+  .searchList_cont div{display: block;margin:10px 0 !important;}
+  .searchList_cont .wcpPip_inner{display: block;}
+  .searchList_cont .wcpPip_inner .sch_label{width:40px;font-size:13px;}
+  .manschTxt{font-size:13px;}
+  .searchList_cont .wcpPip_inner .man_btn{text-align: center;}
+  .searchList_cont .wcpPip_inner .chkradio{display: inline-block;}
+  .spot_bg .spot_sub{height:140px !important;background-image:none !important;text-align: center;}
+  .spot_bg .spot_sub .tit_main{margin:0;font-size:22px !important;}
+  .spot_bg .spot_sub .desc{margin:0;font-size:13px !important;}
+
+  .list_step li{margin-bottom:5px;padding:14px 0 0 0;width:calc(50% - 15px) !important;height:45px;line-height: 1.4em; font-size:13px;box-sizing: border-box;}
+  .list_step li.long{padding: 8px 0 0 0;}
+  .list_step li:nth-child(2n){margin-right:0px;}
+  .list_step2 div{display: block;float:auto;height:auto;}
+  .list_step2.menu3 div,
+  .list_step2.menu5 div{margin:0 0 30px 0 !important;width:100% !important;}
+  .list_step2 div:last-of-type{margin:0;}
+  .list_step2 div a{display: block;padding:10px 0;font-size:13px;}
+  .list_step2 div a br{display: none;}
+  .list_step2 div a:after{top:-20px !important;left:50% !important;transform: rotate(90deg);}
+  .list_proc_center{text-align: center;}
+  .list_proc1 li{float:auto;margin:10px 0 25px -25px;width:100%;box-sizing: border-box;}
+  .list_proc1.step3_1 li{width:100%;height:auto;}
+  .list_proc1 li:after{right:auto;left:50%;top:auto;bottom:-25px;transform: rotate(90deg) translateY(5px);}
+  .list_proc1 li > *{font-size:13px;}
+  .list_proc1.step5_2 li:after, .list_proc1.step5_3 li:after{display: block;}
+  .list_proc1.step5_2 li .stepNum, .list_proc1.step5_3 li .stepNum,.list_proc1.step4_1 li .stepNum,.list_proc1.step3_1 li .stepNum{display:inline-block;padding:6px 20px;}
+  .list_proc1.step5_2 li .point:before{left:50%;transform: translateX(-50px);}
+  .list_proc1.step5_3 li .point:before{left:50%;transform: translateX(-60px);}
+  /* list_num */
+  .list_num>li b,.list_num>li b>*{font-size:13px;}
+  /* 비식별 컨설팅/교육 등 지원 신청 */
+  .bx_blueArrow p{font-size:13px;}
+  .bx_blueArrow .bg_arrow p{padding: 10px;}
+  .bx_blueArrow{padding-right:0; text-align: center;}
+  .bx_blueArrow .bg_arrow{float:none; width: 100%; text-align: center;}
+  .bx_blueArrow .bg_arrow:after {display: none;}
+  .bx_blueArrow.two_txt .bg_white{display: block;margin:10px 0 5px 0;}
+  .bx_blueArrow .reqBtn{position: relative; right: inherit; top: inherit; margin-bottom: 10px; margin-top: 10px; }
+
+  /* 개인정보보호 자가진단 */
+  .selfDiagnosis_txt>*{font-size:15px;}
+  .selfDiagnosis_flash {margin-left:0;}
+  .selfDiagnosis_flash > div{float:auto; width: 100%; margin-left:0;border:1px solid #eee;}
+
+  /* 개인정보처리방침만들기 */
+  .infoMakeperInf{font-size:13px;}
+
+  /* 캠페인 */
+  /* 20200917(s) */
+	/*   .animation_wrp .script_tab .txt,.animation_wrp .ani_s .ani_thum .txt p{font-size: 13px;} */
+  .video_wrp li{width:50%;}
+  /* 20200917(e) */
+  .card_news_list .card_img{max-height: 240px;}
+  .card_news_list .card_name{padding:10px;}
+  .card_news_list .card_name p{font-size:13px;}
+  .card_news_detail li{width:auto;}
+
+  /* 캠페인히스토리 */
+  /*20201005(s)*/
+  .history_list .history_box>div{float: inherit;width:100% !important;}
+  .history_list .history_box .txt_box{padding:10px 0 40px 0;}
+  .history_list .history_box .poster_box{padding:0 !important;text-align: center !important;}
+  .history_list .history_box .poster_box>div{width:280px;}
+  .history_list .history_box:nth-child(2){position: relative;padding-top:440px;}
+  .history_list .history_box:nth-child(2) .poster_box{position: absolute;top:0;}
+  /* 20201005(e) */
+
+  /* 교육수강목록 */
+  .tb_edu_apply .date{width:25% !important;}
+  .tb_edu_apply .video{width:12% !important;}
+  .tb_edu_apply .apply{width:20% !important;}
+  .lec_detail li>*{font-size:13px;}
+  .sequence_num{font-size:13px;}
+
+  /* ismsp */
+  .panel_step{padding:0;}
+  .panel_step>div{float:inherit;}
+  .panel_step > .left ,.panel_step > .right{padding:0;width:100%;text-align: left;}
+  .panel_step > .right{padding:10px;}
+  .panel_step>.left span{display: block;padding:10px 0;text-align: center;width:100%;height:auto;border-radius: 0;line-height: 1em;font-size:17px;}
+  .panel_step>.left span.lh{padding:10px 0;line-height: 1em;}
+  .panel_step>.left span.lh br{display:none;}
+  .intro_layout_box .lay_box{padding:10px;}
+  .intro_layout_box .lay_box h5{padding-bottom:10px;font-size:17px;}
+  .intro_layout_box .lay_box p,.intro_layout_box .lay_box p>*{font-size:13px;}
+
+  /* 데이터기술지원허브 사용신청 */
+  .dataHubImg{height:390px;background-size:100%;}
+  .list_proc2 li:after{right:-15px;}
+  .signature{font-size:13px;}
+  /* 개인정보 분쟁조정 */
+  .bg_DclInvPttRegist{height:650px;}
+  /* 집단분쟁조정절차 및 신청 */
+  .bg_DclGrpPttRegist{height:600px;}
+  /* 비식별 조치 전문기관 */
+  .edu_inf_con2{height:180px;}
+  .edu_inf_con3{background-size:100%;}
+  /* 이용자 개인정보보호 이용수칙 */
+  .man_harm{height:265px;}
+   /* 개인정보 열람등 요구 안내 */
+   .bg_pernalInfo{height:570px;}
+
+   /* 사이트맵 */
+   .sitemap_wrap .sitemap_box >div>ul>li{width:50%;height:220px;}
+}
+
+
+@media all and (max-width:576px){/*모바일 가로*/
+  /* 텍스트 */
+  .tit_sub{font-size:14px !important;background-position: 0 4px;}
+  .tit_sub.mgt60,.spot_sub.mgt60,.tit_main{margin-top:30px !important;}
+  /* dese */
+  .spot_sub{padding-bottom: 15px;}
+  .desc.none_title p{line-height: 20px;}
+  .desc.none_title p.mgt30{margin:15px 0 0 0 !important;}
+  .panel_box.report .or {width:100%}
+  .panel_box.report .area {width:100%}
+  .table_folder tbody .list td>span{line-height: 1.4;}
+  .table_folder tbody .listView td>div{padding:20px 10px}
+  .table_folder tbody .listView td .fileList dt{font-size:inherit;}
+  .table_folder tbody .list td{padding-right:20px !important;}
+  .table_folder tbody .list td:last-of-type:after{top:12px;right:10px;}
+  .table_folder.tb_faq .listView td>div{padding:40px 10px 10px 10px;}
+
+  /* 검색:개인정보 열람등 요구 */
+  .searchList_cont .tit{display: block;margin:15px 0 5px 0;}
+  .searchList_cont .wcpPip_inner .datepicker{width:92px}
+  .bg_pernalInfo{height:460px;}
+
+
+  /* 개인정보 보호조치 진단 step */
+  .list_step3 > ul > li{position: relative; float:none; margin:0 0 30px 0;padding:10px;height:auto;line-height: 1;  width:100%; color: #333;  }
+  .list_step3 > ul > li:last-child{margin:0;}
+  .list_step3 > ul > li:after {top:auto;right:50%;bottom:-20px;transform: rotate(90deg);}
+  .list_step3 > ul > li.another_step {padding: 0;width:100%; line-height: 1; }
+  .list_step3 > ul > li span{padding:10px;}
+  .list_step3 > ul > li ul li{float:none;  padding:10px; height:auto;width:100%; border-top:1px solid #d8d8d8; border-left:none;}
+  .list_step3 > ul > li.on ul li {border-left:none; border-top:1px solid #5aa2c4}
+  .list_step3 > ul > li ul li:first-child{border-top:none;}
+
+  /* 개인정보처리방침 만들기 */
+  .wcpStep_list li input[name=handleName]{width:70%}
+
+  /* 캠페인 */
+  .card_news_list li{width:100%;}
+  .card_news_list .card_box{margin-right:0 !important;}
+  .card_news_list .card_img{max-height: inherit;}
+
+   /*20200925(s)*/
+  /*지킬앤가이드 캐릭터 페이지*/
+  .character_intro_wrap .intro_title img{width:90%;height:auto;}
+  .character_intro_wrap .intro_img img{width:90%;height:auto;}
+  .character_intro_wrap > p{margin: 30px 0 0 0 !important;}
+  .character_list>li>div{float: inherit;width:100% !important;}
+  .character_list .img_area img{width:auto;height:200px;}
+  .character_list .txt_area{margin:30px 0 0 0;}
+  .character_list .txt_area b{font-size:17px;}
+  .character_list .txt_area h4{margin:5px 0 0 0;}
+  .character_list .txt_area dt{width:90px;}
+  .character_list .txt_area dd{width:calc(100% - 95px);}
+  .character_list .keyword li{padding:8px 12px;margin:0 3px 0 0;border-radius: 16px; font-size:12px;}
+  /*20200925(e)*/
+
+  /* list_num */
+  .list_ex>li:nth-child(odd){padding:10px 5px 5px 5px;}
+  .list_ex>li:nth-child(even){padding:10px 5px;}
+
+  /* 개인정보 분쟁조정 */
+  .bg_DclInvPttRegist{height:585px;}
+  /* 집단분쟁조정절차 및 신청 */
+  .bg_DclGrpPttRegist{height:530px;}
+  /* 비식별 조치 안내 */
+  .edu_inf_con1 {height:235px;background-size: 100%;}
+  .edu_inf_con3{height:540px;}
+
+  /* 사이트맵 */
+  .sitemap_wrap .sitemap_box >div>ul>li{width:100%;height:auto !important;border-bottom:1px dashed #ddd;}
+  .sitemap_wrap .sitemap_box >div>ul>li:last-child{border:none;}
+
+  .c_box .pc{display:none;}
+  .c_box .mb{display:block;}
+
+/*동영상 iframe*/
+.videoMediaquery{height:300px !important;}
+}
+
+@media all and (max-width:414px){/*아이폰플러스 시리즈*/
+
+  /* check , radio box */
+  .req_type.menu3 .chkradio{width:calc(100% - 10%);}
+
+  .tit_list{font-size:13px;}
+  .tit_list>*{font-size: inherit;}
+  /* 팝업 레이아웃 #wrap_pop */
+  #wrap_pop>.tit_pop {font-size:17px;}
+  /* 검색 */
+  .searchList_cont .wcpPip_inner,
+  .searchList_cont div label{font-size:13px !important;}
+  .searchList_cont.personalInfoFile .wcpPip_inner{width:100%}
+
+  .list_card .tt{font-size:14px;}
+
+  .req_type .chkradio,.searchList_cont .wcpPip_inner .chkradio{display: block;margin:10px 0;text-align: left;}
+  .searchList_cont .wcpPip_inner .datepicker{padding:4px;font-size:12px;}
+
+  /* 기본탭 tab_btn */
+  .tab_btn.box6 li a{font-size:11px;}
+
+  /* 개인정보 영향평가 */
+  .spot_bg .spot_sub{padding:20px 0 20px 0!important;height:auto !important;}
+  .spot_bg .spot_sub .tit_main{margin:0 !important;font-size:22px !important;}
+  .spot_bg .spot_sub .tit_main>*{font-size:inherit !important;}
+  .spot_bg .spot_sub .desc{margin:0 !important;font-size:13px !important;}
+
+  /* 개인정보보호 관리체계 ISMS */
+  .intro_isms .tt{padding:10px 15px;font-size:13px;}
+  .intro_isms .left{margin-bottom:0;}
+  .intro_isms li .left img{height:100px;}
+  .intro_isms li>div h3{font-size:16px;}
+  .intro_isms li>div label,.intro_isms li>div label>*,.intro_isms li>div p{font-size:13px;}
+  .left_right_div>ul>li,.left_right_div.bd_all>ul>li{padding:10px 0;}
+  .intro_layout_box .lay_box{background-image: none !important;}
+  /* 캠페인 */
+  /* 20200917(s) */
+ /*  .animation_wrp .ani_s{padding:8px;}
+  .animation_wrp .ani_s li{float: auto;margin:0 0 20px 0;width:100%;}
+  .animation_wrp .ani_s li:last-child{margin:0;}
+  .animation_wrp .ani_s .ani_thum{margin:0;} */
+  .video_wrp li a{margin:0 4px}
+  .video_wrp .ani_thum_img{height:140px;}/*20201005*/
+  .video_wrp .txt .title{font-size:14px;}
+  /* 20200917(e) */
+
+  /*캠페인 히스토리*/
+  /* 20201005(s) */
+  .history_list .history_box:first-child{margin-top:30px;}
+  .history_list .history_box:first-child>div{padding-top:20px;}
+  .history_list .history_box .txt_box{padding-top:20px;}
+  .history_list .history_box:nth-child(2){padding-top:300px;}
+  .history_list .history_box .poster_box>div{width:200px;}
+  .history_list .history_box .txt_box .txt{padding:0;}
+  /* 20201005(e) */
+
+  /* 이용자 개인정보보호 이용수칙 */
+  .man_harm{height:174px;}
+  /* 비식별 조치 안내 */
+  .edu_inf_con1 {height:190px;}
+  /* 비식별 조치 전문기관 */
+  .edu_inf_con2{margin-top:0 !important;height:125px;}
+  .edu_inf_con3{height:402px;}
+  /* 데이터기술지원허브 사용신청 */
+.dataHubImg{height:260px;}
+  /* 개인정보 열람등 요구 */
+  .bg_pernalInfo{height:368px;}
+  /* 개인정보 분쟁조정 */
+  .bg_DclInvPttRegist{height:430px;}
+  /* 집단분쟁조정절차 및 신청 */
+  .bg_DclGrpPttRegist{height:400px;}
+
+  /* 전문강사제도 */
+  .map_right{margin:0 40px;}
+  .tab_btn.search_area_tab li a strong{font-size:12px;}
+
+  /* 단체 온라인 교육 */
+  .groupOnlinePop{width:95%;top:60px;}
+
+  /* 사이트맵 */
+  .sitemap_wrap .tit_site{padding:8px 10px;font-size:15px;}
+  .sitemap_wrap .sitemap_box >div>ul>li a{font-size:13px;}
+  /* 뷰어모음 */
+  .list_viewer li{padding:20px 0;text-align: center;}
+  .list_viewer li dt,.list_viewer li dd{font-size:13px;}
+  .list_viewer .thb{position:inherit;top:inherit;left:inherit;}
+  .list_viewer dl{margin:10px 0;width:100%;}
+  .list_viewer .btns{position: inherit;;right:inherit;top:inherit;}
+}
+
+@media all and (max-width:375px){/*아이폰 시리즈*/
+
+}
+
+@media all and (max-width:360px){/*갤럭시 시리즈*/
+  /* 개인정보 열람등 요구 */
+  .bg_pernalInfo{height:320px;}
+  /* 개인정보 분쟁조정 */
+  .bg_DclInvPttRegist{height:372px;}
+  /* 집단분쟁조정절차 및 신청 */
+  .bg_DclGrpPttRegist{height:350px;}
+  /* 비식별 조치 안내 */
+  .edu_inf_con1 {height:170px;}
+  /* 비식별 조치 전문기관 */
+  .edu_inf_con2{height:107px;}
+  .edu_inf_con3{height:348px;}
+   /* 이용자 개인정보보호 이용수칙 */
+   .man_harm{height:156px;}
+
+   /*캠페인 홍보영상*/
+   .video_wrp .ani_thum_img{height:120px;}/*20201005*/
+}
+
+
+@media all and (max-width:320px){/*아이폰4 이하*/
+  /* 전문강사제도 */
+  .map_right{margin:0 10px;}
+
+  /*20201005 캠페인 홍보동영상*/
+  .video_wrp .ani_thum_img{height:105px;}
+}
