@@ -1,0 +1,807 @@
+
+from __future__ import with_statement
+from sqlalchemy import create_engine
+from flask import Flask, url_for, render_template, request, redirect, session, jsonify, make_response, abort, g, flash
+from flask_sqlalchemy import SQLAlchemy
+from pip._vendor.appdirs import user_data_dir
+from sqlalchemy import desc
+from datetime import datetime
+import time
+from sqlalchemy.sql.expression import null
+from _hashlib import new
+from sqlite3 import dbapi2 as sqlite3
+from _dummy_thread import error
+from contextlib import closing
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+from Cython.Shadow import address
+
+DATABASE = 'getitem.db'
+PER_PAGE = 30
+
+app = Flask(__name__) # app 초기화
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///getitem.db'
+
+#파일 업로드 용량 제한
+app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
+
+db2 = SQLAlchemy(app)
+app.config.from_object(__name__)
+# 
+def connect_db():
+    """DB 연결 후 Connection객체 반환, DB 없으면 내부적으로 새로 생성됨."""
+    return sqlite3.connect(app.config['DATABASE'])
+
+###################################### Class start ###############################################
+class User(db2.Model):
+    __tablename__ = 'users'
+
+    id = db2.Column(db2.Integer,  primary_key = True) # 시퀀스 추가
+    name = db2.Column(db2.String)
+    email = db2.Column(db2.String)
+    password = db2.Column(db2.String)
+    phone = db2.Column(db2.String)
+    address = db2.Column(db2.String)
+
+    def __init__(self, name, email, password, phone, address):
+        self.name = name
+        self.email = email
+        self.password = password
+        self.phone = phone
+        self.address = address
+   
+    def __repr__(self):
+        return"<User('%s', '%s', '%s', '%s', '%s')>" % (self.name, self.email, self.password, self.phone, self.address)
+
+
+class Product(db2.Model):
+    __tablename__ = 'product'
+    
+    id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
+    author_id = db2.Column(db2.Integer)
+    title = db2.Column(db2.String)
+    picture = db2.Column(db2.String)
+    start_val = db2.Column(db2.String)
+    current_val = db2.Column(db2.String)
+    immediate_val = db2.Column(db2.String)
+    days = db2.Column(db2.Integer)
+    board = db2.Column(db2.String)
+    now_date = db2.Column(db2.Integer)
+    heart = db2.Column(db2.Integer)
+    bidders = db2.Column(db2.Integer)
+    state = db2.Column(db2.Boolean)
+
+    def __init__(self, author_id, title, picture, start_val, current_val, immediate_val, days, board, now_date, heart, bidders, state):
+        self.author_id = author_id
+        self.title = title
+        self.picture = picture
+        self.start_val = start_val
+        self.current_val = current_val
+        self.immediate_val = immediate_val
+        self.days = days
+        self.board = board
+        self.now_date = now_date
+        self.heart = heart
+        self.bidders = bidders
+        self.state = state
+   
+    def __repr__(self):
+        return"<Product('%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', %d, %d, %d)>" % (self.author_id, self.title, self.picture, self.start_val,
+                                                      self.current_val, self.immediate_val,
+                                                       self.days, self.board, self.now_date,
+                                                       self.heart, self.bidders, self.state)
+
+class Message(db2.Model):
+    __tablename__ = 'message'
+    
+    id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
+    author_id = db2.Column(db2.String)
+    text = db2.Column(db2.String)
+    pub_date = db2.Column(db2.Integer)
+
+
+    def __init__(self, author_id, text, pub_date):
+        self.author_id = author_id
+        self.text = text
+        self.pub_date = pub_date
+   
+    def __repr__(self):
+        return"<Message('%s', '%s', '%d')>" % (self.author_id, self.text, self.pub_date)
+    
+    
+class Boards(db2.Model):
+    __tablename__ = 'bbs'
+    
+    id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
+    writer = db2.Column(db2.String)
+    title = db2.Column(db2.String)
+    content = db2.Column(db2.String)
+    regdate = db2.Column(db2.Integer)
+    reads = db2.Column(db2.Integer)
+
+    def __init__(self, writer, title, content, regdate, reads):
+        self.writer = writer
+        self.title = title
+        self.content = content
+        self.regdate = regdate
+        self.reads = reads
+   
+    def __repr__(self):
+        return"<Board('%s', '%s', '%s', '%d, %d')>" % (self.writer, self.title, self.regdate, self.reads)
+    
+class Bidding(db2.Model):
+    __tablename__ = 'bidding'
+    
+    id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
+    bidder_id = db2.Column(db2.Integer)
+    product_id = db2.Column(db2.Integer)
+    now_date = db2.Column(db2.Integer)
+    my_price = db2.Column(db2.String)
+
+    def __init__(self, bidder_id, product_id, now_date, my_price):
+        self.bidder_id=bidder_id
+        self.product_id = product_id
+        self.now_date = now_date
+        self.my_price = my_price
+   
+    def __repr__(self):
+        return"<Bidding('%d', '%d', '%d', '%s')>" % (self.bidder_id, self.product_id, self.now_date, self.my_price)
+
+class Cart(db2.Model):
+    __tablename__ = 'cart'
+    
+    cartId = db2.Column(db2.Integer, primary_key = True)
+    productId = db2.Column(db2.Integer)
+    userId = db2.Column(db2.Integer)
+
+    def __init__(self, productId, userId):
+        self.productId = productId
+        self.userId = userId
+
+    def __repr__(self):
+        return"<Cart('%d', '%d')>" % (self.productId, self.userId) 
+    
+class Sbid(db2.Model):
+    __tablename__='sbid'
+    
+    id = db2.Column(db2.Integer, primary_key = True)
+    product_id = db2.Column(db2.Integer)
+    sbidder_id = db2.Column(db2.Integer)
+    sbid_price = db2.Column(db2.String)
+    sbid_date = db2.Column(db2.Integer)
+    bidding_date = db2.Column(db2.Integer)
+    my_price = db2.Column(db2.String)
+    
+    def __init__(self, product_id, sbidder_id, sbid_price, sbid_date, bidding_date, my_price):
+        self.product_id = product_id
+        self.sbidder_id = sbidder_id
+        self.sbid_price = sbid_price
+        self.sbid_date = sbid_date
+        self.bidding_date = bidding_date
+        self.my_price = my_price
+
+    def __repr__(self):
+        return"<Sbid('%d', '%d', '%s', '%d', '%d', '%s')>" % (self.product_id, self.sbidder_id, self.sbid_price, self.sbid_date, self.bidding_date, self.my_price) 
+
+class Payment(db2.Model):
+    __tablename__ = 'payment'
+    
+    id = db2.Column(db2.Integer, primary_key = True)
+    author_name = db2.Column(db2.String)
+    product_name = db2.Column(db2.String)
+    sbid_price = db2.Column(db2.String)
+    bidder_name = db2.Column(db2.String)
+    email = db2.Column(db2.String)
+    phone = db2.Column(db2.String)
+    address = db2.Column(db2.String)
+    pay_date = db2.Column(db2.Integer)
+    
+
+    def __init__(self, author_name, product_name, sbid_price, bidder_name, email, phone, address, pay_date):
+        self.author_name = author_name
+        self.product_name = product_name
+        self.sbid_price = sbid_price
+        self.bidder_name = bidder_name
+        self.email = email
+        self.phone = phone
+        self.address = address
+        self.pay_date = pay_date
+
+    def __repr__(self):
+        return"<Payment('%s, %s', '%s', '%s', '%s', '%s', '%s', '%d')>" % (self.author_name, self.product_name, self.sbid_price, self.bidder_name, self.email, self.phone, self.address, self.pay_date) 
+
+
+
+
+###################################### Class end ###############################################
+
+###################################### Method Tool Start ###############################################
+""" 파싱해주는 함수 """
+def query_db(query, args=(), one=False):
+    """Queries the database and returns a list of dictionaries."""
+    """ g는 전역객체, fetchall():조회할때 쓰는 메소드"""
+    cur = g.db.execute(query, args)
+    rv = [dict((cur.description[idx][0], value)
+               for idx, value in enumerate(row)) for row in cur.fetchall()]
+    return (rv[0] if rv else None) if one else rv
+
+""" g.db 전역객체로 DB에 접근하여 query문 적용하기 위한 Method"""
+@app.before_request
+def before_request():
+    """http 요청이 올 때마다 실행 : db연결하고 전역 객체 g에 저장하고 세션에 userid가 저장되어 있는지 체크해서 user 테이블로부터 user 정보 조회 한 후에 전역 객체 g에 저장 """
+    g.db=connect_db()
+
+
+""" 날짜함수 Method """
+def format_datetime(timestamp):
+    """ 정수값에 해당하는 날짜 시간 포맷 형식 변경해서 문자열로 반환하는 함수 """
+    return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d  %H:%M')
+
+app.jinja_env.filters['datetimeformat'] = format_datetime
+""" jinja 템플릿 엔진에 filter로 등록 => html페이지에서 필터처리할 때 사용됨"""
+# template engine jinja에 이름을 지정(datetimeformat)하고 format_datetime(우리가 위에서 만든 함수)를 넣어준다
+
+###################################### Method Tool End ###############################################
+
+###################################### Route Method ###############################################
+
+''' 메인페이지 '''
+@app.route("/")
+def home():
+    product_deadline=Product.query.filter_by(state=1).order_by(Product.now_date.asc()).limit(3)
+    product_newest = Product.query.filter_by(state=1).order_by(Product.now_date.desc()).limit(4)
+    product_popular = Product.query.filter_by(state=1).order_by(Product.heart.desc()).limit(4)
+    return render_template('index.html', product_head=product_deadline
+                           , product_newest=product_newest
+                           , product_popular=product_popular
+                           , now_time = int(time.time()))
+
+""" 제품상세페이지  """
+@app.route("/single-product/<int:product_id>")
+def viewProduct(product_id=None):
+    post = Product.query.filter_by(id=product_id).first()
+    return render_template("single-product.html", product = post, now_time = int(time.time()))
+
+""" 결제가 완료딘다면? 임시함수"""
+@app.route("/sp_success")
+def sp_success():
+    return render_template("sp_success.html")
+
+
+""" 검색창 """
+@app.route("/search", methods=['GET','POST'])
+def search_product():
+    if request.method=='POST':
+        productname = request.form.get('search') # 검색하는 값 받아옴  "개"
+        productlist = db2.session.query(Product).filter(Product.title.like('%'+productname+'%')).all()
+        return render_template("search.html", products=productlist)
+    else:
+        return redirect(url_for("home"))
+
+
+""" 로그인 """
+@app.route("/login", methods=['GET','POST'])
+def login():
+    if request.method=='GET':
+        return render_template("login.html", error = None) 
+    else:
+        uname=request.form['username']
+        upasswd=request.form['password']
+        try:
+            user_data = User.query.filter_by(name=uname, password=upasswd).first()
+            if user_data is not None : 
+                session['user_id']=user_data.id
+                session['logged_in']=True
+                return redirect(url_for('home'))
+            else:
+                error = "ID가 존재하지 않거나 비밀번호가 일치하지 않습니다."
+                return render_template("login.html", error=error)
+        except :
+            error = "DB조회중에 에러가 발생했습니다."
+            return render_template("login.html", error=error)
+
+""" 회원가입 """
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    """get방식  요청은 reighter.html 응답 전송 post 방식 요청은 db에 회원 정보 추가하고 login페이지로 redirect시킵니다"""
+    if request.method=='POST':
+        new_user = User(name=request.form['username'],
+                        email= request.form['emailid']+'@'+request.form['emailadd'],
+                        password = request.form['password'],
+                        phone = request.form['txtMobile1']+'-'+request.form['txtMobile2']+'-'+request.form['txtMobile3'],
+                        address = '')
+        if (request.form['username'] and request.form['password'] and request.form['emailid'] and request.form['emailadd']) == '':
+            if  request.form['username'] == '':
+                error = "ID는 필수 입력 사항입니다."
+                return render_template("register.html", error=error)
+            elif request.form['password'] == '':
+                error = "비밀번호는 필수 입력 사항입니다."
+                return render_template("register.html", error=error)
+            elif (request.form['emailid'] or request.form['emailadd']) == '' :
+                error = "E-mail은 필수 입력 사항입니다."
+                return render_template("register.html", error=error)
+        
+        if request.form['password']==request.form['confirmPassword']: # 비밀번호 확인이 일치하면 commit 시킨다.
+            db2.session.add(new_user)
+            db2.session.commit()
+            return render_template("login.html", error = None)
+        else:
+            error = "입력하신 비밀번호와 비밀번호 확인값이 일치하지 않습니다."
+            return render_template("register.html", error=error)
+    else:
+        return render_template("register.html", error = None)
+    
+    
+    
+# -----------------------------------------< 미구현 >---------------------------------------------------------------
+
+'''(미구현) 상품안에 상품문의를 minitwit 형식으로 구현하는 함수 '''
+@app.route("/single-product/minitwit", methods=['GET', 'POST'])
+def single_product_QnA():
+    """get방식  요청은 reighter.html 응답 전송 post 방식 요청은 db에 회원 정보 추가하고 login페이지로 redirect시킵니다"""
+    user=User.query.filter_by(id=session['user_id']).first()
+    if request.method=='POST':
+        quest_msg = Message(author_id=session['user_id'], text=request.form['text'], pub_date=int(time.time()))
+        if not session['logged_in']:
+            return render_template("login.html")
+        else:
+            db2.session.add(quest_msg)
+            db2.session.commit()
+            flash('메시지가 저장되었습니다.')
+            return render_template('single-product.html', messages=query_db('''
+                                    select message.*, users.* from message, users
+                                    where message.author_id = users.id
+                                    order by message.pub_date desc limit ?''', [PER_PAGE]))
+    else:
+        return render_template("single-product.html", messages=query_db('''
+                                    select message.*, users.* from message, users
+                                    where message.author_id = users.id
+                                    order by message.pub_date desc limit ?''', [PER_PAGE]))
+
+''' Minitwit 문의 게시판  출력(미구현) '''
+@app.route('/add_message', methods=['GET', 'POST'])
+def add_message():
+    if not session['logged_in']:
+        return render_template("login.html")
+    user=User.query.filter_by(id=session['user_id']).first()
+    quest_msg = Message(author_id=session['user_id'], text=request.form['text'], pub_date=int(time.time()))
+    db2.session.add(quest_msg)
+    db2.session.commit()
+    flash('메시지가 저장되었습니다.')
+    return render_template('single-product.html', messages=query_db('''
+        select message.*, users.* from message, users
+        where message.author_id = users.id
+        order by message.pub_date desc limit ?''', [PER_PAGE]))
+# ------------------------------------------------------------------------------------------------------------------------
+
+''' 경매내역보기 조회페이지 '''  
+@app.route("/single-product/<int:prod_bidnum>/viewbidder")
+def viewbidder(prod_bidnum=None):
+    user_data=[]
+    product_data=[]
+    bidding_data = Bidding.query.filter_by(product_id=prod_bidnum).all()
+    
+    b_length = len(bidding_data)
+    for i in range(len(bidding_data)):
+        user_data.append(User.query.filter_by(id=bidding_data[i].bidder_id).first())
+
+    for i in range(len(bidding_data)):
+        product_data.append(Product.query.filter_by(id=bidding_data[i].product_id).first())
+           
+    return render_template("bidder.html", bidders=bidding_data, users=user_data, products=product_data, b_length=b_length)
+
+    
+''' 마이페이지 '''
+@app.route("/mypage")
+def mypage():
+    try:
+        if session['logged_in']:
+            user_data = User.query.filter_by(id=session['user_id']).first()
+            return render_template("mypage.html", user=user_data)
+        else:
+            return render_template("login.html") 
+    except:
+        return render_template("login.html") 
+
+########################## 마이페이지 여섯가지 목록 ###########################  
+''' 판매내역조회 '''
+@app.route("/product_sell_list/<int:user_id>")
+def product_sell_list(user_id=None):
+    if session['logged_in']:
+        user_data = User.query.filter_by(id=session['user_id']).first()
+        product_data=Product.query.filter_by(author_id=user_id).all()
+        return render_template("product_sell_list.html", products = product_data, user=user_data)
+    else:
+        return render_template("login.html")
+  
+    
+''' 판매상품등록  '''
+@app.route("/pdregister")
+def pdregister():
+    try:
+        if not session['logged_in']:
+            return render_template("login.html")
+        else:
+            user_data = User.query.filter_by(id=session['user_id']).first()
+            return render_template("pdregister.html", user=user_data)
+    except:
+        return render_template("login.html")
+    
+  
+############################## 판매상품 등록 -> 상품등록 이미지 파일 관련 Start ################################
+''' 이미지를비롯한상품등록버튼누를시에데이터DB에저장 '''     
+@app.route('/pdregister/uploader', methods=['GET', 'POST'])
+def pdregister_uploadFile():
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    if request.method == 'POST':
+        if request.form['product_name']=='':
+            error = "상품명이 입력되지 않았습니다."
+            return render_template("pdregister.html", error1=error, user=user_data)
+        elif (request.form['initial_price'] and request.form['direct_price'])=='':
+            error = "시작가 및 즉구가를 입력해 주세요"
+            return render_template("pdregister.html", error3=error, user=user_data)
+        elif int(request.form['initial_price'].replace(",",""))>=int(request.form['direct_price'].replace(",","")):
+            error = "즉시 구매 가격보다 높거나 같습니다."
+            return render_template("pdregister.html", error2=error, user=user_data)
+        elif request.form['direct_price']==0:
+            error = "즉시 구매가는  적어도 1원 이상이어야 합니다."
+            return render_template("pdregister.html", error3=error, user=user_data)
+        elif request.form['days']=="":
+            error = "게시 기간이 입력되지 않았습니다."
+            return render_template("pdregister.html", error4=error, user=user_data)
+        f = request.files['product_img']
+        if f.filename == '' : # 첨부된 이미지가 없는 경우
+            picture = "img/no_img.png"
+        else:
+            picture = "./img/product_img/" + str(int(time.time())) + "_" + secure_filename(f.filename)
+            f.save("./static"+picture)
+              # 파일명을 보호하기 위한 메소드에 적용시킨 후 save
+        g.db.execute('''insert into   product(author_id, title, picture, start_val, current_val, immediate_val, days, board, now_date, heart, bidders, state)
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (session['user_id'],
+                    request.form.get('product_name'), picture, request.form.get('initial_price'),
+                    request.form.get('initial_price'), request.form.get('direct_price'),
+                    request.form.get('days'), request.form.get('description'), int(time.time()), 0,0,1))
+        g.db.commit()
+        return redirect(url_for("home"))
+
+''' 상품수정 '''  
+@app.route("/pdregister_edit/pdnum=<int:product_id>", methods=['GET', 'POST'])
+def pdregister_edit(product_id=None):
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    product_data = Product.query.filter_by(id=product_id).first()
+    if session['logged_in']:
+#         return render_template("pdregister_edit.html", user=user_data, product=product_data)
+        if request.method == 'GET':
+            return render_template("pdregister_edit.html", user= user_data, product= product_data)
+        else:
+            edit_product = Product.query.filter_by(id=product_id).first()
+            edit_product.title = request.form['product_name']
+            edit_product.board = request.form['description']
+            f = request.files['product_img']
+            picture = "./img/product_img/" + str(int(time.time())) + "_" + secure_filename(f.filename)
+            if edit_product.title=='':
+                return render_template("pdregister_edit.html", user= user_data, product= product_data, error = "상품이름을 입력하여 주세요")
+            if secure_filename(f.filename)=='':
+                edit_product.picture = product_data.picture
+            else:
+                edit_product.picture = picture
+            db2.session.add(edit_product)
+            db2.session.commit()
+            f.save("./static"+picture)
+            return render_template("single-product.html", user= user_data, product= product_data, now_time = int(time.time()))
+    else:
+        return render_template("login.html")
+    
+''' 등록된상품삭제 '''
+@app.route('/pdregister_edit/pdnum=<int:product_id>/delete')
+def pdregister_delete(product_id=None):
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    products=query_db('''select product.* from product, users where product.author_id = users.id order by product.id desc ''')
+    product_data = Product.query.filter_by(id=product_id).first()
+    db2.session.delete(product_data)
+    db2.session.commit()
+    return redirect(url_for("product_sell_list", user_id = user_data.id))
+    
+    
+
+############################## 판매상품 등록 -> 상품등록 이미지 파일 관련 end ################################
+''' 입찰하기 '''
+@app.route("/single-product/<int:product_id>/getbid", methods=['GET', 'POST'])
+def getbid(product_id=None):
+    product = Product.query.filter_by(id=product_id).first()
+    user_data = User.query.filter_by(id=session['user_id']).first() # userid 가져오기위해
+    bid_data = Bidding.query.filter_by(product_id=product.id).all()
+    flag = 0
+    for bid in bid_data: # 로그인한 사용자가 이미 입찰을 했는지 여부를 체크하고 이미 입찰한 사용자라면 flag값을 1로 셋팅함
+        if bid.bidder_id==user_data.id:
+            flag = 1 #이미 입찰한놈임
+    if request.method == 'POST':        
+        if request.form['my_price']=='':
+            error = "입찰 금액을 입력해 주세요"
+            return render_template("single-product.html", product=product, now_time = int(time.time()), error = error)
+        elif int((request.form['my_price']).replace(",",""))<=int((product.current_val).replace(",","")):
+            error = "입찰가격이 현재가보다 낮습니다. 올바른 가격을 입력해 주세요"
+            return render_template("single-product.html", product=product, now_time = int(time.time()), error = error)
+        elif int((request.form['my_price']).replace(",",""))>=int((product.immediate_val).replace(",","")):
+            error = "입찰가격이 즉시 구매가보다 높습니다. 올바른 가격을 입력해 주세요"
+            return render_template("single-product.html", product=product, now_time = int(time.time()), error = error)
+        else:
+            bidding = Bidding(bidder_id=user_data.id, product_id=product.id, now_date=int(time.time()), my_price = request.form['my_price'])
+            if flag: #이미 입찰한 사람이라면 입찰가격과 현재 날짜만 수정하고 리턴해줌
+                # update set where 문으로 지정된 product의 price를 수정하는 코드 추가
+                g.db.execute('''update bidding set my_price = ?, now_date = ? where product_id = ? and bidder_id = ?''',(request.form['my_price'], int(time.time()), product.id, user_data.id))
+                g.db.commit()
+            else:
+                product.bidders+=1
+                db2.session.add(bidding)
+                db2.session.commit()
+            g.db.execute('''update product set current_val = ? where id = ?''', (request.form['my_price'], product.id ))
+            g.db.commit() # 입력받은 입찰가를 product의 현재가(currenct_val)에 대입하여 update 시켜준다  
+            return redirect(url_for("bid_list"))
+    else:
+        return redirect(url_for("home"))
+    
+''' 입찰 내역 '''
+@app.route("/bid_list")
+def bid_list():
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    bid_data = Bidding.query.filter_by(bidder_id=user_data.id).all()
+    product_data=[]
+    for bid in bid_data:
+        product_data.append(Product.query.filter_by(id=bid.product_id).first())
+    if session['logged_in']:
+        return render_template("bid_list.html", user = user_data, bidding = bid_data, product=product_data, p_long = len(product_data))
+    else:
+        return render_template("login.html")
+    
+''' 즉시구매하기 '''
+@app.route("/single-prodict/<int:product_id>/getitem", methods=['GET', 'POST'])
+def getitem(product_id=None):
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    product_data = Product.query.filter_by(id=product_id).first()
+    bidding_data = Bidding.query.filter_by(bidder_id=user_data.id, product_id=product_data.id).first()
+    if bidding_data==None: #입찰한 적이 없는 사람이었다면
+        bidding_date = int(time.time())
+        bidding_myprice = product_data.immediate_val
+    else:
+        bidding_date = bidding_data.now_date
+        bidding_myprice = product_data.immediate_val
+    product_data.state = 0 # 낙찰 상태로 바꿔줌
+#     product_data.now_date = product_data.now_date-86400*product_data.days #즉시구매시 타이머 종료
+    db2.session.commit()
+    g.db.execute('''insert into   sbid(product_id, sbidder_id, sbid_price, sbid_date, bidding_date, my_price)
+                    values (?, ?, ?, ?, ?, ?)''', ( product_data.id, user_data.id, product_data.immediate_val, int(time.time()), bidding_date, bidding_myprice) )
+    g.db.execute('''update product set current_val = ? where id = ?''', (bidding_myprice, product_data.id ))
+    g.db.commit()
+#     sbid_data = Sbid.query.filter_by(sbidder_id=user_data.id).all()
+    return redirect(url_for("sbid_list"))
+
+
+''' 낙찰내역  '''
+@app.route("/sbid_list")
+def sbid_list():
+    product_data=[]
+    author_name=[]
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    sbid_data = Sbid.query.filter_by(sbidder_id = user_data.id).all()
+    s_long = len(sbid_data)
+    for i in range(s_long):     
+        product_data.append(Product.query.filter_by(id=sbid_data[i].product_id).first())
+    for i in range(s_long):
+        buf = User.query.filter_by(id=product_data[i].author_id).first()
+        author_name.append(buf.name)
+    return render_template("sbid_list.html", user=user_data, sbid=sbid_data, product=product_data, s_long=s_long, author_name=author_name)
+
+
+''' 결제내역  '''
+@app.route("/payment_list")
+def payment_list():
+    product_data = []
+    product_img = []
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    payment_list = Payment.query.filter_by(bidder_name=user_data.name).all()
+    pl_long = len(payment_list)
+    for i in range(pl_long):
+        product_data.append(Product.query.filter_by(title=payment_list[i].product_name).first())
+    
+    for i in range(pl_long):
+        product_img.append(buf.picture)
+    
+    return render_template("payment_list.html", payment_list = payment_list, user=user_data, pl_long=pl_long)
+
+""" 결제하기 누르면 """
+@app.route("/pay_for/<int:product_id>")
+def pay_for(product_id=None):
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    product_data=Product.query.filter_by(id=product_id).first()
+    return render_template("pay_for.html", user=user_data, product=product_data)
+    
+''' 결제완료 '''
+@app.route("/payment_for/<int:productid>/complete", methods=['GET', 'POST'])
+def payment_complete(productid=None):
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    product_data=Product.query.filter_by(id=productid).first()
+    sbid_data = Sbid.query.filter_by(product_id=product_data.id).first()
+    author_info = User.query.filter_by(id=product_data.author_id).first()
+    new_payment= Payment(author_name = author_info.name,
+                            product_name = product_data.title,
+                            sbid_price = sbid_data.sbid_price,
+                            bidder_name = user_data.name,
+                            email = user_data.email,
+                            phone = user_data.phone,
+                            address = user_data.address,
+                            pay_date = int(time.time()) )
+    post = Sbid.query.filter_by(product_id=product_data.id).first()
+    db2.session.delete(post)
+    db2.session.add(new_payment)
+    db2.session.commit()
+    payment_list = Payment.query.filter_by(bidder_name=user_data.name).all() 
+    return render_template("payment_list.html", payment_list = payment_list, user=user_data)
+
+
+""" 낙찰 취소 """
+@app.route("/sbid_list/sbid_delete", methods=['GET', 'POST'])
+def sbid_delete(productid=None):
+    # 낙찰성공 내역 취소하는 내용 추가 필요
+    return redirect(url_for("sbid_list"))
+
+''' 회원정보수정  '''
+@app.route("/mchange", methods=['GET', 'POST'])
+def mchange():
+    try:
+        user_data = User.query.filter_by(id=session['user_id']).first()
+        if not session['logged_in']:
+            return render_template("login.html") #로그인 안되어 있으면 로그인 화면으로
+        if request.method == 'GET':
+            return render_template("mchange.html", user=user_data)
+        else:
+            edit_user = User.query.filter_by(id=session['user_id']).first()
+            edit_user.password = request.form['password']
+            edit_user.email = request.form['emailid']+'@'+request.form['emailadd']
+            edit_user.phone = request.form['txtMobile1']+'-'+request.form['txtMobile2']+'-'+request.form['txtMobile3']
+            edit_user.address = request.form['address']
+
+            if (request.form['password'] and request.form['emailid'] and request.form['emailadd'] and request.form['txtMobile1'])=='' or (len(request.form['txtMobile2'])<3 or len(request.form['txtMobile3'])<4) :
+                if request.form['password'] == '':
+                    error = "비밀번호란이 입력되지 않았습니다."
+                    return render_template("mchange.html", error=error, user=user_data)
+                elif (request.form['emailid'] or request.form['emailadd']) == '' :
+                     error = "E-mail란이 입력되지 않았습니다."
+                     return render_template("mchange.html", error=error, user=user_data)
+                elif (request.form['txtMobile1']==''):
+                     return render_template("mchange.html", error = "핸드폰번호 앞자리가 선택되지 않았습니다.", user=user_data)
+                elif (len(request.form['txtMobile2'])<3 or len(request.form['txtMobile3'])<4):
+                    return render_template("mchange.html", error="핸드폰 번호 양식이 맞지 않습니다.", user=user_data)
+            if request.form['password'] == request.form['confirmPassword']:
+                db2.session.add(edit_user)
+                db2.session.commit()
+                return redirect(url_for("home"))
+            else:
+                error = "입력하신 비밀번호와 비밀번호 확인값이 일치하지 않습니다."
+                return render_template("mchange.html", error=error, user=user_data)
+    except:
+        return render_template("login.html")
+        
+###############장바구니에 담는 소스 코드 작성 START #########################
+""" 카트추가 """
+@app.route("/single-product/<int:product_id>/addcart")
+def add_cart(product_id=None):
+    carts = Cart(productId=product_id, userId=session['user_id'])
+    db2.session.add(carts)
+    db2.session.commit()
+    return redirect(url_for('favorite_list'))
+
+''' 찜목록 '''
+@app.route("/favorite_list")
+def favorite_list():
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    cart_data = Cart.query.filter_by(userId=session['user_id']).all()
+    product_data = []
+    for cart in cart_data:
+        product_data.append(Product.query.filter_by(id=cart.productId).first())
+    return render_template("favorite_list.html", user=user_data, products=product_data)
+###############장바구니에 담는 소스 코드 작성 END ############################ 
+
+''' 내가보낸문의 '''
+############################################################################################
+@app.route("/myboard", methods=['GET', 'POST'])
+def boardlist():
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    try:
+        if session['logged_in']:
+            boardlist = Boards.query.order_by(desc(Boards.id)).all()
+            return render_template("myboard.html", user=user_data, boards = boardlist)
+        else:
+            return render_template("login.html")
+    except:
+        return render_template("login.html")
+    
+@app.route("/myboard/new")
+def boardNew():
+    user_data=User.query.filter_by(id=session['user_id']).first()
+    return render_template("myboard_form.html", user=user_data)
+
+@app.route("/myboard/add" , methods=['GET', 'POST'])
+def addPost():  
+    new_post = Boards(writer=request.form['writer'], title = request.form['title'],   content = request.form['content'] , regdate = int(time.time()), reads=0)
+    db2.session.add(new_post)
+    db2.session.commit()                                           
+    return redirect(url_for("boardlist"))   #get요청
+#get요청
+
+@app.route("/myboard/view/<int:bbs_id>")
+def viewMyboard(bbs_id=None):
+    user_data=User.query.filter_by(id=session['user_id']).first()
+    post = Boards.query.filter_by(id=bbs_id).first()
+    post.reads=post.reads+1
+    db2.session.commit()
+    return render_template("myboard_view.html", bbs = post, user=user_data)
+
+@app.route("/myboard/edit",methods=['POST', 'GET'])
+def editPost():
+    user_data=User.query.filter_by(id=session['user_id']).first()
+    post = Boards.query.filter_by(id=request.form["bbsid"]).first()
+    return render_template("myboard_edit.html",bbs=post, user=user_data)
+
+@app.route("/myboard/save", methods=['POST', 'GET'])
+def savePost():
+    post = Boards.query.filter_by(id=request.form["bbsid"]).first()
+    post.title = request.form["title"]
+    post.content = request.form["content"]
+    #post.reads=post.reads+1
+    db2.session.commit()
+    return redirect(url_for("boardlist"))
+
+@app.route("/myboard/delete", methods=['POST','GET'])
+def removePost():
+    post = Boards.query.filter_by(id=request.form["bbsid"]).first()
+    db2.session.delete(post)
+    db2.session.commit()
+    return redirect(url_for("boardlist"))         
+#################################################################
+
+
+""" 로그아웃 """    
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    session['user_id'] = None
+    return redirect(url_for('home'))
+
+""" 회원탈퇴 """
+#################################################################
+@app.route("/unjoin")
+def unjoin():
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    return render_template("unjoin.html", user=user_data)
+
+@app.route("/unjoin/complete", methods=['GET', 'POST'])
+def unjoin_complete():
+    user_data = User.query.filter_by(id=session['user_id']).first()
+    if request.method == 'POST':
+        if request.form['password']==user_data.password:
+            db2.session.delete(user_data)
+            db2.session.commit()
+            session['logged_in'] = False
+            session['user_id'] = None 
+            return redirect(url_for("home"))
+        else:
+            error = "회원정보의 비밀번호와 일치하지 않습니다."
+            return render_template("unjoin.html", user = user_data, error=error)
+    else:
+        return redirect(url_for("home"))
+#################################################################        
+
+@app.route("/sell_product")
+def sell_product():
+    return render_template("sell_product.html")
+
+# Shut down the scheduler when exiting the app
+
+if __name__ == '__main__':
+    app.debug=True
+#     db2.create_all() #테이블이 생성되고 나서는 주석처리해줌
+    app.secret_key = '1234567890'
+    app.run(host='0.0.0.0')
