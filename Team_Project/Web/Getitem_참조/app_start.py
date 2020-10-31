@@ -967,4 +967,4 @@ if __name__ == '__main__':
     app.debug=True # Debug 활성화
 #     db2.create_all() #테이블이 생성되고 나서는 주석처리해줌
     app.secret_key = '1234567890'
-    app.run(host='0.0.0.0') #본인의 ip로 접속할 수 있게 해줍니다.
+    app.run(debug=False, host='0.0.0.0') #본인의 ip로 접속할 수 있게 해줍니다.
