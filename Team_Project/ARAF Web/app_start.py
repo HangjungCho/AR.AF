@@ -148,19 +148,20 @@ def home():
     else:
         u_id=request.form['username']
         u_passwd=request.form['password']
-        try:
-            user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
-            print(user_data)
-            if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
-                session['user_id']=user_data.id
-                session['logged_in']=True
-                return redirect(url_for('search_product'))
-            else: # 정상적으로 로그인이 되지 않는경우(DB에 관련 user_data가 없는경우 None이 되므로..)
-                error = "ID가 존재하지 않거나 비밀번호가 일치하지 않습니다."
-                return render_template("login.html", error=error) # 왜 로그인이 안되었는지 보내줍니다.
-        except :
-            error = "DB조회중에 에러가 발생했습니다." # 예외처리를 해주지 못한 나머지 에러는 그냥 DB조회중 에러라고  짬처리
-            return render_template("login.html", error=error)
+        #try:
+        user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
+        if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
+            session['user_id']=user_data.id
+            session['logged_in']=True
+
+            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
+            return render_template("search.html", products=productlist)
+        else: # 정상적으로 로그인이 되지 않는경우(DB에 관련 user_data가 없는경우 None이 되므로..)
+            error = "ID가 존재하지 않거나 비밀번호가 일치하지 않습니다."
+            return render_template("login.html", error=error) # 왜 로그인이 안되었는지 보내줍니다.
+        #except :
+        #    error = "DB조회중에 에러가 발생했습니다." # 예외처리를 해주지 못한 나머지 에러는 그냥 DB조회중 에러라고  짬처리
+        #    return render_template("login.html", error=error)
 
 
 
@@ -168,15 +169,16 @@ def home():
 @app.route("/search", methods=['GET','POST'])
 def search_product():
     #if session['logged_in']==True:
-     if request.method=='POST': 
+    if request.method=='POST': 
         product_name = request.form.get('search') 
         product_date = request.form.get('startdate')
         print("search : {}".format(search))
         print("startdate : {}".format(search))
 
-        productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
+        #productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
+        productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
         return render_template("search.html", products=productlist)  
-     else:
+    else:
         productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
         return render_template("search.html", products=productlist)
     #else:
