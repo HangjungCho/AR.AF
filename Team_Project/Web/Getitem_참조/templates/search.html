@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -41,65 +41,7 @@
 </head>
 <body>
 	<!--================ Start Header Menu Area =================-->
-	<header class="header_area">
-		<div class="main_menu">
-		  <nav class="navbar navbar-expand-lg navbar-light">
-			<div class="container">
-			  <a class="navbar-brand logo_h" href="/"><img src="{{url_for('static', filename = 'img/logo.png')}}" alt=""></a>
-			  <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
-				<ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-				  <li class="nav-item submenu dropdown">
-					<a class="nav-link dropdown-toggle">
-					
-					<!-- 검색창 start  -->
-	               <div class="input-group">
-	               <form class = "search_product" action="/search", id="search_form" method="POST">                                  
-	                  <div class="input-group-append">                  
-	                  
-	                     <input class="form-control" type="text" placeholder="검색어를 입력하세요" id="search" name="search" style="width:400px;">
-	                        <button type="submit" value="submit" class="btn btn-secondary" style="background-color: #384aeb; border-color:#384aeb ">
-	                      <i class="fa fa-search"></i>
-	                      </button>
-	                  </div>
-	                  </form>
-	                </div>
-	                <!--  검색창 end -->
-	                
-					</a>
-					</li>
-				</ul>
-				  
-				<ul class="nav-shop">
-            {% if session['logged_in'] %}
-            <li><button type="button" onclick="location.href = '/mypage'">
-                 <img class="user_icon" src="{{url_for('static', filename='img/user_icon.png')}}"
-                width="25" height="25"  alt="마이페이지" title="마이페이지"></button></li>
-            <li><button type="button" onclick="location.href = '/favorite_list'">
-               <img class="heart_icon" src="{{url_for('static', filename='img/heart_icon.png')}}"
-               width="32" height="32"  alt="내가 찜한 상품" title="내가 찜한 상품"></button> </li>
-				<li><button type="button" onclick="location.href = '/myboard'" >
-              	<img class="question_icon" src="{{ url_for('static', filename='img/question_icon.png')}}"
-              	width="28" height="28"  alt="고객 센터" title="고객 센터"></button></li>
-            <li><button type="button" onclick="location.href = '/logout'">
-                 <img class="logout_icon" src="{{url_for('static', filename='img/logout_icon.png')}}"
-                 width="28" height="28"  alt="로그아웃" title="로그아웃"></button></li>     
-                 <li class="nav-item"></li>
-            {% else %}
-            <li><button type="button" onclick="location.href = '/login'">
-            	<img class="heart_icon" src="{{url_for('static', filename='img/login.png')}}"
-            	height="32"  alt="로그인" title="로그인"></button></li>
-               
-            <li><button type="button" onclick="location.href = '/register'">
-            	<img class="heart_icon" src="{{url_for('static', filename='img/register.png')}}"
-            	height="32"  alt="회원가입" title="회원가입"></button> </li>
-            <li class="nav-item"></li>
-            {% endif %}
-						  </ul>
-				</div>
-			</div>
-		  </nav>
-		</div>
-	  </header>
+
 	<!--================ End Header Menu Area =================-->
   
 	<!-- ================ start banner area ================= -->	
