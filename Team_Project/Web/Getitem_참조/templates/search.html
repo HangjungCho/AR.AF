@@ -63,22 +63,11 @@
         margin-left: 250px;
 ">
 				타입
-				<input class="text" type="text" placeholder="name" style="
+				<input class="text" id="search" name="search" type="text" placeholder="제품명 입력" style="
     margin-left: 10px; margin-right: 50px;
 ">
 				기간
 				&nbsp<input id="startdate" name="startdate" type="date" style="
-                                                width: 200px;
-                                                height: 40px;
-                                                padding-top: 10px;
-                                                padding-bottom: 10px;
-                                                border: 1px solid #999;
-                                                color: #000000;
-                                                padding-left: 20px;
-                                                padding-right: 5px;
-                                            ">
-				~
-				<input id="startdate" name="startdate" type="date" style="
                                                 width: 200px;
                                                 height: 40px;
                                                 padding-top: 10px;
@@ -122,6 +111,8 @@
 										<col width='150'>
 										<col width='100'>
 										<col width='100'>
+										<col width='100'>
+										<col width='100'>
 										<col width='150'>
 									</colgroup>
 
@@ -130,8 +121,10 @@
 											<th scope="col">번호</th>
 											<th scope="col" style="width:120px">사진</th>
 											<th scope="col">상품명</th>
-											<th scope="col">시작가</th>
-											<th scope="col">마감일</th>
+											<th scope="col">수량</th>
+
+											<th scope="col">날짜</th>
+											<th scope="col">시간</th>
 											<th scope="col" style="width:150px"></th>
 										</tr>
 									</thead>
@@ -141,17 +134,16 @@
 										<tr style="width:100%; text-align:center">
 											<td>{{product.id}}</td>
 											<td>
-												<a class="pic" href="/single-product/{{product.id}}"><img src="{{url_for('static', filename = product.picture)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
+												<a class="pic" href="/"><img src="{{url_for('static', filename = product.img)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
 											</td>
 											<td>
-												<a style="text-align:center" href="/single-product/{{product.id}}" class="title">{{product.title}}</a>
+												<a style="text-align:center" href="/" class="p_type">{{product.p_type}}</a>
 											</td>
-											<td class="start_val">{{product.start_val}}</td>
-											<!--<td class="current_val">{{product.current_val}}</td>
-											<td class="immediate_val">{{product.immediate_val}}</td>-->
-											<td>{{(product.now_date+86400*product.days)|datetimeformat}}</td>
+											<td class="count">{{product.count}}</td>
+											<td class="date">{{product.date}}</td>
+											<td class="date">{{product.time}}</td>
 											<td>
-												<a href="/single-product/{{product.id}}"><button type="button" class="edit_button">입찰하기</button></a>
+												<a href="/"><button type="button" class="edit_button">입찰하기</button></a>
 											</td>
 										</tr>
 										{% endfor %}
