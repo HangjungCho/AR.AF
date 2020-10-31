@@ -77,6 +77,17 @@
                                                 padding-left: 20px;
                                                 padding-right: 5px;
                                             ">
+				~
+				<input id="startdate" name="startdate" type="date" style="
+                                                width: 200px;
+                                                height: 40px;
+                                                padding-top: 10px;
+                                                padding-bottom: 10px;
+                                                border: 1px solid #999;
+                                                color: #000000;
+                                                padding-left: 20px;
+                                                padding-right: 5px;
+                                            ">
 				<button type="submit" value="submit" class="btn btn-secondary" style="background-color: #384aeb; border-color:#384aeb ">
 					<i class="fa fa-search"></i>
 				</button>
@@ -111,8 +122,6 @@
 										<col width='150'>
 										<col width='100'>
 										<col width='100'>
-										<col width='100'>
-										<col width='100'>
 										<col width='150'>
 									</colgroup>
 
@@ -122,7 +131,6 @@
 											<th scope="col" style="width:120px">사진</th>
 											<th scope="col">상품명</th>
 											<th scope="col">시작가</th>
-											
 											<th scope="col">마감일</th>
 											<th scope="col" style="width:150px"></th>
 										</tr>
@@ -139,8 +147,8 @@
 												<a style="text-align:center" href="/single-product/{{product.id}}" class="title">{{product.title}}</a>
 											</td>
 											<td class="start_val">{{product.start_val}}</td>
-											<td class="current_val">{{product.current_val}}</td>
-											<td class="immediate_val">{{product.immediate_val}}</td>
+											<!--<td class="current_val">{{product.current_val}}</td>
+											<td class="immediate_val">{{product.immediate_val}}</td>-->
 											<td>{{(product.now_date+86400*product.days)|datetimeformat}}</td>
 											<td>
 												<a href="/single-product/{{product.id}}"><button type="button" class="edit_button">입찰하기</button></a>
