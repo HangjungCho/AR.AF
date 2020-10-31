@@ -150,6 +150,7 @@ def home():
         u_passwd=request.form['password']
         try:
             user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
+            print(user_data)
             if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
                 session['user_id']=user_data.id
                 session['logged_in']=True
@@ -159,7 +160,6 @@ def home():
                 return render_template("login.html", error=error) # 왜 로그인이 안되었는지 보내줍니다.
         except :
             error = "DB조회중에 에러가 발생했습니다." # 예외처리를 해주지 못한 나머지 에러는 그냥 DB조회중 에러라고  짬처리
-
             return render_template("login.html", error=error)
 
 
