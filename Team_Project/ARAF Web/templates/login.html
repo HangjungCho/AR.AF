@@ -1,4 +1,4 @@
-﻿<html><head>
+<html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
     <meta name="google" content="notranslate">
@@ -225,27 +225,6 @@ top: 38px;"></div>
                                         <button class="btn btn-lg btn-primary btn-block" type="submit">SIGN IN</button>
                                     </div>
                                 </div>
-
-                                <!--{% if session['user_id'] %}
-                                <p>로그인한 사용자에게는 제공되는 페이지가 아닙니다.</p>
-                                {% else %}
-                                <form class="row login_form" action="/login" id="contactForm" method="POST">
-                                    <div class="col-md-12 form-group">
-                                        <input type="text" class="form-control" id="name" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
-                                    </div>
-                                    <div style="top: 10px;" class="col-md-12 form-group">
-                                        <button type="submit" value="submit" class="button button-login w-100">Log In</button>
-                                    </div>
-                                </form>
-                                {% endif %}-->
-                                {% if error %}
-                                <div class=error><strong>{{ error }}</strong></div>
-                                {% endif %}
-
-
                             </form>
                         </div>
                     </div>
