@@ -1,43 +1,66 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Aroma Shop - Home</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Aroma Shop - Home</title>
 	<link rel="icon" href="{{url_for('static', filename = 'img/Fevicon.png')}}" type="image/png">
-  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.min.css')}}">
-  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/fontawesome/css/all.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/fontawesome/css/all.min.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/themify-icons/themify-icons.css')}}">
-  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/nice-select/nice-select.css')}}">
-  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/owl-carousel/owl.theme.default.min.css')}}">
-  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/nice-select/nice-select.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/owl-carousel/owl.theme.default.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.css')}}">
 
-  <!-- Responsive-->
-  <link rel="stylesheet" href="{{url_for('static', filename = 'css/responsive.css')}}">
-  <script language="javascript" src="{{url_for('static', filename = 'js/timer.js')}}" type="text/javascript"></script>
-  <link rel="stylesheet" href="{{url_for('static', filename = 'css/style.css')}}">
+	<!-- Responsive-->
+	<link rel="stylesheet" href="{{url_for('static', filename = 'css/responsive.css')}}">
+	<script language="javascript" src="{{url_for('static', filename = 'js/timer.js')}}" type="text/javascript"></script>
+	<link rel="stylesheet" href="{{url_for('static', filename = 'css/style.css')}}">
 
-  <style type ="text/css">
-.edit_button {
-	display: block;
-	height: 40px;
-	width: 100%;
-    line-height: 38px !important;
-    padding: 0px 38px;
-	text-transform: uppercase;
-	background:blue;
-    margin-left: 10px;
-	border-radius: 30px;
-	color: #fff;
-	font-weight: 500;
-	border: none;
-	text-align: center;
-}
+	<style type="text/css">
+		.edit_button {
+			display: block;
+			height: 40px;
+			width: 100%;
+			line-height: 38px !important;
+			padding: 0px 38px;
+			text-transform: uppercase;
+			background: blue;
+			margin-left: 10px;
+			border-radius: 30px;
+			color: #fff;
+			font-weight: 500;
+			border: none;
+			text-align: center;
+		}
+	</style>
+	<script>
+
+		window.onload = function () {
+			var dt = new Date();
+			var Year = dt.getFullYear();
+			var Month = "" + (dt.getMonth() + 1);
+			var Day = "" + dt.getDate();
+			var TodayPlusAmonth = "" + (dt.getMonth() + 2);
+
+			if (Month.length < 2) Month = "0" + Month;
+			if (Day.length < 2) Day = "0" + Day;
+			if (TodayPlusAmonth.length < 2) TodayPlusAmonth = "0" + TodayPlusAmonth;
 
 
-</style>
-	
+			var todayMin = Year.toString() + '-' + Month + '-' + Day;
+			var todayMax = Year.toString() + '-' + Month + '-' + Day;
+			var today = Year.toString() + '-' + Month + '-' + Day;
+			var DefaultEndDate = Year.toString() + '-' + TodayPlusAmonth + '-' + Day;
+
+			document.getElementById("startdate").max = todayMax;
+			document.getElementById("enddate").max = todayMax;
+			document.getElementById("startdate").value = today;
+			document.getElementById("enddate").value = DefaultEndDate;
+		}
+
+	</script>
 </head>
 <body>
 	<!--================ Start Header Menu Area =================-->
