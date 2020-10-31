@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Getitemt</title>
+	<link rel="icon" href="{{url_for('static', filename='img/Fevicon.png')}}" type="image/png">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/bootstrap/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/fontawesome/css/all.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/themify-icons/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/linericon/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.theme.default.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.carousel.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/nice-select/nice-select.css')}}">
+
+
+
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/font_list.css')}}">
+ 
+</head>
+<body>
+  <!--================ Start Header Menu Area =================-->
+	<header class="header_area">
+		<div class="main_menu">
+		  <nav class="navbar navbar-expand-lg navbar-light">
+			<div class="container">
+			  <a class="navbar-brand logo_h" href="/"><img src="static/img/logo.png" alt=""></a>
+			  <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+				<ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+				  <li class="nav-item submenu dropdown">
+					<a class="nav-link dropdown-toggle">
+					  <div class="input-group">
+						<input type="text" class="form-control" placeholder="검색어를 입력하세요" style="width:450px;">
+						<div class="input-group-append">
+						   <button class="btn btn-secondary" type="button" style="background-color: #384aeb; border-color:#384aeb ">
+						   <i class="fa fa-search"></i>
+						   </button>
+						</div>
+					 </div>
+					</a>
+					</li>
+				</ul>
+				  
+				<ul class="nav-shop">
+          		<li><button type="button" onclick="location.href = '/mypage'">
+           		<img class="user_icon" src="static/img/user_icon.png"
+             	width="25" height="25"  alt="마이페이지" title="마이페이지"></button></li>
+				<li><button type="button" onclick="location.href = '/favorite_list'">
+            	<img class="heart_icon" src="static/img/heart_icon.png"
+            	width="32" height="32"  alt="내가 찜한 상품" title="내가 찜한 상품"></button> </li>
+				<li><button >
+              	<img class="question_icon" src="static/img/question_icon.png"
+              	width="28" height="28"  alt="문의사항" title="문의사항"></button></li>
+				<li class="nav-item"></li>
+				</ul>
+				</div>
+			</div>
+		  </nav>
+		</div>
+	  </header>
+	<!--================ End Header Menu Area =================-->
+
+	<!-- ================ start banner area ================= -->	
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>결제내역</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+  
+  
+
+  <!--================Cart Area =================-->
+
+ 		<section class="section-margin--small mb-5">
+			<div class="container">
+			  <div class="row">
+				<div class="col-xl-3 col-lg-4 col-md-5">
+					<div class="sidebar-categories">
+						<div class="head">상품관리</div>
+						  <ul class="main-categories" style="padding-bottom: 5%;">
+							<li class="common-filter">
+							<form action="#">
+							  <ul>
+								<li class="filter-list"><a href="/product_sell_list/{{user.id}}" style="color: #838181;">판매 상품 수정/조회</a></li>
+								<li class="filter-list"><a href="/pdregister" style="color: #838181;">판매 상품 등록</a></li>
+							  </ul>
+							</form>
+							</li>
+						</ul>
+					  </div>
+						<div class="sidebar-categories" style="margin-top: 15%;">
+						  <div class="head">경매내역</div>
+							<ul class="main-categories" style="padding-bottom: 5%;">
+							  <li class="common-filter">
+							  <form action="#">
+								<ul>
+								  <li class="filter-list"><a href="/bid_list" style="color: #838181;">입찰내역</a></li>
+								  <li class="filter-list"><a href="/sbid_list" style="color: #838181;">낙찰내역</a></li>
+								  <li class="filter-list"><a href="/payment_list" style="color: #838181;">결제내역</a></li>
+								</ul>
+							  </form>
+							  </li>
+						  </ul>
+						</div>
+						<div class="sidebar-filter" style="margin-top: 15%;">
+						<div class="top-filter-head">내 정보관리</div>
+						<div class="common-filter">
+						<form action="#">
+						<ul style="padding-top: 8%;">
+						<li class="filter-list"><a href="/mchange"  style="color: #838181;">회원정보수정</a></li>
+						<li class="filter-list"><a href="/favorite_list"  style="color: #838181;">내가 찜한 상품</a></li>
+						<li class="filter-list"><a href="/unjoin"  style="color: #838181;">회원탈퇴</a></li>
+						<li class="filter-list"><a href="/myboard"  style="color: #838181;">내가 보낸 문의</a></li>
+                </ul>
+              </form>
+              </div>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-8 col-md-7" style="padding-bottom: 10%;">
+          <!-- Start Filter Bar -->
+          <P style=" padding-left: 3%; color: #384aeb; font-size: 25px;"><b>결제내역</b></P>
+          <hr width = "100%" color = "blue" size = "3">
+          <form  method="post" class="form-horizontal" style="padding-left: 5%; ">
+          
+          <!-- 결제내역 -->
+			<table class="paymenttable" cellpadding="0" cellspacing="0" style="width:100%; margin-top:30px">
+                    <tbody>
+                    <tr class="paymenttable1">
+                      <td style="width:160px;" valign="top">
+                        <div style="position:relative;">
+                          <a href="#"><img src="{{url_for('static', filename='img/category/s-p1.jpg')}}" width="220" height="220" border="0" align="absmiddle"></a>
+                        </div>
+                      </td>
+                      <td style="padding-left:10px;" align="left">
+                        <div>
+                          <a href="#" style="color:#333333;" class="font_26"><strong>손목시계</strong></a>
+                        </div>
+                        <div style="color:black; margin-top:5px;" class="font_16">따뜻한 겨울 합리적 가격</div>
+                        <div style="color:black; margin-top:5px;" class="font_16">판매자 : test</div>
+                        <div style="color:black; margin-top:5px;" class="font_16">입찰자 : 5</div>
+                        <div style="color:black; margin-top:5px;" class="font_16">입찰일 : 2016-02-01 11:36:47</div>
+                        <div style="color:black; margin-top:5px;" class="font_16">마감일 : 2020-06-28 21:12:33</div>
+                  
+                      </td>
+                      <td style="width:255px;" valign="top">
+                        <div style="margin-top:30px; padding:15px; border:1px solid #e9e9e9; background-color:#f8f8f8;">
+                          <table cellpadding="0" cellspacing="0" style="width:100%">
+                            <tbody>
+                            <tr>
+                              <td align="left" class="font_15" style="color:#8e8e8e; height:20px;">시작가</td>
+                              <td align="right" class="font_15">52,000 원</td>
+                            </tr>
+                            <tr>
+                              <td align="left" class="font_15" style="color:#8e8e8e; height:20px;">상품</td>
+                              <td align="right" class="font_15">1 개</td>
+                            </tr>
+                            <tr>
+                              <td align="left" class="font_15" style="color:#8e8e8e; height:20px;">최고입찰가</td>
+                              <td align="right" class="font_15" style="color:#333333;"><strong>64,000 원</strong></td>
+                            </tr> 
+                            <tr>
+                              <td align="left" class="font_15" style="color:#8e8e8e; height:20px;">나의 입찰가</td>
+                              <td align="right" class="font_15" style="color:#ea4242;"><strong>64,000 원</strong></td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <table style="width:300px; margin-top:20px">
+                          <tr>
+                            <td>
+                              <div style="color:blue; text-align:center; font-size:27px" >결제완료
+                              <img src="https://media3.giphy.com/media/hVa2dEN4BLg3fQHWjJ/giphy.gif" 
+                              alt="Money Icon Sticker by @tazikis" style="width: 60px; height: 60px; left: 0px; top: 0px;"></div> 
+                            </td>
+                          </table>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <hr>
+          
+
+          </form>
+          </div>
+      </div>
+    </div>
+</section>
+          
+  <!--================End Cart Area =================-->
+
+
+
+<!--================ Start footer Area  =================-->	
+ <footer class="footer">
+	<div class="footer-area">
+	  <div class="container">
+		<div class="row section_gap" style=" color:#ffffff;">
+			<p style="margin-left: 2%; margin-right: 2%;">이용약관</p>
+			<p>|</p>
+			<p style="margin-left: 2%; margin-right: 2%;">안전거래 가이드</p>
+			<p>|</p>
+			<p style="margin-left: 2%; margin-right: 2%;">전자금융거래 이용약관</p>
+			<p>|</p>
+			<p style="margin-left: 2%; margin-right: 2%;">개인정보 처리방침</p>
+			<p>|</p>
+			<p style="margin-left: 2%; margin-right: 2%;">청소년 보호정책</p>
+			<p>|</p>
+			<p style="margin-left: 2%; margin-right: 2%;">책임의 한계와 법적고지</p>
+			<p>|</p>
+			<p style="margin-left: 2%;">고객센터</p>
+			<p style="margin-left: 10%; color:#706f6f">GETITEM은 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
+			  상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.<br>
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;또한 판매자와 구매자간의 직거래에 대하여 당사는 관여하지 않기 때문에 거래에 대해서는 책임을 지지 않습니다.</p>
+			
+		
+		  <p style="margin-left: 15%; margin-right: 2%;">사업자등록번호:123-45-67890</p>
+		  <p>|</p>
+		  <p style="margin-left: 2%; margin-right: 2%;">통신판매업신고번호:제2020-서울가산-2222호</p>
+		  <p>|</p>
+		  <p style="margin-left: 2%;" >대표이사:조항정</p>
+		 
+		  
+		<p style="margin-left: 35%;"> 주소 : 서울특별시 금천구 가산동 371-28</p>
+		</div>
+			
+	  </div>
+	</div>
+  
+	<div class="footer-bottom">
+	  <div class="container">
+		<div class="row d-flex">
+		  <p class="col-lg-12 footer-text text-center">
+			<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>GETITEM</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+		</div>
+	  </div>
+	</div>
+  </footer>
+	<!--================ End footer Area  =================-->
+
+
+
+  <script src="{{ url_for('static', filename='vendors/jquery/jquery-3.2.1.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendors/bootstrap/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendors/skrollr.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendors/owl-carousel/owl.carousel.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendors/nice-select/jquery.nice-select.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendors/jquery.ajaxchimp.min.js')}}"></script>
+  <script src="{{ url_for('static', filename='vendors/mail-script.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+</body>
+</html>

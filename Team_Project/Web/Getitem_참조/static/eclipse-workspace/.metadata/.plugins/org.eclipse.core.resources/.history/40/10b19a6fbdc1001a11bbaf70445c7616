@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+        <title>결제페이지</title>
+
+        <style>
+        body, tr, td {font-size:10pt; font-family:굴림,verdana; color:#433F37; line-height:19px;}
+        input {font-size:9pt; font-family:굴림,verdana; color:#242424;}
+
+  
+        .pay {
+         background-color: #384aeb; 
+          color: #ffffff; 
+          border-radius: 8px;
+          padding: 8px 30px;
+          margin-top:3%;
+          font-size:14px;
+          border:  #ffffff;
+        }
+ 
+
+
+
+        </style>
+        </head>
+        
+        <body style="background-color:#FFFFFF; margin-top:20px">
+        <center>
+        <table width="632" border="0" cellspacing="0" cellpadding="0">
+          <tbody><tr>
+            <td align="center" bgcolor="#FFFFFF">
+            <table width="620" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                  <td style="background-color:#FFFFFF; padding:8 0 0 56">
+                    <br>
+                    <table width="510" border="0" cellspacing="0" cellpadding="0">
+                     <tr> 
+                        <td>
+                            <P style=" padding-left: 3%; color: #384aeb; font-size: 25px;"><b>결제페이지</b></P>
+                        </td>
+                            
+                      </tr>
+                    </table>
+                    <hr width = "95%" color = "blue" size = "1">
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+                    <br>
+                    <form action="/", id="payment_form" method="POST">
+                    <table width="510" border="0" cellspacing="0" cellpadding="0">
+                      <tbody><tr>
+                        <td width="510" colspan="2" style="padding:0 0 0 23">
+                          <table width="470" border="0" cellspacing="5" cellpadding="0">
+                            <tbody>
+                            <tr>
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="177" height="26">상품명</td>
+                              <td width="280"><input type="text" name="title" size="20" value="{{product.title}}"></td>
+                            </tr>
+                           
+                            <tr> 
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="109" height="25">가격</td>
+                              <td width="343"><input type="text" name="price" size="20" value="{{product.current_val}}"></td>
+                            </tr>
+                           
+                            <tr> 
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="109" height="25">회원ID</td>
+                              <td width="343"><input type="text" name="username" size="20" value="{{user.name}}"></td>
+                            </tr>
+                           
+                            <tr> 
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="109" height="25">이메일</td>
+                              <td width="343"><input type="text" name="email" size="20" value="{{user.email}}"></td>
+                            </tr>
+                        
+                            <tr> 
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="109" height="25">휴대전화</td>
+                              <td width="343"><input type="text" name="phone" size="20" value="{{user.phone}}"></td>
+                            </tr>
+                            
+                            <tr> 
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="109" height="25">주소</td>
+                              <td width="343"><input type="text" name="address" size="20" value="{{user.address}}"></td>
+                            </tr>
+
+                            <tr>
+                              <td width="18" align="center"><img src="{{url_for('static', filename='img/icon02.gif')}}" width="7" height="7"></td>
+                              <td width="109" height="25">결제방법 </td>
+                              <td width="343"> <select name="gopaymethod">
+                                  <option value="Card">신용카드 결제
+                                  </option><option value="VCard">인터넷안전 결제
+                                  </option><option value="DirectBank">실시간 은행계좌이체
+                                  </option><option value="HPP">핸드폰 결제
+                                  </option><option value="VBank">무통장 입금
+                                  </option></select>
+                              </td>
+                            </tr>
+                            
+                            <tr valign="bottom">
+                             <td id=submit height="40" colspan="3" align="center">
+                              <input type="button" class="pay" style="margin-right: 2%;" value="결제하기" onclick="payCheck()"></button></td>
+                            </tr>
+							    
+                          </tbody></table></td></tr>
+                        </tbody>
+                    </table>
+                    </form>
+                    
+                    <br>
+                  </td>
+                </tr>
+              </tbody>
+        </table>
+        
+        </table>
+        </center>      
+                                                                                                                                                                                                                                                                                                                                                                                      
+        </body>
+</html>
+<script>
+function payCheck() {
+	if (confirm("결제 하시겠습니까?") == true){ 
+		location.href="/";
+	}else{   //취소
+	    return false;
+	}
+}
+</script>        
