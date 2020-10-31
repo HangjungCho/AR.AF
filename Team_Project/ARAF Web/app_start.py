@@ -167,20 +167,20 @@ def home():
 """ index """
 @app.route("/search", methods=['GET','POST'])
 def search_product():
-    if session['logged_in']==True:
-        if request.method=='POST': 
-            product_name = request.form.get('search') 
-            product_date = request.form.get('startdate')
-            print("search : {}".format(search))
-            print("startdate : {}".format(search))
+    #if session['logged_in']==True:
+     if request.method=='POST': 
+        product_name = request.form.get('search') 
+        product_date = request.form.get('startdate')
+        print("search : {}".format(search))
+        print("startdate : {}".format(search))
 
-            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
-            return render_template("search.html", products=productlist)  
-        else:
-            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
-            return render_template("search.html", products=productlist)
-    else:
-        return redirect(url_for('home'))
+        productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
+        return render_template("search.html", products=productlist)  
+     else:
+        productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
+        return render_template("search.html", products=productlist)
+    #else:
+    #    return redirect(url_for('home'))
 
 
 
