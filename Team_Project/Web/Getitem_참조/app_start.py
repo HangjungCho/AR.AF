@@ -27,254 +27,80 @@ import atexit
 from Cython.Shadow import address
 
 
-DATABASE = 'getitem.db'  # 내가 설정한 DB 이름
-time_seoul = 32400
-# 서울시간은 UTC 기준 9시간이 많기 때문에 9시간을 초로 환산하여  하루  9시간 * 3600초 => 32400초
-# 이 시간이 현재 시간이 된다
-
+DATABASE = 'araf.db'  # 내가 설정한 DB 이름
 
 app = Flask(__name__) # app 초기화, 밑에 SQLAlchemy에 들어감
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///getitem.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///araf.db'
 
 #파일 업로드 용량 제한
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 
 db2 = SQLAlchemy(app)
 app.config.from_object(__name__)
-# 
+
 def connect_db():
     """DB 연결 후 Connection객체 반환, DB 없으면 내부적으로 새로 생성됨."""
     return sqlite3.connect(app.config['DATABASE'])
 
-###################################### Class start ###############################################
-# User테이블 정의하기 위한 클래스\
-# 가장 기본이 되는 table 입니다. 이 table과 밑에 나오는 product table이 주가되는 table입니당
+#################################### Table Class start #########################################
+
+# ======================================== User ===============================================
 class User(db2.Model):
-    __tablename__ = 'users' # 테이블 이름
-    # id(primary_key)가 없으면 오류나던데 왜 그런지 모르겠음.. 시간없어서 조사는 못했다 ㅜ
-    # 자료형도 설정해 줘야하고 밑에 __repr__함수와 일치시켜야 함
-    id = db2.Column(db2.Integer,  primary_key = True) # 시퀀스 추가
-    name = db2.Column(db2.String) # 회원ID이에요 실명 아닙니다..
-    email = db2.Column(db2.String)
+    __tablename__ = 'User' # 테이블 이름
+
+    ID = db2.Column(db2.Integer,  primary_key = True) # 시퀀스 추가
+    user_id = db2.Column(db2.String) 
     password = db2.Column(db2.String)
-    phone = db2.Column(db2.String)
-    address = db2.Column(db2.String)
 
-    def __init__(self, name, email, password, phone, address):
-        self.name = name
-        self.email = email
+    def __init__(self, user_id, password):
+        self.user_id = user_id
         self.password = password
-        self.phone = phone
-        self.address = address
-   
-# 앞으로 User테이블을 사용할때 각 column의 자료형을 정의해 준다. 위에 정의한 것과 일치시키면 됨
+
     def __repr__(self):
-        return"<User('%s', '%s', '%s', '%s', '%s')>" % (self.name, self.email, self.password, self.phone, self.address)
-# =============================================================================================
-#class Quantity(db2.Model):
-#    __tablename__ = 'Qantity'
-    
-#    ID = db2.Column(db2.Integer, primary_key = True)
-#    type = db2.Column(db2.String)
-#    cal = db2.Column(db2.String)
-#    count = db2.Column(db2.Integer)
-#    date = db2.Column(db2.String)
-#    time = db2.Column(db2.String)
-#    img = db2.Column(db2.String)
-
-#    def __init__(self, type, cal, count, date, time, img):
-#        self.type = type
-#        self.cal = cal
-#        self.count = count
-#        self.date = date
-#        self.time = time
-#        self.img = img
-   
-#        def __repr__(self):
-#        return"<Quantity('%s', '%s', '%d', '%s', '%s', '%s')>" % (self.type, self.cal, self.count, self.date, self.time, self.img)
-
+        return"<User('%s', '%s')>" % (self.user_id, self.password)
 # =============================================================================================
 
-class Product(db2.Model):
-    __tablename__ = 'product'
+# ====================================== Quantity =============================================
+class Quantity(db2.Model):
+   __tablename__ = 'Quantity'
     
-    id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
-    author_id = db2.Column(db2.Integer) # 글쓴 사람의 id index로 회원가입한  user table의 name이 아니라 user table의 id임. 절때 헷갈리지 말것!! 이렇게 해야 db끼리 연결이 됩니다 ㅜㅜ
-    title = db2.Column(db2.String) # 제품명
-    picture = db2.Column(db2.String) # 업로드한 사진의 경로
-    start_val = db2.Column(db2.String) # 시작가
-    current_val = db2.Column(db2.String) # 현재가
-    immediate_val = db2.Column(db2.String) # 즉구가
-    days = db2.Column(db2.Integer) # 몇일동안 경매에 등록할 것인가? (1~7일)
-    board = db2.Column(db2.String) # 제품설명
-    now_date = db2.Column(db2.Integer) # 상품을 등록한 날짜
-    bidders = db2.Column(db2.Integer) # 해당 상품을 입찰한 사용자 수
-    state = db2.Column(db2.Boolean) # 낙찰이 됐으면 0, 낙찰하기 전에 판매중인 상품은 1
-    #state가 1인 상품들은 메인페이지에 표시되는데 0인 상품들은 낙찰이 되었기 때문에 굳이 메인페이지에 표시할 필요가 없어서 사라짐
+   ID = db2.Column(db2.Integer, primary_key = True)
+   p_type = db2.Column(db2.String)
+   cal = db2.Column(db2.String)
+   count = db2.Column(db2.Integer)
+   date = db2.Column(db2.String)
+   time = db2.Column(db2.String)
+   img = db2.Column(db2.String)
+
+   def __init__(self, p_type, cal, count, date, time, img):
+       self.p_type = ptype
+       self.cal = cal
+       self.count = count
+       self.date = date
+       self.time = time
+       self.img = img
+   
+    def __repr__(self):
+       return"<Quantity('%s', '%s', '%d', '%s', '%s', '%s')>" % (self.p_type, self.cal, self.count, self.date, self.time, self.img)
+# =============================================================================================
+
+# ======================================== Count ==============================================
+class Count(db2.Model):
+    __tablename__ = 'Count'
+    
+    p_type = db2.Column(db2.String, primary_key = True)
+    total = db2.Column(db2.Integer)
  
-    def __init__(self, author_id, title, picture, start_val, current_val, immediate_val, days, board, now_date, bidders, state):
-        self.author_id = author_id
-        self.title = title
-        self.picture = picture
-        self.start_val = start_val
-        self.current_val = current_val
-        self.immediate_val = immediate_val
-        self.days = days
-        self.board = board
-        self.now_date = now_date
-        self.bidders = bidders
-        self.state = state
+    def __init__(self, p_type, total):
+        self.p_type = p_type
+        self.total = total
    
     def __repr__(self):
-        return"<Product('%d', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%d', %d, %d,)>" % (self.author_id, self.title,
-                                                                                            self.picture, self.start_val,
-                                                                                            self.current_val, self.immediate_val,
-                                                                                            self.days, self.board, self.now_date,
-                                                                                            self.bidders, self.state)
+        return"<Count('%s', '%d')>" % (self.p_type, total)
+# =============================================================================================       
 
-# 제품 문의사항 minitwit
-class Message(db2.Model):
-    __tablename__ = 'message'
-    
-    id = db2.Column(db2.Integer, primary_key = True) # 기본키, index임
-    product_id = db2.Column(db2.Integer) # A제품이 있고 B 제품이 있으면 그 제품에 대한 product table의 id랑 연결이 된다.
-    author_id = db2.Column(db2.Integer) # 미니트윗 작성자의 user table 의 id
-    text = db2.Column(db2.String) # 작성한 글 내용
-    pub_date = db2.Column(db2.Integer) # 게시 날짜
+###################################### Table Class end ###############################################
 
-
-    def __init__(self, product_id, author_id, text, pub_date):
-        self.product_id = product_id
-        self.author_id = author_id
-        self.text = text
-        self.pub_date = pub_date
-   
-    def __repr__(self):
-        return"<Message('%d', '%d', '%s', '%d')>" % (self.product_id, self.author_id, self.text, self.pub_date)
-    
-# 고객센터 Q&A 게시판
-class Boards(db2.Model):
-    __tablename__ = 'bbs'
-    
-    id = db2.Column(db2.Integer, primary_key = True) # index 기본키
-    writer = db2.Column(db2.String) # 작성자 이름 user table의 name과 연결됨
-    title = db2.Column(db2.String) # 게시글 제목
-    content = db2.Column(db2.String) # 게시글 내용
-    regdate = db2.Column(db2.Integer) #등록 일짜
-    reads = db2.Column(db2.Integer) # 조회수
-
-    def __init__(self, writer, title, content, regdate, reads):
-        self.writer = writer
-        self.title = title
-        self.content = content
-        self.regdate = regdate
-        self.reads = reads
-   
-    def __repr__(self):
-        return"<Board('%s', '%s', '%s', '%d, %d')>" % (self.writer, self.title, self.regdate, self.reads)
-    
-# 회원이 입찰을 하면 개별 회원별로 입찰 내용을 보여줘야 하기 때문에
-# 개인마다의 입찰 목록을 보여주기 위해 만든 table
-class Bidding(db2.Model):
-    __tablename__ = 'bidding'
-    
-    id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
-    bidder_id = db2.Column(db2.Integer) # 입찰자의 user table의 id에 해당하는 부분과 연결됨
-    product_id = db2.Column(db2.Integer) # 제품의 product table의 id에 해당하는 부분과 연결됨
-    now_date = db2.Column(db2.Integer) # 현재 날짜로 int인 이유는 밑에 time 관련하여 설명할때 한번에 설명하겠다.
-    my_price = db2.Column(db2.String) # 내 입찰가, int가 아닌 이유는 우리는 12,000원 과 같이 쉼표(,) 가 들어가기 때문에 다 저장하려고 String으로 했음 사실 쉼표(,)를 없애고 Integer로 받는식으로 해도 되긴할듯 
-
-    def __init__(self, bidder_id, product_id, now_date, my_price):
-        self.bidder_id=bidder_id
-        self.product_id = product_id
-        self.now_date = now_date
-        self.my_price = my_price
-   
-    def __repr__(self):
-        return"<Bidding('%d', '%d', '%d', '%s')>" % (self.bidder_id, self.product_id, self.now_date, self.my_price)
-
-# 찜목록 table
-class Cart(db2.Model):
-    __tablename__ = 'cart'
-    
-    # 경호형이 simple하게 잘 만들어 주셨다 ^^
-    cartId = db2.Column(db2.Integer, primary_key = True)
-    productId = db2.Column(db2.Integer) # product table의 id와 연결됨
-    userId = db2.Column(db2.Integer) # user table의 id와 연결됨
-    # 왜 이런 구조로 만들었는가? 는 밑의 뷰 함수들을 보면서 이해하는 것이 좋다 위에 table 들도 마찬가지. 왜 이런 변수를 넣었는가? 는 밑에 뷰 함수들을 보면서 확인해보세요~
-    
-    def __init__(self, productId, userId):
-        self.productId = productId
-        self.userId = userId
-
-    def __repr__(self):
-        return"<Cart('%d', '%d')>" % (self.productId, self.userId) 
-
-# 낙찰된 목록을 보여주는 table
-class Sbid(db2.Model):
-    __tablename__='sbid'
-    
-    id = db2.Column(db2.Integer, primary_key = True)
-    product_id = db2.Column(db2.Integer) # product table의 id와 연결
-    sbidder_id = db2.Column(db2.Integer) # user table의 id와 연결
-    sbid_price = db2.Column(db2.String) # product table의 current_val과 연결됨
-    sbid_date = db2.Column(db2.Integer) # 낙찰된 날짜 저장 마찬가지로 왜 Integer 형인지는 밑에서..
-    bidding_date = db2.Column(db2.Integer) # 내가 과거에 입찰했었던 날짜
-    my_price = db2.Column(db2.String) # 내가 입찰했던 가격 bidding table의 my_price와 연결됨
-    
-    def __init__(self, product_id, sbidder_id, sbid_price, sbid_date, bidding_date, my_price):
-        self.product_id = product_id
-        self.sbidder_id = sbidder_id
-        self.sbid_price = sbid_price
-        self.sbid_date = sbid_date
-        self.bidding_date = bidding_date
-        self.my_price = my_price
-
-    def __repr__(self):
-        return"<Sbid('%d', '%d', '%s', '%d', '%d', '%s')>" % (self.product_id, self.sbidder_id, self.sbid_price, self.sbid_date, self.bidding_date, self.my_price) 
-
-# 구매 페이지 table
-class Payment(db2.Model):
-    __tablename__ = 'payment'
-    
-    id = db2.Column(db2.Integer, primary_key = True)
-    product_id = db2.Column(db2.Integer) # product table의 id
-    sbid_price = db2.Column(db2.String) # sbid table의 sbid_price 와 연결됨
-    bidder_id = db2.Column(db2.String) # 입찰자의 회원ID로 user table의 name과 연결됨
-    email = db2.Column(db2.String) # user table의 emailrhk dusrufehla
-    phone = db2.Column(db2.String) # user table의 phone과 연결됨
-    address = db2.Column(db2.String) # user talbe의 address와 연결됨
-    pay_date = db2.Column(db2.Integer) # 결제일
- 
-    def __init__(self, product_id, sbid_price, bidder_id, email, phone, address, pay_date):
-        self.product_id = product_id
-        self.sbid_price = sbid_price
-        self.bidder_id = bidder_id
-        self.email = email
-        self.phone = phone
-        self.address = address
-        self.pay_date = pay_date
-
-    def __repr__(self):
-        return"<Payment('%d', '%s', '%d', '%s', '%s', '%s', '%d')>" % (self.product_id, self.sbid_price, self.bidder_id, self.email, self.phone, self.address, self.pay_date) 
-
-# 좋아요 table
-class Heart(db2.Model):
-    __tablename__ = 'heart'
-    id = db2.Column(db2.Integer, primary_key=True)
-    product_id = db2.Column(db2.Integer) # product table의 id와 연결됨
-    heart_cnt = db2.Column(db2.Integer) # 좋아요 개수
-
-    def __init__(self, product_id, heart_cnt):
-        self.product_id = product_id
-        self.heart_cnt = heart_cnt
-
-    def __repr__(self):
-        return"<Heart('%d','%d')>" % (self.product_id, self.heart_cnt) 
-
-
-
-###################################### Class end ###############################################
 
 ###################################### Method Tool Start ###############################################
 """ 쿼리문을 직접 쓸수 있게 해주는 함수 (minitwit에서 쓰던 방식임) """
@@ -314,7 +140,6 @@ UTC란? : 1972년 1월 1일부터 시행된 협정세계시에서는 1967년 국
 JavaScript는 그렇지 않기 때문이죠, 값을 넘겨줄때 string형 날짜를 보내주면 연산을 못하기 때문에 python에서 미리 int로 변환해 주어 보냈습니다.
 이 때문에 굳이굳이 초 단위로, 자료형은 굳이굳이  Integer형으로 한것입니다.
 """
-
 ###################################### Method Tool End ###############################################
 
 
@@ -358,28 +183,7 @@ def home():
                            product_popular=product_popular,
                            now_time = int(time.time()+time_seoul)) # UTC 표준시간 기준 서울은 9시간 이 더 많이 때문에 time_seoul 더해줘야 지금시간이 제대로 출력됩니다
 
-""" 제품상세페이지  """
-# @app.route 의 기능을 다음의 주소로 접근했을때 뷰함수를 실행하게 하라는 것은 앞에서 설명했다.
-# 여기서 주목해야 할 점은 <int:productid> 이다. 자세하게 설명을 하자면, 우리가 어떤 A상품에 대해 클릭하게되면 상세페이지로 넘어가는 것은 다들 알고 있을텐데 다음의 주소로 접속할 경우 이 뷰함수가 실행이 된다.
-# http://(본인의 ip):5000/single-product/5 이런식으로 이동이 될 것이다. 이때 5는 예를 든 것으로 상품의 고유 id인데 이는 상품을 등록할 때 DB에서 product table에 등록하면서 자동으로 id라는 column에서 지정된다 필요하면
-# DB를 확인해 볼것, 이때 id는 primary key(기본키)로 제품이 생성될 때 마다 자동으로 매겨진다
-# 이때 id값은 integer의 자료형을 가질 수 밖에 없게 우리가 위에서 Class 만들때 설정 해 두었다 (한번 위에서 product Class를 확인 해 보시면 알듯)
-# 그렇기 때문에, <> 형태의 괄호 안에 무슨형이고, 이 값을 이 뷰 함수가 어떤 변수명으로 사용할 것인지 사용자가 지정할 수 있는데, 나는 앞에서 주소값의 5값을 앞으로 productid 라고 쓰고 싶어서 productid라고 써둔 것이다.
-# 만약 productid가 아니라 임의로 special이라고 쓰고 싶다? 상관없다. 본인이 쓰고싶은 이름으로 지정하면 된다.
-# 자 이제 요약하면 http://(본인ip):5000/single-product/(모든 int 형의 값) 의 경로로 접속할때 어떤 상품의 id건 모두 다 productid라는 변수로 우리가 받아주겠다, 라는 의미다.
-@app.route("/single-product/<int:productid>")
-def viewProduct(productid=None): # 자 이제 본인이 지정한 변수명을 None값으로 초기화 하여 선언 해 주어야 함수 안에서 활용 할 수 있다. 나는 productid라고 지정해 뒀으니 productid=None 으로 써두자
-    user_data = []
-    product_data = Product.query.filter_by(id=productid).first() # 위에서 productid를 그렇게 강조했는데 어디서 쓰이냐? 바로 여기서 쓰인다. 현재 보고있는 상품의 id값이 저장되어 있으므로 그 상품의 정보를 가져와 준다.
-    author_user = User.query.filter_by(id=product_data.author_id).first() # 상품의 id만 있으면 이렇게 제품을 등록한 유저의 정보도 가져올 수 있고,
-    message_data = Message.query.filter_by(product_id=productid).order_by(desc(Message.pub_date)).all() # 특정 상세제품의 minitwit에 내용들도 모두 가져올 수 있다.
-    heart_data = Heart.query.filter_by(product_id=productid).first() # 당연히 좋아요 관련 데이터도 가져올 수 있다
-    sp_long = len(message_data) # 굳이 message_data가 몇개있는지 별도의 변수에 저장한 이유는, html에서는 len함수를 쓸수 없기 때문에 여기서 따로 변수에 저장해 두었다. (html에서 for문을 쓰기 위해서 갯수를 저장해둠)
-    for i in range(sp_long): #sp_long은 바로 위에 있으니 참고
-        user_data.append(User.query.filter_by(id=message_data[i].author_id).first())
-        # user_data에 minitwit을 쓴 사람의 id정보를 담아주는 for문으로 순전히 minitwit에 어떤사람이 썼는지 보여주기 위해 만든 user_data임.
-    return render_template("single-product.html", messages=message_data, product = product_data, now_time = int(time.time()+time_seoul), user=user_data, sp_long=sp_long, author_user=author_user, heart=heart_data)
-    # render_templat은 위에서 설명했으므로 앞으로는 설명을 생략하도록 하겠다.
+
 
 """ 검색창 """
 # 자, 처음으로 POST 방식을 사용하는 뷰 함수가 나왔는데 아래의 형식으로 사용해야한다. methods 오타 주의!! s안쓰면 에러남
@@ -457,499 +261,7 @@ def register():
         return render_template("register.html", error = None)
     
     
-    
-# -----------------------------------------< 미니트윗 >---------------------------------------------------------------
-
-''' 상품안에 상품문의를 minitwit 형식으로 구현하는 함수 '''
-@app.route("/single-product/<int:productid>/add_message", methods=['GET', 'POST']) # <int:productid>는 위에서 설명한 것과 동일합니다!
-def single_product_QnA(productid=None):
-    if not session['logged_in']: # session['logged_in'] 은 로그인 페이지에서 저장해 뒀던것을 기억하나요? 로그인 되어있다면 이 값은 True로 되어있을 것 입니다.
-        return render_template("login.html")
-    else:
-        user_data2=[]
-        user_data=User.query.filter_by(id=session['user_id']).first()
-        product_data = Product.query.filter_by(id=productid).first()
-        author_user=User.query.filter_by(id=product_data.author_id).first()
-        heart_data = Heart.query.filter_by(product_id=productid).first()
-        # Table 명과 어떤것을 filter했는지만 주목해 주시면 됩니다~
-        if request.method=='POST':
-            quest_msg = Message(product_id = productid, author_id=user_data.id, text=request.form['text'], pub_date=int(time.time()+time_seoul))
-            # minitwit에 내용을 쓰고 등록하면 해당상품의 id, 등록한 사람 id, 등록한 내용, 등록한 날짜 를 Message table에 저장하고
-            db2.session.add(quest_msg) # 그 내용을 db에 저장한 뒤에,
-            db2.session.commit() # commit을 해줘야 적용됩니다. SQL과 동일한 내용인데 기억나시나요? commit하지 않으면 DB에 저장되지 않습니다.
-            message_data = Message.query.filter_by(product_id=productid).order_by(desc(Message.pub_date)).all() # 이제 minitwit내용을 날짜순으로 내림차순(최신 등록한 날짜가 맨 위에오게)으로 정리해주고
-            sp_long = len(message_data) # 메세지가 몇개 있는지 따로 변수로 저장해주고 (이유는 위에서 한 것과 같다, len함수를 html에서 쓸수 없으므로..)
-            for i in range(sp_long):
-                user_data2.append(User.query.filter_by(id=message_data[i].author_id).first()) # message_data를 토대로 minitwit 작성한 회원들의 정보를 모두 저장해줍니다.
-            return render_template('single-product.html', product = product_data, now_time = int(time.time()+time_seoul), messages=message_data, user= user_data2, sp_long=sp_long, author_user=author_user, heart=heart_data)
-            # 모든 변수를 single-product.html에 넘겨줍니다. 이 정보들을 활용하는 것은 single-product.html에서 쓰기 나름인데 html 보시면 어떻게 썼는지 보실수 있습니다. 이해하는데는 별로 어렵지 않으니 한번 보세요 ㅎㅎ
-        else: #get 방식으로 들어온 경우는 347줄에 있는 viewProduct 함수를 실행해 줍니다.
-            return redirect(url_for("viewProduct"))
-    
-# ------------------------------------------------------------------------------------------------------------------------
-
-#이제 거의 같은 기능들이 반복되므로 특별한 내용이나 새로 추가된 기능이 나온것이 아니면 코멘트 달지 않을게요.. 너무 오래걸려서 ㅜ 모르면 질문해주셔도 됩니다!
-''' 경매내역보기 조회페이지 '''  
-@app.route("/single-product/<int:prod_bidnum>/viewbidder")
-def viewbidder(prod_bidnum=None):
-    user_data=[]
-    product_data=[]
-    bidding_data = Bidding.query.filter_by(product_id=prod_bidnum).all()
-    
-    b_length = len(bidding_data)
-    for i in range(len(bidding_data)):
-        user_data.append(User.query.filter_by(id=bidding_data[i].bidder_id).first())
-
-    for i in range(len(bidding_data)):
-        product_data.append(Product.query.filter_by(id=bidding_data[i].product_id).first())
-           
-    return render_template("bidder.html", bidders=bidding_data, users=user_data, products=product_data, b_length=b_length)
-
-    
-''' 마이페이지 '''
-@app.route("/mypage")
-def mypage():
-    try:
-        if session['logged_in']:
-            user_data = User.query.filter_by(id=session['user_id']).first()
-            return render_template("mypage.html", user=user_data)
-        else:
-            return render_template("login.html") 
-    except:
-        return render_template("login.html") 
-
-########################## 마이페이지 여섯가지 목록 ###########################  
-''' 판매내역조회 '''
-@app.route("/product_sell_list/<int:user_id>")
-def product_sell_list(user_id=None):
-    if session['logged_in']:
-        user_data = User.query.filter_by(id=session['user_id']).first()
-        product_data=Product.query.filter_by(author_id=user_id).all()
-        return render_template("product_sell_list.html", products = product_data, user=user_data)
-    else:
-        return render_template("login.html")
-  
-    
-''' 판매상품등록  '''
-@app.route("/pdregister")
-def pdregister():
-    try:
-        if not session['logged_in']:
-            return render_template("login.html")
-        else:
-            user_data = User.query.filter_by(id=session['user_id']).first()
-            return render_template("pdregister.html", user=user_data)
-    except:
-        return render_template("login.html")
-    
-  
-############################## 판매상품 등록 -> 상품등록 이미지 파일 관련 Start ################################
-''' 이미지를비롯한상품등록버튼누를시에데이터DB에저장 '''     
-@app.route('/pdregister/uploader', methods=['GET', 'POST'])
-def pdregister_uploadFile():
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    if request.method == 'POST':
-        # 예외처리 구간
-        if request.form['product_name']=='':
-            error = "상품명이 입력되지 않았습니다."
-            return render_template("pdregister.html", error1=error, user=user_data)
-        elif (request.form['initial_price'] and request.form['direct_price'])=='':
-            error = "시작가 및 즉구가를 입력해 주세요"
-            return render_template("pdregister.html", error3=error, user=user_data)
-        elif int(request.form['initial_price'].replace(",",""))>=int(request.form['direct_price'].replace(",","")):
-            error = "즉시 구매 가격보다 높거나 같습니다."
-            return render_template("pdregister.html", error2=error, user=user_data)
-        elif request.form['direct_price']==0:
-            error = "즉시 구매가는  적어도 1원 이상이어야 합니다."
-            return render_template("pdregister.html", error3=error, user=user_data)
-        elif request.form['days']=="":
-            error = "게시 기간이 입력되지 않았습니다."
-            return render_template("pdregister.html", error4=error, user=user_data)
-        # 예외처리 끝
-        
-        f = request.files['product_img'] # request.files 라는 기능을 보면 pdregister.html의 214줄 에서 name="product_img" 의 내용을 가져오는데
-                                         # 이때 html에서 이미 image 파일로 저장해 뒀기 때문에 그 정보를 가져옵니다.
-        if f.filename == '' : # 첨부된 이미지가 없는 경우
-            picture = "img/no_img.png" # 이미지가없다고 아무것도 안하면 메인화면에서 페이지에 이미지가 없는형태로 띄워주어 텅 비게 됩니다.. 정말 보기 안좋아서 img폴더에 보면 제가 따로 no_img라는 이미지 파일을 저장해 뒀습니다.
-                                       # 그 경로로 picture 변수를 저장해줍니다. 꼭 no_img 파일이 있는지 확인해주세요!
-        else: # 이미지가 잘 저장된경우
-            picture = "./img/product_img/" + str(int(time.time()+time_seoul)) + "_" + secure_filename(f.filename) # 해당 이미지를 저장해주는데 이름을 어떻게 할 것인지 고민해 봤습니다.
-                                            # 이미지 파일의 이름이 중복되면 충돌이 있어서 안됩니다. 따라서 충돌이 되지 않도록 현재날짜를 초로 환산한 time.time을 활용했습니다.
-                                            # 따라서 파일이름은[현재날짜를초로 환산한 값_기존파일이름] 으로 저장될 것입니다. 위치는 img폴더의 product_img폴더 안에 저장되게 경로를 설정해줍니다.
-            f.save("./static"+picture)      # 그 경로에 파일을 저장해 줍시다.
-              # 파일명을 보호하기 위한 메소드에 적용시킨 후 save
-        # 앞전에 제가 g.db와 db2는 다르다는 것을 기억하시나요? g.db는 flask 책에서 배운 minitwit에서 활용한 방식이고 db2는 박혜정쌤이 게시판 만들때 썼던 방식입니다. 여기서는 g.db를 썼네요 이유는 없습니다 그냥 초기에 잘 몰라서 쓴거같습니다.
-        # db2로 바꿔서 적용할 수도 있는데 이는 바로 밑에 따로 적용해 두겠습니다.
-        
-        # minitwit 에서 g.db방식
-        g.db.execute('''insert into   product(author_id, title, picture, start_val, current_val, immediate_val, days, board, now_date, bidders, state)
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (session['user_id'],
-                    request.form.get('product_name'), picture, request.form.get('initial_price'),
-                    request.form.get('initial_price'), request.form.get('direct_price'),
-                    request.form.get('days'), request.form.get('description'), int(time.time()+time_seoul), 0,1))
-        g.db.commit()
-        
-        # 혜정쌤의 게시판만들기에서 db2 방식
-        """
-        something = Product(author_id=session['user_id'], title=request.form.get('product_name'), picture=picture,
-                          start_val=request.form.get('initial_price'), current_val=request.form.get('initial_price'),
-                          immediate_val=request.form.get('direct_price'), days=request.form.get('days'),
-                          board=request.form.get('description'), now_date=int(time.time()+time_seoul),
-                          bidders=0, state=1)
-        db2.session.add(something)
-        db2.session.commit()
-        """
-        
-        # 두 방식이 똑같다는 것이 이해가 되시나요? 어쨌든 둘다 가능하다는 걸 말하고 싶었습니다. 궁금하시면 주석처리 해제 후 적용해보세요^^ 테스트 완료해 뒀습니다.
-        # 순수 SQL문을 써서 하고싶은사람은 minitwit방식을 써도 나쁘지 않을것 같아요
-        return redirect(url_for("home"))
-
-''' 상품수정 '''  
-# picture 부분은 위에서 상품등록 할때와 같습니다. 나머지는 방식이 똑같아서 딱히 설명을 추가적으로 할 것이 없네요
-@app.route("/pdregister_edit/pdnum=<int:product_id>", methods=['GET', 'POST'])
-def pdregister_edit(product_id=None):
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    product_data = Product.query.filter_by(id=product_id).first()
-    message_data = Message.query.filter_by(product_id=product_id).order_by(desc(Message.pub_date)).all()
-    author_user=User.query.filter_by(id=product_data.author_id).first()
-    heart_data = Heart.query.filter_by(product_id=product_data.id).first()
-    sp_long = len(message_data)
-    if session['logged_in']:
-        if request.method == 'GET':
-            return render_template("pdregister_edit.html", user= user_data, product= product_data)
-        else:
-            edit_product = Product.query.filter_by(id=product_id).first()
-            edit_product.title = request.form['product_name']
-            edit_product.board = request.form['description']
-            f = request.files['product_img']
-            picture = "./img/product_img/" + str(int(time.time()+time_seoul)) + "_" + secure_filename(f.filename)
-            if edit_product.title=='':
-                return render_template("pdregister_edit.html", user= user_data, product= product_data, error = "상품이름을 입력하여 주세요")
-            if secure_filename(f.filename)=='':
-                edit_product.picture = product_data.picture
-            else:
-                edit_product.picture = picture
-            db2.session.add(edit_product)
-            db2.session.commit()
-            f.save("./static"+picture)
-            return render_template("single-product.html", user= user_data, product= product_data, now_time = int(time.time()+time_seoul), sp_long=sp_long, author_user=author_user, heart=heart_data)
-    else:
-        return render_template("login.html")
-    
-''' 등록된상품삭제 '''
-@app.route('/pdregister_edit/pdnum=<int:product_id>/delete')
-def pdregister_delete(product_id=None):
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    
-    products=query_db('''select product.* from product, users where product.author_id = users.id order by product.id desc ''')
-    # query_db 또한 SQL문을 써서 만드는 방식입니다.. 지금보니까 왜썼지? 싶네요 지워도 써먹은데가없어서 적용될거같은데.. 일단 놔둘게요 
-    
-    product_data = Product.query.filter_by(id=product_id).first()
-    db2.session.delete(product_data) # 새로나온 기능이네요 delete하면 일치하는 내용을 DB에서 삭제해줍니다. 간단하죠?
-    db2.session.commit() # commit을 해야 적용된다는 점 잊지마세요!
-    return redirect(url_for("product_sell_list", user_id = user_data.id))
-    
-    
-
-############################## 판매상품 등록 -> 상품등록 이미지 파일 관련 end ################################
-''' 입찰하기 '''
-@app.route("/single-product/<int:productid>/getbid", methods=['GET', 'POST'])
-def getbid(productid=None):
-    if not session['logged_in']:
-        return redirect(url_for("login"))
-    product = Product.query.filter_by(id=productid).first()
-    user_data = User.query.filter_by(id=session['user_id']).first() # userid 가져오기위해
-    bid_data = Bidding.query.filter_by(product_id=product.id).all()
-    message_data = Message.query.filter_by(product_id=productid).order_by(desc(Message.pub_date)).all()
-    author_user=User.query.filter_by(id=product.author_id).first()
-    heart_data = Heart.query.filter_by(product_id=productid).first()
-    sp_long = len(message_data)
-    flag = 0
-    for bid in bid_data: # 로그인한 사용자가 이미 입찰을 했는지 여부를 체크하고 이미 입찰한 사용자라면 flag값을 1로 셋팅함
-        if bid.bidder_id==user_data.id:
-            flag = 1 #이미 입찰한놈임
-    if request.method == 'POST':        
-        if request.form['my_price']=='':
-            error = "입찰 금액을 입력해 주세요"
-            return render_template("single-product.html", product=product, now_time = int(time.time()+time_seoul), error = error, sp_long=sp_long, author_user=author_user, heart=heart_data)
-        elif int((request.form['my_price']).replace(",",""))<=int((product.current_val).replace(",","")):
-            error = "입찰가격이 현재가보다 낮습니다. 올바른 가격을 입력해 주세요"
-            return render_template("single-product.html", product=product, now_time = int(time.time()+time_seoul), error = error, sp_long=sp_long, author_user=author_user, heart=heart_data)
-        elif int((request.form['my_price']).replace(",",""))>=int((product.immediate_val).replace(",","")):
-            error = "입찰가격이 즉시 구매가보다 높습니다. 올바른 가격을 입력해 주세요"
-            return render_template("single-product.html", product=product, now_time = int(time.time()+time_seoul), error = error, sp_long=sp_long, author_user=author_user, heart=heart_data)
-        else:
-            bidding = Bidding(bidder_id=user_data.id, product_id=product.id, now_date=int(time.time()+time_seoul), my_price = request.form['my_price'])
-            if flag: #이미 입찰한 사람이라면 입찰가격과 현재 날짜만 수정하고 리턴해줌
-                # update set where 문으로 지정된 product의 price를 수정하는 코드 추가
-                g.db.execute('''update bidding set my_price = ?, now_date = ? where product_id = ? and bidder_id = ?''',(request.form['my_price'], int(time.time()+time_seoul), product.id, user_data.id))
-                g.db.commit()
-            else:
-                product.bidders+=1
-                db2.session.add(bidding)
-                db2.session.commit()
-            g.db.execute('''update product set current_val = ? where id = ?''', (request.form['my_price'], product.id ))
-            g.db.commit() # 입력받은 입찰가를 product의 현재가(currenct_val)에 대입하여 update 시켜준다  
-            return redirect(url_for("bid_list"))
-    else:
-        return redirect(url_for("home"))
-    
-''' 입찰 내역 '''
-@app.route("/bid_list")
-def bid_list():
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    bid_data = Bidding.query.filter_by(bidder_id=user_data.id).all()
-    product_data=[]
-    for bid in bid_data:
-        product_data.append(Product.query.filter_by(id=bid.product_id).first())
-    if session['logged_in']:
-        return render_template("bid_list.html", user = user_data, bidding = bid_data, product=product_data, p_long = len(product_data))
-    else:
-        return render_template("login.html")
-    
-''' 즉시구매하기 '''
-@app.route("/single-prodict/<int:product_id>/getitem", methods=['GET', 'POST'])
-def getitem(product_id=None):
-    if not session['logged_in']:
-        return redirect(url_for("login"))
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    product_data = Product.query.filter_by(id=product_id).first()
-    bidding_data = Bidding.query.filter_by(bidder_id=user_data.id, product_id=product_data.id).first()
-
-    if bidding_data==None: #입찰한 적이 없는 사람이었다면
-        bidding_date = int(time.time()+time_seoul)
-        bidding_myprice = product_data.immediate_val
-    else:
-        bidding_date = bidding_data.now_date
-        bidding_myprice = product_data.immediate_val
-    product_data.state = 0 # 낙찰 상태로 바꿔줌
-#     product_data.now_date = product_data.now_date-86400*product_data.days #즉시구매시 타이머 종료
-    db2.session.commit()
-    g.db.execute('''insert into   sbid(product_id, sbidder_id, sbid_price, sbid_date, bidding_date, my_price)
-                    values (?, ?, ?, ?, ?, ?)''', ( product_data.id, user_data.id, product_data.immediate_val, int(time.time()+time_seoul), bidding_date, bidding_myprice) )
-    g.db.commit()
-#     sbid_data = Sbid.query.filter_by(sbidder_id=user_data.id).all()
-    return redirect(url_for("sbid_list"))
-
-
-''' 낙찰내역  '''
-@app.route("/sbid_list")
-def sbid_list():
-    product_data=[]
-    author=[]
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    sbid_data = Sbid.query.filter_by(sbidder_id = user_data.id).all()
-    s_long = len(sbid_data)
-    for i in range(s_long):     
-        product_data.append(Product.query.filter_by(id=sbid_data[i].product_id).first())
-    for i in range(s_long):
-        author.append(User.query.filter_by(id=product_data[i].author_id).first())
-    return render_template("sbid_list.html", user=user_data, sbid=sbid_data, product=product_data, s_long=s_long, author=author)
-
-
-''' 결제내역  '''
-@app.route("/payment_list")
-def payment_list():
-    product_data = []
-    author = []
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    payment_list = Payment.query.filter_by(bidder_id=user_data.id).all() # 입찰한 사용자 기준으로 모든정보 가져옴
-    pl_long = len(payment_list)
-    for i in range(pl_long):
-        product_data.append(Product.query.filter_by(id=payment_list[i].product_id).first()) #입찰한 제품의 정보를 축적한다.
-    for i in range(pl_long):
-        author.append(User.query.filter_by(id=product_data[i].author_id).first())
-    
-    return render_template("payment_list.html", payment = payment_list, user=user_data, product = product_data, author = author ,pl_long=pl_long)
-
-""" 결제하기 누르면 """
-@app.route("/pay_for/<int:product_id>")
-def pay_for(product_id=None):
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    product_data=Product.query.filter_by(id=product_id).first()
-    return render_template("pay_for.html", user=user_data, product=product_data)
-    
-''' 결제완료 '''
-@app.route("/payment_for/<int:productid>/complete", methods=['GET', 'POST'])
-def payment_complete(productid=None):
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    product_data=Product.query.filter_by(id=productid).first()
-    sbid_data = Sbid.query.filter_by(product_id=product_data.id).first()
-    new_payment= Payment(product_id = product_data.id,
-                            sbid_price = sbid_data.sbid_price,
-                            bidder_id = user_data.id,
-                            email = user_data.email,
-                            phone = user_data.phone,
-                            address = user_data.address,
-                            pay_date = int(time.time()+time_seoul) )
-    post = Sbid.query.filter_by(product_id=product_data.id).first()
-    db2.session.delete(post)
-    db2.session.add(new_payment)
-    db2.session.commit()
-    payment_list = Payment.query.filter_by(bidder_id=user_data.id).all() 
-    return redirect(url_for("payment_list"))
-
-
-""" 낙찰 취소 """
-@app.route("/sbid_list/sbid_delete/<int:productid>", methods=['GET', 'POST'])
-def sbid_delete(productid=None):
-    # 낙찰성공 내역 취소하는 내용 추가 필요
-    user_data=User.query.filter_by(id=session['user_id']).first()
-    sbid_data=Sbid.query.filter_by(product_id=productid).first()
-    product_data=Product.query.filter_by(id=productid).first()
-    db2.session.delete(sbid_data)
-    product_data.state = 1
-    db2.session.commit() 
-    return redirect(url_for("sbid_list"))
-
-''' 회원정보수정  '''
-@app.route("/mchange", methods=['GET', 'POST'])
-def mchange():
-    try:
-        user_data = User.query.filter_by(id=session['user_id']).first()
-        if not session['logged_in']:
-            return render_template("login.html") #로그인 안되어 있으면 로그인 화면으로
-        if request.method == 'GET':
-            return render_template("mchange.html", user=user_data)
-        else:
-            edit_user = User.query.filter_by(id=session['user_id']).first()
-            edit_user.password = request.form['password']
-            edit_user.email = request.form['emailid']+'@'+request.form['emailadd']
-            edit_user.phone = request.form['txtMobile1']+'-'+request.form['txtMobile2']+'-'+request.form['txtMobile3']
-            edit_user.address = request.form['address']
-
-            if (request.form['password'] and request.form['emailid'] and request.form['emailadd'] and request.form['txtMobile1'])=='' or (len(request.form['txtMobile2'])<3 or len(request.form['txtMobile3'])<4) :
-                if request.form['password'] == '':
-                    error = "비밀번호란이 입력되지 않았습니다."
-                    return render_template("mchange.html", error=error, user=user_data)
-                elif (request.form['emailid'] or request.form['emailadd']) == '' :
-                     error = "E-mail란이 입력되지 않았습니다."
-                     return render_template("mchange.html", error=error, user=user_data)
-                elif (request.form['txtMobile1']==''):
-                     return render_template("mchange.html", error = "핸드폰번호 앞자리가 선택되지 않았습니다.", user=user_data)
-                elif (len(request.form['txtMobile2'])<3 or len(request.form['txtMobile3'])<4):
-                    return render_template("mchange.html", error="핸드폰 번호 양식이 맞지 않습니다.", user=user_data)
-            if request.form['password'] == request.form['confirmPassword']:
-                db2.session.add(edit_user)
-                db2.session.commit()
-                return redirect(url_for("home"))
-            else:
-                error = "입력하신 비밀번호와 비밀번호 확인값이 일치하지 않습니다."
-                return render_template("mchange.html", error=error, user=user_data)
-    except:
-        return render_template("login.html")
-        
-###############장바구니에 담는 소스 코드 작성 START #########################
-""" 카트추가 """
-@app.route("/single-product/<int:productid>/addcart")
-def add_cart(productid=None):
-    if not session['logged_in']:
-        return redirect(url_for("login"))
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    product_data = Product.query.filter_by(id=productid).first()
-    message_data = Message.query.filter_by(product_id=productid).order_by(desc(Message.pub_date)).all()
-    author_user=User.query.filter_by(id=product_data.author_id).first()
-    heart_data = Heart.query.filter_by(product_id=productid).first()
-    cart_data = Cart.query.filter_by(productId=product_data.id, userId=user_data.id).first()
-    sp_long = len(message_data)
-    
-    if Heart.query.filter_by(product_id=product_data.id).first() == None: #만약 한번도 찜에 올라온 데이터가 아니라면 행에 추가해준다
-        heart = Heart(product_id = product_data.id, heart_cnt=0)
-        db2.session.add(heart)
-        db2.session.commit()   
-    if cart_data==None:
-        carts = Cart(productId=product_data.id, userId=session['user_id'])
-        heart = Heart.query.filter_by(product_id=product_data.id).first()
-        heart.heart_cnt+=1
-        db2.session.add(heart)
-        db2.session.add(carts)
-        db2.session.commit()
-        return redirect(url_for('favorite_list'))
-    else:
-        return render_template("single-product.html", user= user_data, product= product_data, now_time = int(time.time()+time_seoul), error="이미 찜목록에 있는 상품입니다.",sp_long=sp_long, author_user = author_user, heart=heart_data)
-        
-
-''' 찜목록 삭제 '''
-@app.route("/favorite_list/<int:product_id>/delete")
-def delete_cart(product_id=None):
-    user_data=User.query.filter_by(id=session['user_id']).first()
-    product_data=Product.query.filter_by(id=product_id).first()
-    cart_data = Cart.query.filter_by(productId=product_data.id, userId=user_data.id).first()
-    heart_data = Heart.query.filter_by(product_id=product_data.id).first()
-    heart_data.heart_cnt-=1
-    db2.session.delete(cart_data)
-    db2.session.commit()
-    return redirect(url_for("favorite_list"))
-
-''' 찜목록 '''
-@app.route("/favorite_list")
-def favorite_list():
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    cart_data = Cart.query.filter_by(userId=session['user_id']).all()
-    product_data = []
-    for cart in cart_data:
-        product_data.append(Product.query.filter_by(id=cart.productId).first())
-    return render_template("favorite_list.html", user=user_data, products=product_data)
-
-###############장바구니에 담는 소스 코드 작성 END ############################ 
-
-''' 내가보낸문의 '''
-############################################################################################
-@app.route("/myboard", methods=['GET', 'POST'])
-def boardlist():
-    user_data = User.query.filter_by(id=session['user_id']).first()
-    try:
-        if session['logged_in']:
-            boardlist = Boards.query.order_by(desc(Boards.id)).all()
-            return render_template("myboard.html", user=user_data, boards = boardlist)
-        else:
-            return render_template("login.html")
-    except:
-        return render_template("login.html")
-    
-@app.route("/myboard/new")
-def boardNew():
-    user_data=User.query.filter_by(id=session['user_id']).first()
-    return render_template("myboard_form.html", user=user_data)
-
-@app.route("/myboard/add" , methods=['GET', 'POST'])
-def addPost():  
-    new_post = Boards(writer=request.form['writer'], title = request.form['title'],   content = request.form['content'] , regdate = int(time.time()+time_seoul), reads=0)
-    db2.session.add(new_post)
-    db2.session.commit()                                           
-    return redirect(url_for("boardlist"))   #get요청
-#get요청
-
-@app.route("/myboard/view/<int:bbs_id>")
-def viewMyboard(bbs_id=None):
-    user_data=User.query.filter_by(id=session['user_id']).first()
-    post = Boards.query.filter_by(id=bbs_id).first()
-    post.reads=post.reads+1
-    db2.session.commit()
-    return render_template("myboard_view.html", bbs = post, user=user_data)
-
-@app.route("/myboard/edit",methods=['POST', 'GET'])
-def editPost():
-    user_data=User.query.filter_by(id=session['user_id']).first()
-    post = Boards.query.filter_by(id=request.form["bbsid"]).first()
-    return render_template("myboard_edit.html",bbs=post, user=user_data)
-
-@app.route("/myboard/save", methods=['POST', 'GET'])
-def savePost():
-    post = Boards.query.filter_by(id=request.form["bbsid"]).first()
-    post.title = request.form["title"]
-    post.content = request.form["content"]
-    #post.reads=post.reads+1
-    db2.session.commit()
-    return redirect(url_for("boardlist"))
-
-@app.route("/myboard/delete/<int:bbsid>", methods=['POST','GET'])
-def removePost(bbsid=None):
-    post = Boards.query.filter_by(id=bbsid).first()
-    db2.session.delete(post)
-    db2.session.commit()
-    return redirect(url_for("boardlist"))         
-#################################################################
+ 
 
 """ 로그아웃 """    
 @app.route("/logout")
