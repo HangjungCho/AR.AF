@@ -1378,16 +1378,16 @@ a {
 }
 
 .blog-banner-area {
-    height: 280px;
+    height: 200px;
     position: relative;
     z-index: 1
 }
 
-@media (min-width: 1000px) {
+/*@media (min-width: 1000px) {
     .blog-banner-area {
         height: 200px
     }
-}
+}*/
 
 .blog-banner-area .blog-banner {
     position: absolute;
