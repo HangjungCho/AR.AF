@@ -1369,6 +1369,7 @@ a {
     font-size: 30px;
     margin-bottom: 10px;
     margin-left: 50px;
+    margin-top: 25px;
     color: #222
 }
 
@@ -1380,7 +1381,7 @@ a {
 }
 
 .blog-banner-area {
-    height: 200px;
+    height: 80px;
     position: relative;
     z-index: 1
 }
