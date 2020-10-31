@@ -1368,12 +1368,14 @@ a {
 .blog-banner h1 {
     font-size: 30px;
     margin-bottom: 10px;
+    margin-left: 50px;
     color: #222
 }
 
 @media (min-width: 992px) {
     .blog-banner h1 {
-        font-size: 36px
+        font-size: 36px;
+        text-align: left;
     }
 }
 
