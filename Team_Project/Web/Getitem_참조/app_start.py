@@ -91,7 +91,7 @@ class Quantity(db2.Model):
         self.img = img
    
         def __repr__(self):
-        return"<Quantity('%d', '%s', '%s', '%d', '%s', '%s', '%s')>" % (self.type, self.cal, self.count, self.date, self.time, self.img)
+        return"<Quantity('%s', '%s', '%d', '%s', '%s', '%s')>" % (self.type, self.cal, self.count, self.date, self.time, self.img)
 
 # =============================================================================================
 
