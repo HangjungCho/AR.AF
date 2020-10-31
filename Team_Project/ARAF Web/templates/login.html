@@ -5,16 +5,18 @@
     <meta name="robots" content="none">
     <title>STRATIOWEB</title>
     <link rel="shortcut icon" href="/static/favicon.png">
-    
+
     <noscript>
         <style type="text/css">
-            .pagecontainer {display:none;}
+            .pagecontainer {
+                display: none;
+            }
         </style>
         <div class="noscriptmsg">
             <p>This website uses the javascript. Please enable the javascript of your web browser.</p>
         </div>
     </noscript>
-    
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link href="/static/css/karol.css" rel="stylesheet">
@@ -22,42 +24,43 @@
 
     <!-- css -->
     <style type="text/css">
-    .navbar-inverse .navbar-nav>.open>a,
-    .navbar-inverse .navbar-nav>.open>a:focus,
-    .navbar-inverse .navbar-nav>.open>a:hover{
-        background-color: whitesmoke;
-    }
-    
-    .navbar-nav>li>.dropdown-menu{
-        text-align: center;
-        position: absolute;
-        top: 77px;
-        left: 20px;
-        border: solid 1px #E6E6E6;
-        border-radius: 2px;
-    }
-    .dropdown-menu>li>a{
-        color: #999999;
-        line-height: 19px;
-        font-size: 16px;
-        text-align: left;
-        font-family: '__Roboto_5';
-        font-weight: 300;
-    }
+        .navbar-inverse .navbar-nav > .open > a,
+        .navbar-inverse .navbar-nav > .open > a:focus,
+        .navbar-inverse .navbar-nav > .open > a:hover {
+            background-color: whitesmoke;
+        }
+
+        .navbar-nav > li > .dropdown-menu {
+            text-align: center;
+            position: absolute;
+            top: 77px;
+            left: 20px;
+            border: solid 1px #E6E6E6;
+            border-radius: 2px;
+        }
+
+        .dropdown-menu > li > a {
+            color: #999999;
+            line-height: 19px;
+            font-size: 16px;
+            text-align: left;
+            font-family: '__Roboto_5';
+            font-weight: 300;
+        }
     </style>
 
-    
-<style>
-    @media (min-width: 500px) {
-        .container {
-            width: 500px;
-        }
-    }
 
-    button{
-        width:100%;
-    }
-</style>
+    <style>
+        @media (min-width: 500px) {
+            .container {
+                width: 500px;
+            }
+        }
+
+        button {
+            width: 100%;
+        }
+    </style>
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -66,40 +69,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.6/jstz.min.js"></script>
     <script src="/static/js/webtoolkit.base64.js"></script>
     <script src="/static/js/karol.js"></script>
-    
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/style.css')}}">
+
     <!-- javasciprt -->
     <script type="text/javascript">
         var target_url = '';
-        var is_reload  = false;
-        function redirect(){
-            if(is_reload)        {location.reload(); return;    };
-            if(target_url != '') {location.replace(target_url); };
+        var is_reload = false;
+        function redirect() {
+            if (is_reload) { location.reload(); return; };
+            if (target_url != '') { location.replace(target_url); };
         };
 
-        function blueAlert(arg0, arg1, arg2, arg3){
-            if(arg0 == null || arg0 === '') arg0 = 'Save successful!';
-            if(arg1 == null || arg1 === '') arg1 = 'Save successful!';
-            if(arg2 == null || arg2 === '') target_url='';
+        function blueAlert(arg0, arg1, arg2, arg3) {
+            if (arg0 == null || arg0 === '') arg0 = 'Save successful!';
+            if (arg1 == null || arg1 === '') arg1 = 'Save successful!';
+            if (arg2 == null || arg2 === '') target_url = '';
             else target_url = arg2;
-            if(arg3 == null || !(arg3===true || arg3===false)) is_reload = false;
+            if (arg3 == null || !(arg3 === true || arg3 === false)) is_reload = false;
             else is_reload = arg3;
             document.getElementById('blueModalTitle').innerHTML = '' + arg0;
             document.getElementById('blueModalBody').innerHTML = '' + arg1;
             $('#blue_modal').click();
         }
-        function redAlert(arg0, arg1, arg2, arg3){
-            if(arg0 == null || arg0 === '') arg0 = 'Something went wrong.';
-            if(arg1 == null || arg1 === '') arg1 = '';
-            if(arg2 == null || arg2 === '') target_url='';
+        function redAlert(arg0, arg1, arg2, arg3) {
+            if (arg0 == null || arg0 === '') arg0 = 'Something went wrong.';
+            if (arg1 == null || arg1 === '') arg1 = '';
+            if (arg2 == null || arg2 === '') target_url = '';
             else target_url = arg2;
-            if(arg3 == null || !(arg3===true || arg3===false)) is_reload = false;
+            if (arg3 == null || !(arg3 === true || arg3 === false)) is_reload = false;
             else is_reload = arg3;
             document.getElementById('redModalTitle').innerHTML = '' + arg0;
             document.getElementById('redModalBody').innerHTML = '' + arg1;
             $('#red_modal').click();
         }
 
-        function gl_updateURLParameter(url, param, paramVal){
+        function gl_updateURLParameter(url, param, paramVal) {
             var newAdditionalURL = "";
             var tempArray = url.split("?");
             var baseURL = tempArray[0];
@@ -107,8 +111,8 @@
             var temp = "";
             if (additionalURL) {
                 tempArray = additionalURL.split("&");
-                for (var i=0; i<tempArray.length; i++){
-                    if(tempArray[i].split('=')[0] != param){
+                for (var i = 0; i < tempArray.length; i++) {
+                    if (tempArray[i].split('=')[0] != param) {
                         newAdditionalURL += temp + tempArray[i];
                         temp = "&";
                     }
@@ -117,50 +121,53 @@
             var rows_txt = temp + "" + param + "=" + paramVal;
             return baseURL + "?" + newAdditionalURL + rows_txt;
         }
-        
-        function blockPage(){
+
+        function blockPage() {
             var x = document.getElementById('cover');
             x.style.display = '';
             x.style.zIndex = "999";
             x.style.height = document.body.offsetHeight + 'px';
         }
-        function unblockPage(){
+        function unblockPage() {
             var x = document.getElementById('cover');
             x.style.display = 'none';
             x.style.zIndex = "-999";
         }
 
     </script>
-    
-<script type="text/javascript">
-    function localOnload(){
-        $.ajax({
-            url: "/timezone",
-            type: 'PUT',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader("X-CSRFToken", 'vk45qyyq995lWE0lKnZFF5VJvuWIhaq1dA6glo89oeboorgNa9zpB3hvwEbDNIdu');
-            },
-            data: {
-                timezone: jstz.determine().name()
-            }
-        });
-    }
-</script>
+
+    <script type="text/javascript">
+        function localOnload() {
+            $.ajax({
+                url: "/timezone",
+                type: 'PUT',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", 'vk45qyyq995lWE0lKnZFF5VJvuWIhaq1dA6glo89oeboorgNa9zpB3hvwEbDNIdu');
+                },
+                data: {
+                    timezone: jstz.determine().name()
+                }
+            });
+        }
+    </script>
 
 </head>
 <body onload="try{terry.page.all.onLoad();}catch(err){;}">
 <div id="cover" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; cursor: wait; background: #c8c8c8; opacity: 0.5; display: none;">&nbsp;</div>
 
     <!-- Navigation bar -->
-    <nav class="navbar navbar-inverse navbar-static-top" style="background-color: #E6E6E6; border: 0px; height:100px;">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                
-                <a class="navbar-brand" href="#" style="cursor: default;"><img src="/static/logo.png" style="margin: 22px; margin-right:0px;"></a>
+<section class="blog-banner-area" id="category">
+
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1 style="margin-top: 0.5px;">ARAF</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                </nav>
             </div>
-            
         </div>
-    </nav>
+    </div>
+</section>
     
     <!-- Contents -->
     
@@ -175,7 +182,7 @@
                 <h1>Sign In</h1><div class="line"></div>
             </div>
 
-            <p style="line-height:70px;">&nbsp;</p>
+            <p>&nbsp;</p>
 
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="well">
