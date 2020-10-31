@@ -70,6 +70,30 @@ class User(db2.Model):
 # 앞으로 User테이블을 사용할때 각 column의 자료형을 정의해 준다. 위에 정의한 것과 일치시키면 됨
     def __repr__(self):
         return"<User('%s', '%s', '%s', '%s', '%s')>" % (self.name, self.email, self.password, self.phone, self.address)
+# =============================================================================================
+class Quantity(db2.Model):
+    __tablename__ = 'Qantity'
+    
+    ID = db2.Column(db2.Integer, primary_key = True)
+    type = db2.Column(db2.String)
+    cal = db2.Column(db2.String)
+    count = db2.Column(db2.Integer)
+    date = db2.Column(db2.String)
+    time = db2.Column(db2.String)
+    img = db2.Column(db2.String)
+
+    def __init__(self, type, cal, count, date, time, img):
+        self.type = type
+        self.cal = cal
+        self.count = count
+        self.date = date
+        self.time = time
+        self.img = img
+   
+        def __repr__(self):
+        return"<Quantity('%d', '%s', '%s', '%d', '%s', '%s', '%s')>" % (self.type, self.cal, self.count, self.date, self.time, self.img)
+
+# =============================================================================================
 
 class Product(db2.Model):
     __tablename__ = 'product'
