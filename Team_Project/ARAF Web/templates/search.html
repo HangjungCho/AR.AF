@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Aroma Shop - Home</title>
+	<title>ARAF - Home</title>
 	<link rel="icon" href="{{url_for('static', filename = 'img/Fevicon.png')}}" type="image/png">
 	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/fontawesome/css/all.min.css')}}">
@@ -79,9 +79,7 @@
 	<!--================ End Header Menu Area =================-->
 	<!-- ================ start banner area ================= -->
 	<section style=" margin-left:100px;">
-		<form method="post" style="
-    margin: auto;
-">
+		<form method="POST" action="/search" style=" margin: auto;">
 			<div class="name" style="        margin-top: 10px;
         margin-left: 250px;
 ">
@@ -115,7 +113,13 @@
 				<button type="submit" value="submit" class="btn btn-secondary" style="background-color: #384aeb; border-color:#384aeb ">
 					<i class="fa fa-search"></i>
 				</button>
+				<p>
+					{% if error %}
+					<div class=error><strong>{{ error }}</strong></div>
+					{% endif %}
+				</p>
 			</div>
+
 
 
 
@@ -169,16 +173,16 @@
 										<tr style="width:100%; text-align:center">
 											<td>{{product.id}}</td>
 											<td>
-												<a class="pic" href="/"><img src="{{url_for('static', filename = product.img)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
+												<a class="pic" href="/search"><img src="{{url_for('static', filename = product.img)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
 											</td>
 											<td>
-												<a style="text-align:center" href="/" class="p_type">{{product.p_type}}</a>
+												<a style="text-align:center" href="/search" class="p_type">{{product.p_type}}</a>
 											</td>
 											<td class="count">{{product.count}}</td>
 											<td class="date">{{product.date}}</td>
 											<td class="date">{{product.time}}</td>
 											<td>
-												<a href="/"><button type="button" class="edit_button">입찰하기</button></a>
+												<a href="/search"><button type="button" class="edit_button">입찰하기</button></a>
 											</td>
 										</tr>
 										{% endfor %}

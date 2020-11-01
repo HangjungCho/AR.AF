@@ -8,8 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from pip._vendor.appdirs import user_data_dir
 from sqlalchemy import desc
 
-# 우리는 타이머 기능을 사용하기 때문에 필요하기도 하지만 날짜를 계산하기 위해서 필요하다.
-from datetime import datetime 
+# 날짜를 계산을 위한 라이브러리
+from datetime import datetime
 import time
 
 from sqlalchemy.sql.expression import null
@@ -118,9 +118,6 @@ def before_request():
     """http 요청이 올 때마다 실행 : db연결하고 전역 객체 g에 저장하고 세션에 userid가 저장되어 있는지 체크해서 user 테이블로부터 user 정보 조회 한 후에 전역 객체 g에 저장 """
     g.db=connect_db()
     
-# 여기서 말해두지만 g.db와 db2는 엄연히 다른 방식입니다.. 
-# g.db는 minitwit에서 끌어다가 쓴 방식이고
-# db2 는 박혜정쌤이 게시판 만들때 쓰던 방식입니다 개인적으로 db2 방식이 더 쉬워서 많이썼어요 ㅎㅎ 이 위에있는 두 query_db, before_request 함수는 minitwit에서 쓰는 방식을 가져온 것입니다.
 
 """ 날짜함수 Method """
 def format_datetime(timestamp):
@@ -148,41 +145,57 @@ def home():
     else:
         u_id=request.form['username']
         u_passwd=request.form['password']
-        #try:
-        user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
-        if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
-            session['user_id']=user_data.id
-            session['logged_in']=True
+        try:
+            user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
+            if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
+                session['user_id']=user_data.user_id
+                session['logged_in']=True
 
-            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
-            return render_template("search.html", products=productlist)
-        else: # 정상적으로 로그인이 되지 않는경우(DB에 관련 user_data가 없는경우 None이 되므로..)
-            error = "ID가 존재하지 않거나 비밀번호가 일치하지 않습니다."
-            return render_template("login.html", error=error) # 왜 로그인이 안되었는지 보내줍니다.
-        #except :
-        #    error = "DB조회중에 에러가 발생했습니다." # 예외처리를 해주지 못한 나머지 에러는 그냥 DB조회중 에러라고  짬처리
-        #    return render_template("login.html", error=error)
+                productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
+                return redirect(url_for("search_product"))
+            else: # 정상적으로 로그인이 되지 않는경우(DB에 관련 user_data가 없는경우 None이 되므로..)
+                error = "ID가 존재하지 않거나 비밀번호가 일치하지 않습니다."
+                return render_template("login.html", error=error) # 왜 로그인이 안되었는지 보내줍니다.
+        except :
+            error = "DB조회중에 에러가 발생했습니다." # 예외처리를 해주지 못한 나머지 에러는 그냥 DB조회중 에러라고  짬처리
+            return render_template("login.html", error=error)
 
 
 
-""" index """
+""" 검색페이지 """
 @app.route("/search", methods=['GET','POST'])
 def search_product():
-    #if session['logged_in']==True:
-    if request.method=='POST': 
-        product_name = request.form.get('search') 
-        product_date = request.form.get('startdate')
-        print("search : {}".format(search))
-        print("startdate : {}".format(search))
+    if session['logged_in']==True:
+        if request.method=='POST': 
+            # 받아온 날짜 값
+            product_name = request.form.get('search') 
+            product_startdate = request.form.get('startdate')
+            product_enddate = request.form.get('enddate')
 
-        #productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
-        productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
-        return render_template("search.html", products=productlist)  
+            if product_startdate and product_enddate == '':
+                error = "날짜를 입력해주세요"
+                return render_template("search.html", error = error)
+            # string(a) -> timestamp(b) -> datetime(c) -> string(d)
+            #예시
+            a = '2020-10-10' # string
+            b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
+            c = datetime.fromtimestamp(b) # datetime
+            d = datetime.strftime(c, '%Y-%m-%d') # string
+
+            # datetime 변환 값
+            #strp_startdate = time.mktime(datetime.strptime(product_startdate, '%Y-%m-%d').timetuple())
+            #strp_enddate = time.mktime(datetime.strptime(product_enddate, '%Y-%m-%d').timetuple())
+            #print("p_name : {}".format(product_name))
+            #print("startdate : {}".format(strp_startdate))
+            #print("enddate : {}".format(strp_enddate))
+
+            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
+            return render_template("search.html", products=productlist)  
+        else: # GET한 순간 모든 상품을 보여줌
+            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
+            return render_template("search.html", products=productlist)
     else:
-        productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
-        return render_template("search.html", products=productlist)
-    #else:
-    #    return redirect(url_for('home'))
+        return redirect(url_for('home'))
 
 
 
