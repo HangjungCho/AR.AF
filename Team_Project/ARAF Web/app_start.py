@@ -169,12 +169,15 @@ def search_product():
         if request.method=='POST': 
             # 받아온 날짜 값
             product_name = request.form.get('search') 
+            # string형 YYYY-mm-dd 폼
             product_startdate = request.form.get('startdate')
             product_enddate = request.form.get('enddate')
 
+            # 입력된 날짜가 없을때 예외처리
             if product_startdate and product_enddate == '':
                 error = "날짜를 입력해주세요"
                 return render_template("search.html", error = error)
+
             # string(a) -> timestamp(b) -> datetime(c) -> string(d)
             #예시
             a = '2020-10-10' # string                     
@@ -182,10 +185,17 @@ def search_product():
             c = datetime.fromtimestamp(b) # datetime
             d = datetime.strftime(c, '%Y-%m-%d') # string
 
-            # datetime 변환 값
-            #strp_startdate = time.mktime(datetime.strptime(product_startdate, '%Y-%m-%d').timetuple())
-            #strp_enddate = time.mktime(datetime.strptime(product_enddate, '%Y-%m-%d').timetuple())
-            #print("p_name : {}".format(product_name))
+            # Time stamp로 변환
+            strp_startdate = time.mktime(datetime.strptime(product_startdate, '%Y-%m-%d').timetuple())
+            strp_enddate = time.mktime(datetime.strptime(product_enddate, '%Y-%m-%d').timetuple())
+
+            # 쿼리문 작성(이중쿼리 날짜조회 -> 제품조회 순)
+            buf = 
+
+
+            #timestamp를 string형으로 변환
+            
+            #날짜값 반환
             #print("startdate : {}".format(strp_startdate))
             #print("enddate : {}".format(strp_enddate))
 
