@@ -177,7 +177,7 @@ def search_product():
                 return render_template("search.html", error = error)
             # string(a) -> timestamp(b) -> datetime(c) -> string(d)
             #예시
-            a = '2020-10-10' # string
+            a = '2020-10-10' # string                     
             b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
             c = datetime.fromtimestamp(b) # datetime
             d = datetime.strftime(c, '%Y-%m-%d') # string
