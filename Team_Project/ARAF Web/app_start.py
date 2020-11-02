@@ -167,6 +167,7 @@ def home():
 def search_product():
     if session['logged_in']==True:
         if request.method=='POST': 
+            productlist = []
             # 받아온 날짜 값
             product_name = request.form.get('search') 
             # string형 YYYY-mm-dd 폼
@@ -174,33 +175,29 @@ def search_product():
             product_enddate = request.form.get('enddate')
 
             # 입력된 날짜가 없을때 예외처리
-            if product_startdate and product_enddate == '':
-                error = "날짜를 입력해주세요"
+            if product_startdate == '':
+                error = "시작 날짜를 입력해주세요"
                 return render_template("search.html", error = error)
+            elif product_enddate == '':
+                error = "끝 날짜를 입력해주세요"
+                return render_template("search.html", error = error)
+            else:
+                # 입력받은 날짜를 계산하기 위해 Time stamp로 변환
+                strp_startdate = time.mktime(datetime.strptime(product_startdate, '%Y-%m-%d').timetuple())
+                strp_enddate = time.mktime(datetime.strptime(product_enddate, '%Y-%m-%d').timetuple())
 
-            # string(a) -> timestamp(b) -> datetime(c) -> string(d)
-            #예시
-            a = '2020-10-10' # string                     
-            b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
-            c = datetime.fromtimestamp(b) # datetime
-            d = datetime.strftime(c, '%Y-%m-%d') # string
+                # 쿼리문 작성(제품조회)
+                buf_list = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
 
-            # Time stamp로 변환
-            strp_startdate = time.mktime(datetime.strptime(product_startdate, '%Y-%m-%d').timetuple())
-            strp_enddate = time.mktime(datetime.strptime(product_enddate, '%Y-%m-%d').timetuple())
+                # 조회된 제품 중 선택한 날짜 기준으로만
+                for  product in buf_list:
+                   #time stamp변환
+                   convert_timestamp = time.mktime(datetime.strptime(product.date, '%Y-%m-%d').timetuple())
+                   if convert_timestamp >= strp_startdate and convert_timestamp <= strp_enddate:
+                       productlist.append(product) # 선택날짜의 범위 내에 있으면 추가해줌
 
-            # 쿼리문 작성(이중쿼리 날짜조회 -> 제품조회 순)
-            buf = 
+                return render_template("search.html", products=productlist)  
 
-
-            #timestamp를 string형으로 변환
-            
-            #날짜값 반환
-            #print("startdate : {}".format(strp_startdate))
-            #print("enddate : {}".format(strp_enddate))
-
-            productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%'+product_name+'%')).all()
-            return render_template("search.html", products=productlist)  
         else: # GET한 순간 모든 상품을 보여줌
             productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
             return render_template("search.html", products=productlist)
@@ -223,3 +220,21 @@ if __name__ == '__main__':
 #     db2.create_all() #테이블이 생성되고 나서는 주석처리해줌
     app.secret_key = '1234567890'
     app.run(debug=False, host='0.0.0.0') #본인의 ip로 접속할 수 있게 해줍니다.
+
+
+
+
+
+
+
+
+
+
+
+
+# string(a) -> timestamp(b) -> datetime(c) -> string(d)
+#예시
+#a = '2020-10-10' # string                     
+#b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
+#c = datetime.fromtimestamp(b) # datetime
+#d = datetime.strftime(c, '%Y-%m-%d') # string
