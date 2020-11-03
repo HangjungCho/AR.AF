@@ -37,9 +37,7 @@ class ReceptionProcess( Process ):
                 print( 'Client connect Waiting.....\n' )
 
                 clientImgProcess = ClientImgProcess( client_sock, address )
-                # clientInfoProcess = ClientInfoProcess( client_sock, address )
                 clientImgProcess.start()
-                # clientInfoProcess.start()
 
             except Exception as e:
                 print( e )
@@ -72,22 +70,16 @@ class ClientImgProcess( Process ):
     def insertDB( self, imgdata, product):
         conn = sqlite3.connect( 'araf.db' )
         product_type = product[:7]
-        # print('ptype : {}'.format(type(product_type)))
-        # print('product_type : {}'.format(product_type))
         with conn:
             cursor = conn.cursor()
             cursor.execute( 'SELECT num FROM Count WHERE p_type = ?', (product_type,))
             count = cursor.fetchall()
 
-        # print('count[0][0] value : {}'.format(count[0][0]))
         # depart information
         cal = product[7:10]
         realdate = product[10:20]
         realtime = product[20:]
-        # print('cal : {}'.format(cal))
-        # print('count : {}'.format(count))
-        # print('realdate : {}'.format(realdate))
-        # print('realtime : {}'.format(realtime))
+
 
         # save image
         now_date = realdate.replace('-', '') + '_' + realtime.replace(':', '')
@@ -127,9 +119,6 @@ class ClientImgProcess( Process ):
             getdata1 = self.recvall(self.client_sock, int(getlength1))
             imgdata = np.frombuffer(getdata1, dtype='uint8') 
 
-            # print('getlength1 : {}'.format(getlength1), end='')
-            # print('getdata1 : {}'.format(getdata1), end='')
-
             # img decode
             decimg=cv2.imdecode(imgdata,1)
             print('')
@@ -139,9 +128,6 @@ class ClientImgProcess( Process ):
             """ product information protocol """ 
             getlength2 = self.client_sock.recv( 28 )
             getdata2 = self.recvall(self.client_sock, int(getlength2))
-
-            # print('getlength2 : {}'.format(getlength2), end='')
-            # print('getdata2 : {}'.format(getdata2), end='')
             # insert all data in Database
             product = getdata2.decode()
             self.insertDB(decimg, product)
