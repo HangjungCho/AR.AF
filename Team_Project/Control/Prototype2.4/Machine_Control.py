@@ -473,8 +473,10 @@ class CameraProcess( Process, NetFunc):
         np.set_printoptions(suppress=True)
 
         cap = cv2.VideoCapture(-1)
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        #width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        #height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 
         # load model.
         model = load_model('lego_model2.h5')
@@ -483,15 +485,16 @@ class CameraProcess( Process, NetFunc):
                 ret, img_color = cap.read()
                 if ret == False:
                     continue
-                img_input = img_color.copy()
+                #img_input = img_color.copy()
                 
-                cv2.rectangle(img_color, (208, 128),  (width-208, height-128), (0, 0, 255), 3)
+                #cv2.rectangle(img_color, (208, 128),  (width-208, height-128), (0, 0, 255), 3)
                 cv2.imshow('Camera', img_color)
                 # make rectangle 224X224
-                img_roi = img_input[128:height-128, 208:width-208]
+                #img_roi = img_input[128:height-128, 208:width-208]
                 cv2.waitKey(1)
 
                 if ircheck == 1:
+                    img_roi = cv2.resize(img_color, dsize=(224, 224))
                     print('process progressed...')
                     ''' ### send image data to server ### '''
                     self.sendImg2Server(img_roi)
