@@ -1,8 +1,8 @@
-#from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model
 from multiprocessing import Process, Queue
 from threading import Thread
 
-#import tensorflow as tf
+import tensorflow as tf
 import socket
 import cv2
 import numpy as np
@@ -160,7 +160,7 @@ class PushMotor1(Thread):
 
     def push_activate1(self):
         GPIO.output(self.ports, False)
-        time.sleep(5.7)
+        time.sleep(5.9)
         GPIO.output(self.ports, True)
     
     def push_deactivate1(self):
@@ -189,7 +189,7 @@ class PushMotor2(Thread):
 
     def push_activate2(self):
         GPIO.output(self.ports, False)
-        time.sleep(5.7)
+        time.sleep(5.9)
         GPIO.output(self.ports, True)
 
     def push_deactivate2(self):
@@ -249,6 +249,7 @@ class IRSensor2(Thread):
         global Check2
         while True:
             if GPIO.input(self.port) == 0:
+                print('IR2 Progressed')
                 if self.C2Mque.qsize() == 0:
                     continue
                 else:
@@ -284,7 +285,9 @@ class IRSensor3(Thread):
         global Check3
         while True:
             if GPIO.input(self.port) == 0:
+                # print('IR3 Progressed')
                 if self.item_list.qsize() == 0:
+                    # print('item list empty')
                     continue
                 else:
                     Check_type = self.item_list.get()
@@ -427,35 +430,40 @@ class CameraProcess( Process, NetFunc):
         data[0] = normalized_image_array
         
         
-        #prediction = model.predict(data)
-        #class_1 = prediction[0][0]
-        #class_2 = prediction[0][1]
-        #class_3 = prediction[0][2]
-        #predict_class = max(prediction[0])
+        prediction = model.predict(data)
+        class_1 = prediction[0][0]
+        class_2 = prediction[0][1]
+        class_3 = prediction[0][2]
+        class_4 = prediction[0][3]
+        predict_class = max(prediction[0])
 
-        #if predict_class < 0.9:
-        #    print("[ Cannot Distinguish ]")
-        #    predict_type = 'ERR_001'
-        #    classification = 'E'
-        #else:
-        #    if class_1 == predict_class:
-        #        print('prediction result : Dinosaur')
-        #        predict_type = 'DSR_001'
-        #        classification = 'A'
+        if predict_class < 0.9:
+            print("[ Cannot Distinguish ]")
+            predict_type = 'ERR_001'
+            classification = 'E'
+        else:
+            if class_1 == predict_class:
+                print('prediction result : Dinosaur')
+                predict_type = 'DSR_001'
+                classification = 'A'
 
-        #    elif class_2 == predict_class:
-        #        print('prediction result : Airplane')
-        #        predict_type = 'APL_001'
-        #        classification = 'B'
+            elif class_2 == predict_class:
+                print('prediction result : Airplane')
+                predict_type = 'APL_001'
+                classification = 'B'
 
-        #    elif class_3 == predict_class:
-        #        print('prediction result : Whale')
-        #        predict_type = 'WAL_001'
-        #        classification = 'C'
+            elif class_3 == predict_class:
+                print('prediction result : Whale')
+                predict_type = 'WAL_001'
+                classification = 'C'
 
-        #    self.C2Mque.put(classification)
+            elif class_4 == predict_class:
+                print('prediction result : Empty')
+                predict_type = 'ERR_001'
+                classification = 'E'
 
-        predict_type = 'WAL_001'
+            self.C2Mque.put(classification)
+
         cal = 'ADD'
         now = datetime.datetime.now()
         capdate = now.strftime( '%Y-%m-%d' )
@@ -483,7 +491,7 @@ class CameraProcess( Process, NetFunc):
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 
         # load model.
-        #model = load_model('lego_model2.h5')
+        model = load_model('early_model.h5')
         try:
             while True:
                 ret, img_color = cap.read()
@@ -502,7 +510,7 @@ class CameraProcess( Process, NetFunc):
                     print('process progressed...')
                     ''' ### send image data to server ### '''
                     self.sendImg2Server(img_roi)
-                    model = 1
+
                     ''' ### predict lego ### '''
                     self.predictType(model, img_roi)
                     ircheck = 0
