@@ -204,6 +204,11 @@ def search_product():
     else:
         return redirect(url_for('home'))
 
+#"""제품 자세히 보기"""
+#@app.route("/search/view_detail", methods=['GET','POST'])
+#def view():
+#    return render_template("view.html", error=error)
+#pass
 
 
 """ 로그아웃 """    

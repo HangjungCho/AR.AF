@@ -176,7 +176,7 @@
 
 										{% for product in products %}
 										<tr style="width:100%; text-align:center">
-											<td>{{product.id}}</td>
+											<td>{{product.ID}}</td>
 											<td>
 												<a class="pic" href="/search"><img src="{{url_for('static', filename = product.img)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
 											</td>
@@ -187,7 +187,8 @@
 											<td class="date">{{product.date}}</td>
 											<td class="date">{{product.time}}</td>
 											<td>
-												<a href="/search"><button type="button" class="edit_button">입찰하기</button></a>
+												<a type="button" class="sbid_button"
+												   onClick="window.open('/view_detail/{{product[i].ID}}','pay','width=700, height=450')" style="color:#ffffff; cursor:pointer">자세히</a>
 											</td>
 										</tr>
 										{% endfor %}
