@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Getitem</title>
+	<link rel="icon" href="{{url_for('static', filename='img/Fevicon.png')}}" type="image/png">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/bootstrap/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/fontawesome/css/all.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/themify-icons/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/linericon/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/nice-select/nice-select.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.theme.default.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.carousel.min.css')}}">
+  <script language="javascript" src="{{url_for('static', filename='js/timer.js')}}" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+
+<style type ="text/css">
+#timer {
+	background-color:transparent;
+	color:#000000;
+	text-align:center;
+	font-size:18px;
+	border : none;
+}
+
+.red-btn {
+	display: block;
+	height: 40px;
+	width: 85%;
+    line-height: 38px !important;
+    padding: 0px 38px;
+	text-transform: uppercase;
+	background:red;
+    margin-right: 10px;
+	margin-bottom: 5px;
+	border-radius: 30px;
+	color: #fff;
+	font-weight: 500;
+	border: none;
+	text-align: center;
+}
+.gray-btn {
+	display: block;
+	height: 40px;
+	width: 50%;
+    line-height: 38px !important;
+    padding: 0px 38px;
+	background:gray;
+    margin-right: 10px;
+	margin-bottom: 5px;
+	border-radius: 30px;
+	color: #fff;
+	font-weight: 500;
+	border: none;
+	text-align: center;
+}
+
+.star-rating {width:304px; }
+.star-rating,.star-rating span {display:inline-block; height:55px; overflow:hidden; background:url(../static/img/star.png)no-repeat; }
+.star-rating span{background-position:left bottom; line-height:0; vertical-align:top;}
+
+</style>
+
+<script type="text/javascript">
+function QCreate(){		
+	f.action="/single-product/{{product.id}}/add_message";
+	f.submit();	
+}
+
+</script>
+<style>
+#topbt {
+    position: fixed;
+    z-index: 1000;
+    right: 50px;
+    bottom: 50px;
+    width: 50px;
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+
+
+<!--================Single Product Area =================-->
+
+<div class="product_image_area">
+	<div class="container">
+		
+			<div class="row s_product_inner">
+				<div class="col-lg-6">
+					<div class="owl-carousel owl-theme s_Product_carousel">
+						<div class="single-prd-item">
+							<img class="img-fluid" src="{{url_for('static', filename = product.img)}}" width="530" height="600" > <!--상품 이미지 표시-->
+						</div>
+					</div>
+				</div>
+				<form class="row login_form" action="/single-product/{{product.id}}/getbid" id="register_form" method = "POST">
+				<div style="border:1px solid #dfdfdf; background-color:#f7f7f7; padding:20px; padding-top:70px; text-align:left;" width="530" height="500">
+					<table cellpadding="0" cellspacing="0" style="width:100%; margin-left:40px">
+						<tbody>
+						<div  style="font-size:30px; color:#333333; margin-bottom:15px; margin-left:40px">상세 정보</div> <!--원래 상품명 표시-> 제목으로 변경-->
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>상품명</strong></td><!--상품명 = 제품 타입-->
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.id }}</span></span> </strong></td>	
+						</tr>
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>수량</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.count }}</span></span> </strong></td>
+						</tr>
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>날짜</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.date }}</span></span> </strong></td>					
+						</tr>
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>시간</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.time }}</span></span> </strong></td>					
+						</tr>
+						</tbody> <!--수정완료-->
+					</table>
+					<hr style="color:black; width:470px; height:1px; ">
+					<!--
+					<table cellpadding="0" cellspacing="0" style="width:100%; margin-left:40px;">
+					<tbody>
+						<tr>
+							<td style="color:black; height:30px;  width:80px;" class="font_16 letter_s">경매기간</td>
+							<td class="font_16" style="width:410px;">{{ product.now_date|datetimeformat }} ~ <strong>{{ (product.now_date+86400*product.days)|datetimeformat }}</strong></td>
+							
+						</tr>
+
+						<tr>
+							<td style="color:black; height:30px;" class="font_16 letter_s">시작가</td>
+							<td class="font_16">{{product.start_val}} 원</td>
+						</tr>
+
+					</tbody>
+					</table>
+					-->
+					<hr style="color:black; width:470px; height:1px;">
+						<hr style="color:black; width:350px; height:1px">
+						<div class="gray-btn" style="margin-left:20%; margin-top:5%">닫기</div>
+
+					</table>
+					</div>
+					</form>
+			</div>
+		</div>
+	</div>	
+	
+
+  <script src="{{url_for('static', filename = 'vendors/jquery/jquery-3.2.1.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendors/skrollr.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendors/nice-select/jquery.nice-select.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendors/jquery.ajaxchimp.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendors/mail-script.js')}}"></script>
+  <script src="{{url_for('static', filename = 'js/main.js')}}"></script>
+  <script>
+
+   function number_chk(obj){
+   
+   var val = obj.value.replace(/,/g, "");
+   
+   var val2 = val.substr(0, 1);
+   
+   var val3 = val.length;
+   
+   if(val2 == 0){
+   
+   val = val.substr(1, val3);
+   
+   }
+   
+   obj.value = num_format(val);
+   
+   }
+   
+   function num_format(n){
+   
+   var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
+   
+   n = String(n);    //숫자 -> 문자변환
+   
+   while(reg.test(n)){
+   
+   n = n.replace(reg, "$1" + "," + "$2");
+   
+   }
+   
+   return n;
+   
+   }
+   
+</script>
+
+</body>
+</html>
