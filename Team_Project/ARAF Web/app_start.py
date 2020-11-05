@@ -174,7 +174,8 @@ def search_product():
             product_startdate = request.form.get('startdate')
             product_enddate = request.form.get('enddate')
 
-            # 입력된 날짜가 없을때 예외처리
+            ###  입력된 날짜가 없을때 예외처리
+
             if product_startdate == '':
                 error = "시작 날짜를 입력해주세요"
                 return render_template("search.html", error = error)
@@ -182,6 +183,13 @@ def search_product():
                 error = "끝 날짜를 입력해주세요"
                 return render_template("search.html", error = error)
             else:
+                # string(a) -> timestamp(b) -> datetime(c) -> string(d)
+                #예시
+                #a = '2020-10-10' # string                     
+                #b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
+                #c = datetime.fromtimestamp(b) # datetime
+                #d = datetime.strftime(c, '%Y-%m-%d') # string
+
                 # 입력받은 날짜를 계산하기 위해 Time stamp로 변환
                 strp_startdate = time.mktime(datetime.strptime(product_startdate, '%Y-%m-%d').timetuple())
                 strp_enddate = time.mktime(datetime.strptime(product_enddate, '%Y-%m-%d').timetuple())
@@ -204,11 +212,12 @@ def search_product():
     else:
         return redirect(url_for('home'))
 
-#"""제품 자세히 보기"""
-#@app.route("/search/view_detail", methods=['GET','POST'])
-#def view():
-#    return render_template("view.html", error=error)
-#pass
+"""제품 자세히 보기"""
+@app.route("/view_detail/<int:productid>", methods=['GET','POST'])
+def view_detail(productid=None):
+    product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
+    return render_template("view.html", product = product_data)
+
 
 
 """ 로그아웃 """    
@@ -225,21 +234,3 @@ if __name__ == '__main__':
 #     db2.create_all() #테이블이 생성되고 나서는 주석처리해줌
     app.secret_key = '1234567890'
     app.run(debug=False, host='0.0.0.0') #본인의 ip로 접속할 수 있게 해줍니다.
-
-
-
-
-
-
-
-
-
-
-
-
-# string(a) -> timestamp(b) -> datetime(c) -> string(d)
-#예시
-#a = '2020-10-10' # string                     
-#b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
-#c = datetime.fromtimestamp(b) # datetime
-#d = datetime.strftime(c, '%Y-%m-%d') # string

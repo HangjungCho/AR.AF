@@ -74,8 +74,8 @@
 					</nav>
 				</div>
 				<div style="float:right">
-					<a class="pic" href="/search" style="margin-right: 1px;">
-						<img alt="첨부이미지" class="pic" height="40" width="40" src="/static/./img_file/logout/logout.png" style="margin-right: 1px; margin-top: 10px">
+					<a class="pic" href="/logout" style="margin-right: 1px;">
+						<img alt="첨부이미지" class="pic" height="40" width="40" src="{{url_for('static', filename ='img/logout.png')}}" style="margin-right: 1px; margin-top: 10px">
 					</a>
 				</div>
 			</div>
@@ -187,8 +187,11 @@
 											<td class="date">{{product.date}}</td>
 											<td class="date">{{product.time}}</td>
 											<td>
+												<!--<a type="button" class="sbid_button"
+	   onClick="window.open('/view_detail/product[i].ID','pay','width=700, height=450')" style="color:#ffffff; cursor:pointer">자세히</a>-->
 												<a type="button" class="sbid_button"
-												   onClick="window.open('/view_detail/{{product[i].ID}}','pay','width=700, height=450')" style="color:#ffffff; cursor:pointer">자세히</a>
+												   onClick="window.open('/view_detail/{{product.ID}}','detail','width=700, height=450')" style="color:#ffffff; cursor:pointer">자세히</a>
+							
 											</td>
 										</tr>
 										{% endfor %}
@@ -246,7 +249,7 @@
 		<div class="footer-bottom">
 			<div class="container">
 				<div class="row d-flex">
-					<p class="col-lg-12 footer-text text-center">-->
+					<p class="col-lg-12 footer-text text-center">
 	<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 	<!--Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>GETITEM</a>-->
 	<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->

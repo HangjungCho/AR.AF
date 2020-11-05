@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -66,7 +66,7 @@
 
 <script type="text/javascript">
 function QCreate(){		
-	f.action="/single-product/{{product.id}}/add_message";
+	f.action="/view_product/{{product.id}}/add_message";
 	f.submit();	
 }
 
@@ -106,7 +106,7 @@ function QCreate(){
 						<div  style="font-size:30px; color:#333333; margin-bottom:15px; margin-left:40px">상세 정보</div> <!--원래 상품명 표시-> 제목으로 변경-->
 						<tr>
 							<td style="color:#333333; height:40px;" class="font_16"><strong>상품명</strong></td><!--상품명 = 제품 타입-->
-							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.id }}</span></span> </strong></td>	
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.p_type }}</span></span> </strong></td>	
 						</tr>
 						<tr>
 							<td style="color:#333333; height:40px;" class="font_16"><strong>수량</strong></td>
@@ -128,13 +128,13 @@ function QCreate(){
 					<tbody>
 						<tr>
 							<td style="color:black; height:30px;  width:80px;" class="font_16 letter_s">경매기간</td>
-							<td class="font_16" style="width:410px;">{{ product.now_date|datetimeformat }} ~ <strong>{{ (product.now_date+86400*product.days)|datetimeformat }}</strong></td>
+							<td class="font_16" style="width:410px;">{ product.now_date|datetimeformat }} ~ <strong>{ (product.now_date+86400*product.days)|datetimeformat }}</strong></td>
 							
 						</tr>
 
 						<tr>
 							<td style="color:black; height:30px;" class="font_16 letter_s">시작가</td>
-							<td class="font_16">{{product.start_val}} 원</td>
+							<td class="font_16">product.start_val 원</td>
 						</tr>
 
 					</tbody>
