@@ -1,4 +1,4 @@
-from tensorflow.keras.models import load_model
+ from tensorflow.keras.models import load_model
 from multiprocessing import Process, Queue
 from threading import Thread
 from PIL import Image, ImageOps
@@ -19,8 +19,6 @@ Check3 = 0
 
 
 # Cam Process global variations
-ircheck = 0
-
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -283,9 +281,7 @@ class IRSensor3(Thread):
         global Check3
         while True:
             if GPIO.input(self.port) == 0:
-                # print('IR3 Progressed')
                 if self.item_list.qsize() == 0:
-                    # print('item list empty')
                     continue
                 else:
                     Check_type = self.item_list.get()
@@ -338,7 +334,6 @@ class MachineProcess( Process, TurnOff ):
 
 
         # make object
-        # PC = ProcessCommunication(self.M2Cque, self.C2Mque)
         conveyor_main = Conveyor_main()
         conveyor1 = Conveyor1()
         conveyor2 = Conveyor2()
@@ -348,8 +343,7 @@ class MachineProcess( Process, TurnOff ):
         IR2 = IRSensor2(self.C2Mque, self.item_list)
         IR3 = IRSensor3(self.C2Mque, self.item_list)
 
-        # start
-        # PC.start()
+        # thread start
         conveyor_main.start()
         conveyor1.start()
         conveyor2.start()
@@ -359,28 +353,6 @@ class MachineProcess( Process, TurnOff ):
         IR2.start()
         IR3.start()        
         
-
-
-# class ProcessCommunication(Thread):
-#     def __init__(self, M2Cque, C2Mque ):
-#         Thread.__init__(self, name='ProcessCommunication')
-#         self.M2Cque = M2Cque
-#         self.C2Mque = C2Mque
-#         print( '[ProcessComm __init__]' )
-
-#     def __del__(self):
-#         print('[ProcessComm __del__]')
-
-#     def run(self):
-#         global ircheck
-
-#         while True:
-#             if self.M2Cque.qsize() == 0:
-#                 continue
-#             else:
-#                 ircheck = self.M2Cque.get()
-#                 print('ProcessCommunication ircheck : {}'.format(ircheck))
-
 
 class CameraProcess( Process, NetFunc):
     def __init__( self, host, port, M2Cque, C2Mque):
@@ -397,17 +369,18 @@ class CameraProcess( Process, NetFunc):
     def sendImg2Server( self, model, img_roi ):
         # set imencode parameter. set image quality 0~100 (100 is the best quality). default is 95
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),100]
+
         # image encoding,  encode_param is composed of [1, 100]
         result, imgencode = cv2.imencode('.jpg', img_roi, encode_param)
         if result==False:
             print("Error : result={}".format(result))
+
         # Show image
         cv2.imshow('image', img_roi)
         
         # Convert numpy array
         roi_data = np.array(imgencode)
 
-        print('roi_data : {}'.format(roi_data))
         # Convert String for sending Data
         stringData = roi_data.tostring()
         # Send to server
