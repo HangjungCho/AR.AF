@@ -95,7 +95,7 @@ function QCreate(){
 				<div class="col-lg-6">
 					<div class="owl-carousel owl-theme s_Product_carousel">
 						<div class="single-prd-item">
-							<img class="img-fluid" src="{{url_for('static', filename = product.img)}}" width="300" height="300" > <!--상품 이미지 표시-->
+							<img class="img-fluid" src="{{url_for('static', filename = product.img)}}" width="150" height="150" > <!--상품 이미지 표시-->
 						</div>
 					</div>
 				</div>
@@ -123,28 +123,10 @@ function QCreate(){
 						</tbody> <!--수정완료-->
 					</table>
 					<hr style="color:black; width:470px; height:1px; ">
-					<!--
-					<table cellpadding="0" cellspacing="0" style="width:100%; margin-left:40px;">
-					<tbody>
-						<tr>
-							<td style="color:black; height:30px;  width:80px;" class="font_16 letter_s">경매기간</td>
-							<td class="font_16" style="width:410px;">{ product.now_date|datetimeformat }} ~ <strong>{ (product.now_date+86400*product.days)|datetimeformat }}</strong></td>
-							
-						</tr>
-
-						<tr>
-							<td style="color:black; height:30px;" class="font_16 letter_s">시작가</td>
-							<td class="font_16">product.start_val 원</td>
-						</tr>
-
-					</tbody>
-					</table>
-					-->
 					<hr style="color:black; width:470px; height:1px;">
 						<hr style="color:black; width:350px; height:1px">
 						<div class="gray-btn" style="margin-left:20%; margin-top:5%">닫기</div>
 
-					</table>
 					</div>
 					</form>
 			</div>
