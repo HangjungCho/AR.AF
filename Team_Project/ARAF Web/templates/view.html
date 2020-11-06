@@ -179,32 +179,7 @@ function QCreate(){
 		}
 
 	</script>
-	<script language="JavaScript">
-		function WindowReset(win /* Window Object */) { // 새창의 크기와 위치 재설정
-
-			//
-			// 새창의 진행상황 체크 완료되면 코드실행
-			//
-			//while(win.document.readyState != 'complete'){}
-
-			var winBody = win.document.body;
-
-			//
-			// 새창의 사이즈에 더해줄 marginWidth와 marginHeight
-			//
-			var marginHeight = parseInt(winBody.topMargin) + parseInt(winBody.bottomMargin);
-			var marginWidth = parseInt(winBody.leftMargin) + parseInt(winBody.rightMargin);
-			//
-			// 새창의 사이즈 설정
-			//
-			var wid = winBody.scrollWidth + (winBody.offsetWidth - winBody.clientWidth) + marginWidth - 5;
-			var hei = winBody.scrollHeight + (winBody.offsetHeight - winBody.clientHeight) + marginHeight + 17;
-			//
-			// 사이즈 재조정
-			//
-			win.resizeTo(wid, hei);
-		}
-	</script>
+	
 
 
 </body>
