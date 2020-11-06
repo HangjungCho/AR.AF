@@ -87,7 +87,7 @@ a {
 .owl-carousel .owl-stage {
     display: flex
 }
-/*
+
 .section-margin {
     margin: 45px 0
 }
@@ -97,14 +97,14 @@ a {
         margin: 70px 0
     }
 }
-*/
+
 @media (min-width: 1100px) {
     .section-margin {
         margin: 120px 0
     }
 
     .section-margin.calc-60px {
-        margin: 90px 0 0 0
+        margin: 120px 0 70px 0
     }
 }
 
@@ -145,7 +145,7 @@ a {
     width: 100%;
     z-index: 9999;
     transition: background 0.4s, all 0.3s linear;
-    box-shadow: 0px 10px 27px 3px rgba(221, 221, 221, 0.3)
+    box-shadow: 0px 10px 27px 3px rgba(233, 0, 0, 0.3)
 }
 
 .header_area .navbar {
@@ -167,7 +167,7 @@ a {
 
 @media (min-width: 991px) {
     .header_area .navbar .nav .nav-item .nav-link {
-        padding: 32px 0px
+        padding: 50px 0px
     }
 }
 
@@ -299,7 +299,7 @@ a {
 }
 
 .header_area.navbar_fixed .main_menu .navbar .nav .nav-item .nav-link {
-    line-height: 70px
+    line-height: 100px
 }
 
 #search_input_box {
@@ -573,7 +573,7 @@ a {
     }
 
     .header_area.navbar_fixed .main_menu .navbar .nav .nav-item .nav-link {
-        line-height: 40px
+        line-height:100px
     }
 
     .categories_post img {
@@ -908,6 +908,7 @@ a {
 
 .card-product {
     border: 0;
+    margin-bottom: 30px
 }
 
 .card-product p {
@@ -1368,29 +1369,26 @@ a {
 .blog-banner h1 {
     font-size: 30px;
     margin-bottom: 10px;
-    margin-left: 50px;
-    margin-top: 25px;
     color: #222
 }
 
 @media (min-width: 992px) {
     .blog-banner h1 {
-        font-size: 36px;
-        text-align: left;
+        font-size: 36px
     }
 }
 
 .blog-banner-area {
-    height: 80px;
+    height: 280px;
     position: relative;
     z-index: 1
 }
 
-/*@media (min-width: 1000px) {
+@media (min-width: 1000px) {
     .blog-banner-area {
-        height: 200px
+        height: 410px
     }
-}*/
+}
 
 .blog-banner-area .blog-banner {
     position: absolute;
@@ -3830,10 +3828,6 @@ a {
     display: block
 }
 
-.register_form_inner {
-    padding-top: 70px
-}
-
 .instagram_area {
     position: relative
 }
@@ -4031,7 +4025,7 @@ a {
 
 @media (min-width: 991px) {
     .cart_inner .table tbody tr.bottom_button td .cupon_text {
-        margin-left: -30px
+        margin-left: -465px
     }
 }
 
@@ -4702,16 +4696,14 @@ a {
 
 .footer-area {
     background: #002347;
-    padding: 50px 0px 50px;
+    padding: 50px 0px 50px
 }
-
 
 @media (min-width: 1000px) {
     .footer-area {
-        padding: 100px 0px 120px
+        padding: 195px 0px 120px
     }
 }
-
 
 .single-footer-widget p {
     margin-bottom: 15px
@@ -4832,277 +4824,3 @@ a {
         padding-bottom: 115px !important
     }
 }
-
-
-/* banner section start */
-
-.banner_section {
-    width: 100%;
-    float: left;
-    padding-bottom: 60px;
-}
-
-.banner_taital {
-    width: 100%;
-    font-size: 60px;
-    color: #000000;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.buynow_bt {
-    width: 170px;
-    margin: 0 auto;
-    padding-top: 30px;
-}
-
-.buynow_bt a {
-    width: 100%;
-    float: left;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #252525;
-    text-align: center;
-    padding: 10px 0px;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.buynow_bt a:hover {
-    background-color: #f26522;
-    color: #ffffff;
-}
-
-#my_slider a.carousel-control-next {
-    right: 0px;
-    top: 40px;
-}
-
-#my_slider a.carousel-control-pre {
-    left: 0px;
-    top: 40px;
-}
-
-#my_slider .carousel-control-next,
-#my_slider .carousel-control-prev {
-    width: 45px;
-    height: 45px;
-    background: rgb(242, 222, 172, 0.80);
-    opacity: 1;
-    font-size: 20px;
-    color: #000;
-    border-radius: 100px;
-}
-
-#my_slider .carousel-control-next:focus,
-#my_slider .carousel-control-next:hover,
-#my_slider .carousel-control-prev:focus,
-#my_slider .carousel-control-prev:hover {
-    color: #fff;
-}
-
-
-/* banner section end */
-
-.timer { 
-	background-color:transparent;
-	color:#000000;
-	text-align:center;
-	font-family:tahoma,'�������',NanumGothic,'����',Dotum,Helvetica,'Apple SD Gothic Neo',Sans-serif;
-	font-size:18px;
-	border : none;
-}
-
-.slider_button {
-    background-color: #ff0000; 
-    color: #ffffff; 
-    border-radius: 8px;
-    padding: 8px 55px;
-    margin-left: 7%;
-    margin-top:3%;
-    font-size:14px;
-    border:  #ffffff;
-}
-
-.card-body p{
-    margin:0;
-}
-
-.side_right ul li{ 
-    display:inline; /* ���γ����� ���γ����� ���� */ 
-    font:bold 17px Dotum; /* ��Ʈ ���� - 12px�� ����ü ���� �۾��� ǥ�� */ 
-    padding:0 10px; /* �� �޴� ���� */ }
-
-.timer_div timer { 
-	background-color:transparent;
-	color:#000000;
-	text-align:center;
-	font-size:18px;
-	border : none;
-}
-/*���⼭ ���� �߰��Ѱɷ� ��������*/
-.mchange_button {
-    background-color: #384aeb; 
-    color: #ffffff; 
-    border-radius: 8px;
-    padding: 8px 30px;
-    margin-top:3%;
-    font-size:14px;
-    border:  #ffffff;
-}
-
-.mchange_button_1 {
-    background-color: #777777; 
-    color: #ffffff; 
-    border-radius: 8px;
-    padding: 8px 30px;
-    margin-top:3%;
-    font-size:14px;
-    border:  #ffffff;
-}
-
-.bidtable {
-    border-collapse: separate;
-  }
-
-.sbid_button{
-    background-color: #337ab7; 
-    color: #ffffff; 
-    margin-top:4%;
-    margin-left:50px; 
-    width:78%;
-    padding: 8px 10px;
-    text-align: center;
-    border-radius: 13px;
-}
-
-.sbid_button_1{
-    background-color: #ff0000; 
-    margin-top:4%;
-    color: #ffffff; 
-    margin-left:50px; 
-    width:78%;
-    padding: 8px 10px;
-    text-align: center;
-    border-radius: 13px;
-}
-
-.sub_news, .sub_news th, .sub_news td {
-    border: 0
-}
-
-    .sub_news a {
-        color: #384aeb;
-        text-decoration: none
-    }
-
-.sub_news {
-    width: 100%;
-    border-bottom: 1px solid #999;
-    color: #666;
-    font-size: 12px;
-    table-layout: fixed
-}
-
-    .sub_news caption {
-        display: none
-    }
-
-    .sub_news th {
-        padding: 5px 0 6px;
-        border-top: solid 1px #999;
-        border-bottom: solid 1px #b2b2b2;
-        background-color: #f1f1f4;
-        color: #333;
-        font-weight: bold;
-        line-height: 20px;
-        vertical-align: top
-    }
-
-    .sub_news td {
-        padding: 8px 0 9px;
-        border-bottom: solid 1px #d2d2d2;
-        text-align: center;
-        line-height: 18px;
-    }
-
-    .sub_news .date, .sub_news .hit {
-        padding: 0;
-        font-family: Tahoma;
-        font-size: 11px;
-        line-height: normal
-    }
-
-    .sub_news .title {
-        text-align: left;
-        padding-left: 15px;
-        font-size: 13px;
-    }
-
-        .sub_news .title .picture, .sub_news .title .new {
-            margin: 0 0 2px;
-            vertical-align: middle
-        }
-
-        .sub_news .title a.comment {
-            padding: 0;
-            background: none;
-            color: #f00;
-            font-size: 12px;
-            font-weight: bold
-        }
-
-    .sub_news tr.reply .title a {
-        padding-left: 16px;
-        background: url(img/ic_reply.png) 0 1px no-repeat
-    }
-
-
-
-.board_button{
-
-    padding-left: 5%;
-    background-color: #384aeb; 
-    color: #ffffff; 
-    width:15%;
-    padding: 8px 10px;
-    text-align: center;
-    border-radius: 13px;
-    float:right;
-    margin-top: 20px;
-    border: #ffffff;
-}
-/* message ���� css �ӽ÷� �߰� �� �� 06_30 ������ �߰� */
-div.page ul.messages {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-div.page ul.messages li {
-    margin: 10px 0;
-    padding: 5px;
-    background: #F0FAF9;
-    border: 1px solid #DBF3F1;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    min-height: 48px;
-}
-
-div.page ul.messages p {
-    margin: 0;
-}
-
-div.page ul.messages li img {
-    float: left;
-    padding: 0 10px 0 0;
-}
-
-div.page ul.messages li small {
-    font-size: 0.9em;
-    color: #888;
-}
-/* message ���� css �ӽ÷� �߰� �� �� 06_30 ������ �߰� */
-
