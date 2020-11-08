@@ -15,6 +15,7 @@ import RPi.GPIO as GPIO
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
+
 import threading
 
 # Machine Process global variations
@@ -421,8 +422,9 @@ class Ui_Dialog(object):
 
 #화면을 띄우는데 사용되는 Class 선언
 class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
-    def __init__(self) :
-        super().__init__()
+    def __init__(self, host, port) :
+        Ui_Dialog.__init__(self)
+        NetFunc.__init__(self, host, port)
         self.setupUi(self)
         self.initUI()
         self.server_ip = '192.168.101.102'
@@ -431,9 +433,7 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
         self.C2Mque = Queue() # CameraProcess to MachineProcess Queue
         self.item_list = Queue()
         self.start = 0
-
-        # Process.__init__(self, name='CameraProcess')
-        NetFunc.__init__( self, self.server_ip, self.server_port)
+        self.setting = 0
         print( '[CameraProcess __init__]' )
 
         #메뉴툴바
@@ -460,9 +460,13 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
 
     #btn_1이 눌리면 작동할 함수
     def button1Function(self) :
-        ps = Process(target=self.run())
-        
-        # ps.start()
+        if self.setting == 0:
+            print('Activate button1')
+            print('setting 0? : {}'.format(self.setting))
+            Process(target=self.run())
+            self.setting = 1
+        else:
+            print('setting 1? : {}'.format(self.setting))
 
     #btn_2가 눌리면 작동할 함수
     def button2Function(self) :
@@ -615,7 +619,7 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
                 self.cam.setPixmap(pixmap)
                 cv2.waitKey(1)
                 QApplication.processEvents()
-
+                
                 if self.start == 1:
            
                     img_roi = cv2.resize(img_color, dsize=(224, 224))
@@ -652,8 +656,9 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
 
 
 if __name__ == '__main__':
-
+    host = '192.168.101.102'
+    port = 9000
     app = QApplication(sys.argv)
-    myWindow = WindowClass() 
+    myWindow = WindowClass(host, port) 
     myWindow.show()
     app.exec_()
