@@ -85,18 +85,18 @@ class Quantity(db2.Model):
 # =============================================================================================
 
 # ======================================== Count ==============================================
-#class Count(db2.Model):
-#    __tablename__ = 'Count'
+class Count(db2.Model):
+    __tablename__ = 'Count'
     
-#    p_type = db2.Column(db2.String, primary_key = True)
-#    total = db2.Column(db2.Integer)
+    p_type = db2.Column(db2.String, primary_key = True)
+    total = db2.Column(db2.Integer)
  
-#    def __init__(self, p_type, total):
-#        self.p_type = p_type
-#        self.total = total
+    def __init__(self, p_type, total):
+        self.p_type = p_type
+        self.total = total
    
-#    def __repr__(self):
-#        return"<Count('%s', '%d')>" % (self.p_type, total)
+    def __repr__(self):
+        return"<Count('%s', '%d')>" % (self.p_type, total)
 # =============================================================================================       
 
 ###################################### Table Class end ###############################################
@@ -184,7 +184,7 @@ def search_product():
                 return render_template("search.html", error = error)
             else:
                 # string(a) -> timestamp(b) -> datetime(c) -> string(d)
-                #예시
+                # 날짜변환 예시
                 #a = '2020-10-10' # string                     
                 #b = time.mktime(datetime.strptime(a, '%Y-%m-%d').timetuple()) # timestamp
                 #c = datetime.fromtimestamp(b) # datetime
