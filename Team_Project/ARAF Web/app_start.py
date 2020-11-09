@@ -218,6 +218,22 @@ def view_detail(productid=None):
     product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
     return render_template("view.html", product = product_data)
 
+""" 출고 """
+@app.route("/view_detail/<int:productid>/checkout", methods=['GET', 'POST'])
+def checkout(productid=None):
+    # 1. Count Table의 num값에 1을 마이너스 한다
+    # 2. Quantity Table의 Cal 컬럼을 'ADD'에서 'SUB'으로 교체해 주고 DB에 커밋한다.
+    # 3. 이후 view.html에서 출고 버튼을 비활성화 할수 있도록 변경해준다, Quantity의 Cal 컬럼을 이용하면 될듯
+    return render_template("search.html")
+
+""" 오류보고 """
+@app.route("view_detail/<int:productid>/report", methods=['GET', 'POST'])
+def report(productid=None):
+    # 1. productid를 이용하여 해당 상품을 가져와서 Quantity Table의 p_type 컬럼을 ERR_001로 이름을 교체한 후 DB에 커밋한다.
+    # 2. 상품의 이름이 ERR_001을 가진 데이터들은 오류보고 버튼 을 비활성화 하도록 html에서 작업한다.
+    return rednder_template("search.html")
+
+
 
 
 """ 로그아웃 """    
