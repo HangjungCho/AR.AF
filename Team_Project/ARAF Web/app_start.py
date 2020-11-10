@@ -88,15 +88,16 @@ class Quantity(db2.Model):
 class Count(db2.Model):
     __tablename__ = 'Count'
     
-    p_type = db2.Column(db2.String, primary_key = True)
-    total = db2.Column(db2.Integer)
+    ID = db2.Column(db2.Integer, primary_key = True)
+    p_type = db2.Column(db2.String)
+    num = db2.Column(db2.Integer)
  
-    def __init__(self, p_type, total):
+    def __init__(self, p_type, num):
         self.p_type = p_type
-        self.total = total
+        self.num = num
    
     def __repr__(self):
-        return"<Count('%s', '%d')>" % (self.p_type, total)
+        return"<Count('%s', '%d')>" % (self.p_type, self.num)
 # =============================================================================================       
 
 ###################################### Table Class end ###############################################
@@ -222,17 +223,28 @@ def view_detail(productid=None):
 @app.route("/view_detail/<int:productid>/checkout", methods=['GET', 'POST'])
 def checkout(productid=None):
     # 1. Count Table의 num값에 1을 마이너스 한다
-    # 2. Quantity Table의 Cal 컬럼을 'ADD'에서 'SUB'으로 교체해 주고 DB에 커밋한다.
-    # 3. 이후 view.html에서 출고 버튼을 비활성화 할수 있도록 변경해준다, Quantity의 Cal 컬럼을 이용하면 될듯
-    return render_template("search.html")
+    product_data = Quantity.query.filter_by(ID=productid).first()
+    count_data = Count.query.filter_by(p_type=product_data.p_type).first()
+    count_data.num -= 1
+    # 2. Quantity Table의 Cal 컬럼을 'ADD'에서 'SUB'으로 교체해 주고 DB에 커밋한다
+    product_data.cal = 'SUB'
+    db2.session.commit()
+    return redirect(url_for('search_product'))
+
 
 """ 오류보고 """
-@app.route("view_detail/<int:productid>/report", methods=['GET', 'POST'])
+@app.route("/view_detail/<int:productid>/report", methods=['GET', 'POST'])
 def report(productid=None):
     # 1. productid를 이용하여 해당 상품을 가져와서 Quantity Table의 p_type 컬럼을 ERR_001로 이름을 교체한 후 DB에 커밋한다.
+    product_data = Quantity.query.filter_by(ID=productid).first()
+    count_data = Count.query.filter_by(p_type=product_data.p_type).first()
+    err_data = Count.query.filter_by(p_type='ERR_001').first()
+    product_data.p_type = 'ERR_001'
+    count_data.num -= 1
+    err_data.num += 1
+    db2.session.commit()
     # 2. 상품의 이름이 ERR_001을 가진 데이터들은 오류보고 버튼 을 비활성화 하도록 html에서 작업한다.
-    return rednder_template("search.html")
-
+    return redirect(url_for('search_product'))
 
 
 
