@@ -98,7 +98,7 @@
 				<div class="row">
 					<div class="col-lg-6" style="margin-left: 230px;">
 						<P style=" color: #337ab7; font-size: 25px; text-align:center;"><b>제품선택</b></P>
-						<input type="text" id="justAnInputBox" placeholder="Select" autocomplete="off" />
+						<input type="text" id="justAnInputBox" name="justAnInputBox" placeholder="Select" autocomplete="off" />
 					</div>
 
 				</div>
@@ -110,20 +110,19 @@
 
 
 			<script type="text/javascript">
-
 				var SampleJSONData = [
 					{
 						id: 0,
-						title: 'Dinos'
+						title: '{{counts[0].p_type}}'
 					}, {
 						id: 1,
-						title: 'Airplane'
+                        title: '{{counts[1].p_type}}'
 					}, {
 						id: 2,
-						title: 'Car'
+                        title: '{{counts[2].p_type}}'
 					}, {
 						id: 3,
-						title: 'Whale',
+                        title: '{{counts[3].p_type}}',
 					}
 				];
 
@@ -251,7 +250,7 @@
 											<td class="date">{{product.time}}</td>
 											<td>
 												<a type="button" class="sbid_button"
-												   onClick="window.open('/view_detail/{{product.ID}}','detail','width=791, height=411, scrollbars=no, resizable=no')" style="color:#ffffff; cursor:pointer">자세히</a>
+												   onClick="window.open('/view_detail/{{product.ID}}','detail','width=791, height=411, scrollbars=no, resizable=no')" style="color:#ffffff; cursor:pointer; margin-left: 0px;">자세히</a>
 											</td>
 										</tr>
 										{% endfor %}

@@ -170,19 +170,20 @@ def search_product():
         if request.method=='POST': 
             productlist = []
             # 받아온 날짜 값
-            product_name = request.form.get('search') 
+            product_name = request.form.get('justAnInputBox') 
             # string형 YYYY-mm-dd 폼
             product_startdate = request.form.get('startdate')
             product_enddate = request.form.get('enddate')
+            countlist = db2.session.query(Count).all()
 
             ###  입력된 날짜가 없을때 예외처리
 
             if product_startdate == '':
                 error = "시작 날짜를 입력해주세요"
-                return render_template("search.html", error = error)
+                return render_template("search.html", error = error, counts=countlist)
             elif product_enddate == '':
                 error = "끝 날짜를 입력해주세요"
-                return render_template("search.html", error = error)
+                return render_template("search.html", error = error, counts=countlist)
             else:
                 # string(a) -> timestamp(b) -> datetime(c) -> string(d)
                 # 날짜변환 예시
@@ -204,12 +205,14 @@ def search_product():
                    convert_timestamp = time.mktime(datetime.strptime(product.date, '%Y-%m-%d').timetuple())
                    if convert_timestamp >= strp_startdate and convert_timestamp <= strp_enddate:
                        productlist.append(product) # 선택날짜의 범위 내에 있으면 추가해줌
+                
 
-                return render_template("search.html", products=productlist)  
+                return render_template("search.html", products=productlist , counts=countlist)  
 
         else: # GET한 순간 모든 상품을 보여줌
             productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
-            return render_template("search.html", products=productlist)
+            countlist = db2.session.query(Count).all()
+            return render_template("search.html", products=productlist, counts=countlist)
     else:
         return redirect(url_for('home'))
 
