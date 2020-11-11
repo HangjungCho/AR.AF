@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>ARAF - Home</title>
+	
 	<link rel="icon" href="{{url_for('static', filename = 'img/Fevicon.png')}}" type="image/png">
 	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename = 'vendors/fontawesome/css/all.min.css')}}">
@@ -57,7 +58,7 @@
 			document.getElementById("startdate").max = todayMax;
 			document.getElementById("enddate").max = todayMax;
 			document.getElementById("enddata").value = today;
-			
+
 		}
 
 	</script>
@@ -83,6 +84,7 @@
 	</section>
 	<!--================ End Header Menu Area =================-->
 	<!-- ================ start banner area ================= -->
+	
 	<section style=" margin-left:100px;">
 		<form method="POST" action="/search" style=" margin: auto;">
 			<div class="name" style="        margin-top: 10px;
@@ -178,10 +180,10 @@
 										<tr style="width:100%; text-align:center">
 											<td>{{product.ID}}</td>
 											<td>
-												<a class="pic" ><img src="{{url_for('static', filename = product.img)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
+												<a class="pic"><img src="{{url_for('static', filename = product.img)}}" width="100" height="100" class="pic" alt="첨부이미지"></a>
 											</td>
 											<td>
-												<a style="text-align:center"  class="p_type">{{product.p_type}}</a>
+												<a style="text-align:center" class="p_type">{{product.p_type}}</a>
 											</td>
 											<td class="count">{{product.count}}</td>
 											<td class="date">{{product.date}}</td>
@@ -212,33 +214,33 @@
 		<div class="footer-area">
 			<div class="container">
 				<div class="row section_gap" style=" color:#ffffff;">
-			<p style="margin-left: 2%; margin-right: 2%;">이용약관</p>
-			<p>|</p>
-			<p style="margin-left: 2%; margin-right: 2%;">안전거래 가이드</p>
-			<p>|</p>
-			<p style="margin-left: 2%; margin-right: 2%;">전자금융거래 이용약관</p>
-			<p>|</p>
-			<p style="margin-left: 2%; margin-right: 2%;">개인정보 처리방침</p>
-			<p>|</p>
-			<p style="margin-left: 2%; margin-right: 2%;">청소년 보호정책</p>
-			<p>|</p>
-			<p style="margin-left: 2%; margin-right: 2%;">책임의 한계와 법적고지</p>
-			<p>|</p>
-			<p style="margin-left: 2%;">고객센터</p>
-			<!--<p style="margin-left: 10%; color:#706f6f">GETITEM은 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
-			  상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.<br>
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;또한 판매자와 구매자간의 직거래에 대하여 당사는 관여하지 않기 때문에 거래에 대해서는 책임을 지지 않습니다.</p>-->
+					<p style="margin-left: 2%; margin-right: 2%;">이용약관</p>
+					<p>|</p>
+					<p style="margin-left: 2%; margin-right: 2%;">안전거래 가이드</p>
+					<p>|</p>
+					<p style="margin-left: 2%; margin-right: 2%;">전자금융거래 이용약관</p>
+					<p>|</p>
+					<p style="margin-left: 2%; margin-right: 2%;">개인정보 처리방침</p>
+					<p>|</p>
+					<p style="margin-left: 2%; margin-right: 2%;">청소년 보호정책</p>
+					<p>|</p>
+					<p style="margin-left: 2%; margin-right: 2%;">책임의 한계와 법적고지</p>
+					<p>|</p>
+					<p style="margin-left: 2%;">고객센터</p>
+					<!--<p style="margin-left: 10%; color:#706f6f">GETITEM은 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
+					  상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.<br>
+					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;또한 판매자와 구매자간의 직거래에 대하여 당사는 관여하지 않기 때문에 거래에 대해서는 책임을 지지 않습니다.</p>-->
 
 
-		  <p style="margin-left: 15%; margin-right: 2%;">사업자등록번호:123-45-67890</p>
-		  <p>|</p>
-		  <p style="margin-left: 2%; margin-right: 2%;">통신판매업신고번호:제2020-서울가산-2222호</p>
-		  <p>|</p>
-		  <p style="margin-left: 2%;" >대표이사:조항정</p>
+					<p style="margin-left: 15%; margin-right: 2%;">사업자등록번호:123-45-67890</p>
+					<p>|</p>
+					<p style="margin-left: 2%; margin-right: 2%;">통신판매업신고번호:제2020-서울가산-2222호</p>
+					<p>|</p>
+					<p style="margin-left: 2%;">대표이사:조항정</p>
 
 
-		<p style="margin-left: 35%;"> 주소 : 서울특별시 금천구 가산동 371-28</p>
-		</div>
+					<p style="margin-left: 35%;"> 주소 : 서울특별시 금천구 가산동 371-28</p>
+				</div>
 
 			</div>
 		</div>
@@ -247,28 +249,26 @@
 			<div class="container">
 				<div class="row d-flex">
 					<p class="col-lg-12 footer-text text-center">
-	<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-	<!--Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>GETITEM</a>-->
-	<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-	<!--</p>
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						<!--Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>GETITEM</a>-->
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						<!--</p>
 				</div>
 			</div>
 		</div>
 	</footer>
 	<!--================ End footer Area  =================-->
+						
+						<script src="{{url_for('static', filename = 'vendors/jquery/jquery-3.2.1.min.js')}}"></script>
+						<script src="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.bundle.min.js')}}"></script>
+						<script src="{{url_for('static', filename = 'vendors/skrollr.min.js')}}"></script>
+						<script src="{{url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.js')}}"></script>
+						<script src="{{url_for('static', filename = 'vendors/nice-select/jquery.nice-select.min.js')}}"></script>
+						<script src="{{url_for('static', filename = 'vendors/jquery.ajaxchimp.min.js')}}"></script>
+						<script src="{{url_for('static', filename = 'vendors/mail-script.js')}}"></script>
+						<script src="{{url_for('static', filename = 'js/main.js')}}"></script>
+						<!--====for popup====-->
 
-
-
-	<script src="{{url_for('static', filename = 'vendors/jquery/jquery-3.2.1.min.js')}}"></script>
-	<script src="{{url_for('static', filename = 'vendors/bootstrap/bootstrap.bundle.min.js')}}"></script>
-	<script src="{{url_for('static', filename = 'vendors/skrollr.min.js')}}"></script>
-	<script src="{{url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.js')}}"></script>
-	<script src="{{url_for('static', filename = 'vendors/nice-select/jquery.nice-select.min.js')}}"></script>
-	<script src="{{url_for('static', filename = 'vendors/jquery.ajaxchimp.min.js')}}"></script>
-	<script src="{{url_for('static', filename = 'vendors/mail-script.js')}}"></script>
-	<script src="{{url_for('static', filename = 'js/main.js')}}"></script>
-	<!--====for popup====-->
-	
 
 </body>
 </html>
