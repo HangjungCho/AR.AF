@@ -89,118 +89,77 @@
 	</section>
 	<!--================ End Header Menu Area =================-->
 	<!-- ================ start banner area ================= -->
-	<!--multiselect-->
-	<div class="container">
-		<h1>ComboTree jQuery Plugin Demos</h1>
-
-		<div class="row">
-			<div class="col-lg-6">
-				<h3>Multi Selection</h3>
-				<input type="text" id="justAnInputBox" placeholder="Select" autocomplete="off" />
-			</div>
-
-		</div>
-	</div>
-
-
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script language="javascript" src="{{url_for('static', filename = 'js/comboTreePlugin.js')}}" type="text/javascript"></script>
-
-
-	<script type="text/javascript">
-
-		var SampleJSONData = [
-			{
-				id: 0,
-				title: 'Horse'
-			}, {
-				id: 1,
-				title: 'Birds',
-				isSelectable: false,
-				subs: [
-					{
-						id: 10,
-						title: 'Pigeon',
-						isSelectable: false
-					}, {
-						id: 11,
-						title: 'Parrot'
-					}, {
-						id: 12,
-						title: 'Owl'
-					}, {
-						id: 13,
-						title: 'Falcon'
-					}
-				]
-			}, {
-				id: 2,
-				title: 'Rabbit'
-			}, {
-				id: 3,
-				title: 'Fox'
-			}, {
-				id: 5,
-				title: 'Cats',
-				subs: [
-					{
-						id: 50,
-						title: 'Kitty'
-					}, {
-						id: 51,
-						title: 'Bigs',
-						subs: [
-							{
-								id: 510,
-								title: 'Cheetah'
-							}, {
-								id: 511,
-								title: 'Jaguar'
-							}, {
-								id: 512,
-								title: 'Leopard'
-							}
-						]
-					}
-				]
-			}, {
-				id: 6,
-				title: 'Fish'
-			}
-		];
-
-
-
-		var comboTree1, comboTree2;
-
-		jQuery(document).ready(function ($) {
-
-			comboTree1 = $('#justAnInputBox').comboTree({
-				source: SampleJSONData,
-				isMultiple: true,
-				cascadeSelect: false,
-				collapse: true,
-				selectableLastNode: true
-
-			});
-
-
-		});
-
-
-	</script>
-
-	<!--multiselect-->
+	
 
 	<section style=" margin-left:100px;">
 		<form method="POST" action="/search" style=" margin: auto;">
+			<!--multiselect-->
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6" style="margin-left: 80px;">
+						<P style=" color: #337ab7; font-size: 25px; text-align:center;"><b>제품선택</b></P>
+						<input type="text" id="justAnInputBox" placeholder="Select" autocomplete="off" />
+					</div>
+
+				</div>
+			</div>
+
+
+			<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+			<script language="javascript" src="{{url_for('static', filename = 'js/comboTreePlugin.js')}}" type="text/javascript"></script>
+
+
+			<script type="text/javascript">
+
+				var SampleJSONData = [
+					{
+						id: 0,
+						title: 'Horse'
+					}, {
+						id: 1,
+						title: 'Rabbit'
+					}, {
+						id: 2,
+						title: 'Fox'
+					}, {
+						id: 3,
+						title: 'Cats',
+					}, {
+						id: 6,
+						title: 'Fish'
+					}
+				];
+
+
+
+				var comboTree1, comboTree2;
+
+				jQuery(document).ready(function ($) {
+
+					comboTree1 = $('#justAnInputBox').comboTree({
+						source: SampleJSONData,
+						isMultiple: true,
+						cascadeSelect: false,
+						collapse: true,
+						selectableLastNode: true
+
+					});
+
+
+				});
+
+
+			</script>
+
+			<!--multiselect-->
 			<div class="name" style="        margin-top: 10px;
-        margin-left: 250px;
+        margin-left: 100px;
 ">
-				타입
-				<input class="text" id="search" name="search" type="text" placeholder="제품명 입력" style="
-    margin-left: 10px; margin-right: 50px;
-">
+				<!--타입
+						<input class="text" id="search" name="search" type="text" placeholder="제품명 입력" style="
+			margin-left: 10px; margin-right: 50px;
+		">
+						-->
 				기간
 				&nbsp<input id="startdate" name="startdate" type="date" max="" value="" style="
                                                 width: 200px;
@@ -215,7 +174,7 @@
 				~
 				&nbsp&nbsp
 				<input id="enddate" name="enddate" type="date" max="" style="
-                                                width: 200px;ㅁ
+                                                width: 200px;
                                                 height: 40px;
                                                 padding-top: 10px;
                                                 padding-bottom: 10px;
@@ -247,7 +206,7 @@
 	<section style="margin:0 auto;">
 		<div class="value" style="text-align: center; margin:0 auto;">
 
-			<div class="col-xl-9 col-lg-8 col-md-7" style="margin: 0 auto;">
+			<div class="col-xl-9 col-lg-8 col-md-7" style="margin-left: 250px;">
 				<!-- Start Filter Bar -->
 				<P style=" color: #337ab7; font-size: 25px; text-align:center;"><b>재고수량</b></P>
 				<hr width="800px" color="#337ab7" size="3" style="margin:0 auto;">
@@ -255,7 +214,7 @@
 
 					<section class="tracking_box_area section-margin--small" style="margin:0 auto;">
 						<div class="container">
-							<div class="tracking_box_inner" style="margin-left:150px;">
+							<div class="tracking_box_inner" style="margin-left:40px;">
 								<table class="sub_news" border='1' cellspacing='0' summary="게시판 글 제목 리스트">
 
 									<colgroup>
@@ -313,11 +272,12 @@
 
 				</form>
 			</div>
+		</div>
 	</section>
 
 	<!--================End Cart Area =================-->
 	<!--================ Start footer Area  =================-->
-	<footer class="footer">
+	<!--<footer class="footer">
 		<div class="footer-area">
 			<div class="container">
 				<div class="row section_gap" style=" color:#ffffff;">
@@ -333,13 +293,13 @@
 					<p>|</p>
 					<p style="margin-left: 2%; margin-right: 2%;">책임의 한계와 법적고지</p>
 					<p>|</p>
-					<p style="margin-left: 2%;">고객센터</p>
+					<p style="margin-left: 2%;">고객센터</p>-->
 					<!--<p style="margin-left: 10%; color:#706f6f">GETITEM은 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
 					  상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.<br>
 					  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;또한 판매자와 구매자간의 직거래에 대하여 당사는 관여하지 않기 때문에 거래에 대해서는 책임을 지지 않습니다.</p>-->
 
 
-					<p style="margin-left: 15%; margin-right: 2%;">사업자등록번호:123-45-67890</p>
+					<!--<p style="margin-left: 15%; margin-right: 2%;">사업자등록번호:123-45-67890</p>
 					<p>|</p>
 					<p style="margin-left: 2%; margin-right: 2%;">통신판매업신고번호:제2020-서울가산-2222호</p>
 					<p>|</p>
@@ -355,7 +315,7 @@
 		<div class="footer-bottom">
 			<div class="container">
 				<div class="row d-flex">
-					<p class="col-lg-12 footer-text text-center">
+					<p class="col-lg-12 footer-text text-center">-->
 						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						<!--Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>GETITEM</a>-->
 						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -364,6 +324,7 @@
 								</div>
 							</div>
 						</footer>
+				
 						<!--================ End footer Area  =================-->
 
 						<script src="{{url_for('static', filename = 'vendors/jquery/jquery-3.2.1.min.js')}}"></script>
