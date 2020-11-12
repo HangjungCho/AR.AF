@@ -193,88 +193,35 @@
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">Product no.</th>
-                    <th scope="col">Product Type</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">
-                      123
-                    </th>
-                    <td>
-                      Airplane
-                    </td>
-                    <td>
-                      2020-10-12
-                    </td>
-                    <td>
-                        10:10 &nbsp;&nbsp;&nbsp;&nbsp; <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      /argon/index.html
-                    </th>
-                    <td>
-                      3,985
-                    </td>
-                    <td>
-                      319
-                    </td>
-                    <td>
-                      <i class="fas fa-arrow-down text-warning mr-3"></i> 46,53%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      /argon/charts.html
-                    </th>
-                    <td>
-                      3,513
-                    </td>
-                    <td>
-                      294
-                    </td>
-                    <td>
-                      <i class="fas fa-arrow-down text-warning mr-3"></i> 36,49%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      /argon/tables.html
-                    </th>
-                    <td>
-                      2,050
-                    </td>
-                    <td>
-                      147
-                    </td>
-                    <td>
-                      <i class="fas fa-arrow-up text-success mr-3"></i> 50,87%
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      /argon/profile.html
-                    </th>
-                    <td>
-                      1,795
-                    </td>
-                    <td>
-                      190
-                    </td>
-                    <td>
-                      <i class="fas fa-arrow-down text-danger mr-3"></i> 46,53%
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Product no.</th>
+                            <th scope="col">Product Type</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <!--제품 정보 불러오기-->
+                    {% for product in products %}
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                {{product.ID}}
+                            </th>
+                            <td>
+                                {{product.p_type}}
+                            </td>
+                            <td>
+                                {{product.date}}
+                            </td>
+                            <td>
+                                {{product.time}} &nbsp;&nbsp;&nbsp;&nbsp; <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
             </div>
           </div>
         </div>
@@ -292,107 +239,38 @@
             </div>
             <div class="table-responsive">
               <!-- Projects table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">Product Type</th>
-                    <th scope="col">EA</th>
-                    <th scope="col">rate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">
-                      Airplane
-                    </th>
-                    <td>
-                      10
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">60%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      Facebook
-                    </th>
-                    <td>
-                      5,480
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">70%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      Google
-                    </th>
-                    <td>
-                      4,807
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">80%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      Instagram
-                    </th>
-                    <td>
-                      3,678
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">75%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      twitter
-                    </th>
-                    <td>
-                      2,645
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">30%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-gradient-warning" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Product Type</th>
+                            <th scope="col">EA</th>
+                            <th scope="col">rate</th>
+                        </tr>
+                    </thead>
+                    {% for product in products %}
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                {{product.p_type}}
+                            </th>
+                            <td>
+                                {{product.count}}
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <!--불량품 비율 계산 필요-->
+                                    <span class="mr-2">60%</span>
+                                    <div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
             </div>
           </div>
         </div>
