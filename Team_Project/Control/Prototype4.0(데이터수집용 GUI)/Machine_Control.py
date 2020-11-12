@@ -1,15 +1,14 @@
 # ---- Img, Tensorflow, Process, Thread import ---- #
-from tensorflow.keras.models import load_model
-from multiprocessing import Process, Queue
+from tensorflow.keras.models import load_model, model_from_json
+from multiprocessing import Process, Queue, current_process
 from threading import Thread
 from PIL import Image, ImageOps
 
 # ----- GUI import ---- #
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 
-import tensorflow as tf
 import socket
 import cv2
 import numpy as np
@@ -22,8 +21,13 @@ import RPi.GPIO as GPIO
 Check1 = 0
 Check2 = 0
 Check3 = 0
-
-
+running = 0
+running2 = 0
+Reject_Item1 = 0
+Reject_Item2 = 0
+Item_Dictionary = {0:'ERR_001',1:'DSR_001',2:'APL_001',3:'WAL_001'}
+Item1 = 0
+Item2 = 0
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -59,31 +63,92 @@ class NetFunc():
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(750, 540)
+        Dialog.resize(1550, 510)
         self.btn_1 = QtWidgets.QPushButton(Dialog)
-        self.btn_1.setGeometry(QtCore.QRect(510, 450, 105, 30))
+        self.btn_1.setGeometry(QtCore.QRect(510, 420, 105, 30))
         self.btn_1.setObjectName("btn_1")
         self.btn_2 = QtWidgets.QPushButton(Dialog)
-        self.btn_2.setGeometry(QtCore.QRect(510, 490, 105, 30))
+        self.btn_2.setGeometry(QtCore.QRect(635, 420, 105, 30))
         self.btn_2.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.btn_2.setObjectName("btn_2")
+        self.btn_2.setEnabled(False)
         self.textEdit = QtWidgets.QTextEdit(Dialog)
-        self.textEdit.setGeometry(QtCore.QRect(510, 280, 230, 160))
+        self.textEdit.setGeometry(QtCore.QRect(510, 250, 230, 160))
         self.textEdit.setObjectName("textEdit")
-        self.textEdit.setEnabled(False)
+        # self.textEdit.setEnabled(False)
         self.btn_3 = QtWidgets.QPushButton(Dialog)
-        self.btn_3.setGeometry(QtCore.QRect(635, 450, 105, 70))
+        self.btn_3.setGeometry(QtCore.QRect(510, 460, 230, 30))
         self.btn_3.setObjectName("btn_3")
         self.img = QtWidgets.QLabel(Dialog)
-        self.img.setGeometry(QtCore.QRect(510, 40, 224, 224))
+        self.img.setGeometry(QtCore.QRect(510, 10, 224, 224))
         self.img.setText("")
         self.img.setObjectName("img")
         self.cam = QtWidgets.QLabel(Dialog)
-        self.cam.setGeometry(QtCore.QRect(10, 40, 480, 480))
+        self.cam.setGeometry(QtCore.QRect(10, 10, 480, 480))
         self.cam.setText("")
         self.cam.setObjectName("cam")
-
+        self.conveyor = QtWidgets.QLabel(Dialog)
+        self.conveyor.setGeometry(QtCore.QRect(760, 10, 580, 440))
+        self.conveyor.setText("")
+        self.conveyor.setObjectName("conveyor")
+        self.type_1 = QtWidgets.QComboBox(Dialog)
+        self.type_1.setEnabled(True)
+        self.type_1.setGeometry(QtCore.QRect(880, 470, 140, 30))
+        self.type_1.setIconSize(QtCore.QSize(40, 20))
+        self.type_1.setObjectName("type_1")
+        self.type_1.addItem("")
+        self.type_1.addItem("")
+        self.type_1.addItem("")
+        self.type_1.addItem("")
+        self.type_2 = QtWidgets.QComboBox(Dialog)
+        self.type_2.setEnabled(True)
+        self.type_2.setGeometry(QtCore.QRect(1100, 470, 140, 30))
+        self.type_2.setMinimumSize(QtCore.QSize(94, 0))
+        self.type_2.setIconSize(QtCore.QSize(40, 20))
+        self.type_2.setDuplicatesEnabled(False)
+        self.type_2.setFrame(True)
+        self.type_2.setObjectName("type_2")
+        self.type_2.addItem("")
+        self.type_2.addItem("")
+        self.type_2.addItem("")
+        self.type_2.addItem("")
+        self.pushButton = QtWidgets.QPushButton(Dialog)
+        self.pushButton.setGeometry(QtCore.QRect(1360, 100, 180, 30))
+        self.pushButton.setObjectName("pushButton")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(1360, 20, 180, 30))
+        self.label.setMouseTracking(False)
+        self.label.setTabletTracking(False)
+        self.label.setScaledContents(False)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        self.pushButton_2 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_2.setGeometry(QtCore.QRect(1360, 220, 180, 30))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.label_2 = QtWidgets.QLabel(Dialog)
+        self.label_2.setGeometry(QtCore.QRect(1360, 140, 180, 30))
+        self.label_2.setMouseTracking(False)
+        self.label_2.setTabletTracking(False)
+        self.label_2.setScaledContents(False)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
+        self.Add_item = QtWidgets.QTextEdit(Dialog)
+        self.Add_item.setGeometry(QtCore.QRect(1360, 55, 180, 35))
+        self.Add_item.setObjectName("Add_item")
+        self.Delete_combobox = QtWidgets.QComboBox(Dialog)
+        self.Delete_combobox.setEnabled(True)
+        self.Delete_combobox.setGeometry(QtCore.QRect(1360, 180, 180, 30))
+        self.Delete_combobox.setMinimumSize(QtCore.QSize(94, 0))
+        self.Delete_combobox.setIconSize(QtCore.QSize(40, 20))
+        self.Delete_combobox.setDuplicatesEnabled(False)
+        self.Delete_combobox.setFrame(True)
+        self.Delete_combobox.setObjectName("Delete_combobox")
+        self.Delete_combobox.addItem("")
+        self.Delete_combobox.addItem("")
+        self.Delete_combobox.addItem("")
+        self.Delete_combobox.addItem("")
         self.retranslateUi(Dialog)
+        self.type_1.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -92,51 +157,22 @@ class Ui_Dialog(object):
         self.btn_1.setText(_translate("Dialog", "Start"))
         self.btn_2.setText(_translate("Dialog", "Stop"))
         self.btn_3.setText(_translate("Dialog", "Exit"))
-
-
-#화면을 띄우는데 사용되는 Class 선언
-class WindowClass(QMainWindow, Ui_Dialog) :
-    def __init__(self, M2Cque) :
-        super().__init__()
-        self.setupUi(self)
-        self.initUI()
-        self.start = 0
-        self.setting = 0
-        self.M2Cque = M2Cque
-
-        print( '[WindowClass __init__]' )
-        
-        #버튼에 기능을 연결하는 코드
-        self.btn_1.clicked.connect(self.button1Function)
-        self.btn_2.clicked.connect(self.button2Function)
-        self.btn_3.clicked.connect(self.button3Function)
-        
-    def __del__( self ):
-        print( '[WindowClass __del__]' )
-        os._exit(0)
-        
-    def initUI(self):
-        self.setWindowTitle('ARAF')
-        self.setWindowIcon(QIcon('raspi.png'))
-        self.show()
-
-    #btn_1이 눌리면 작동할 함수
-    def button1Function(self) :
-        self.btn_1.setEnabled(False)
-        Process(target=self.run())
-
-    #btn_2가 눌리면 작동할 함수
-    def button2Function(self) :
-        self.start = 1
-
-
-        
-        #btn_3가 눌리면 작동할 함수
-    def button3Function(self) :
-        print("exit")
-        # 컨베이어 끄는 코드
-        os._exit(0)
-
+        self.type_1.setItemText(0, _translate("Dialog", "--None--"))
+        self.type_1.setItemText(1, _translate("Dialog", "DSR_001"))
+        self.type_1.setItemText(2, _translate("Dialog", "APL_001"))
+        self.type_1.setItemText(3, _translate("Dialog", "WAL_001"))
+        self.type_2.setItemText(0, _translate("Dialog", "--None--"))
+        self.type_2.setItemText(1, _translate("Dialog", "DSR_001"))
+        self.type_2.setItemText(2, _translate("Dialog", "APL_001"))
+        self.type_2.setItemText(3, _translate("Dialog", "WAL_001"))
+        self.pushButton.setText(_translate("Dialog", "Add Item"))
+        self.label.setText(_translate("Dialog", "Add Item"))
+        self.pushButton_2.setText(_translate("Dialog", "Delete Item"))
+        self.label_2.setText(_translate("Dialog", "Delete Item"))
+        self.Delete_combobox.setItemText(0, _translate("Dialog", "--None--"))
+        self.Delete_combobox.setItemText(1, _translate("Dialog", "DSR_001"))
+        self.Delete_combobox.setItemText(2, _translate("Dialog", "APL_001"))
+        self.Delete_combobox.setItemText(3, _translate("Dialog", "WAL_001"))
 
 class Conveyor_main(Thread):
     def __init__(self):
@@ -149,6 +185,10 @@ class Conveyor_main(Thread):
 
     def __del__( self ):
         print( "Closing Conveyor_main" )
+
+    def change_running2(self, change_num2):
+        global running2
+        running2 = change_num2
 
     def conveyor_init(self):
         GPIO.output(self.con1_port, True)
@@ -163,17 +203,18 @@ class Conveyor_main(Thread):
         GPIO.output(self.con2_port, True)
 
     def run(self):
-        global Check2, Check3
+        global Check2, Check3, running2
         self.conveyor_init()
         while True:
-            if (Check2 or Check3) == 1 :
-                self.main_conveyor_Off()
-                time.sleep(2)
+            if running2 == 1:
+                if (Check2 or Check3) == 1 :
+                    self.main_conveyor_Off()
+                    time.sleep(2)
+                else:
+                    self.main_conveyor_On()
             else:
-                self.main_conveyor_On()
-
-
-
+                self.main_conveyor_Off()
+                
 class Conveyor1(Thread):
     def __init__(self):
         Thread.__init__(self, name='Conveyor1')
@@ -201,8 +242,6 @@ class Conveyor1(Thread):
                 time.sleep(8)
             elif Check2 == 0:
                 self.con1_Off()
-
-
 
 class Conveyor2(Thread):
     def __init__(self):
@@ -232,8 +271,6 @@ class Conveyor2(Thread):
             elif Check3 == 0:
                 self.con2_Off()
 
-
-
 class PushMotor1(Thread):
     def __init__(self):
         Thread.__init__(self, name='PushMotor1')
@@ -260,8 +297,6 @@ class PushMotor1(Thread):
                 print('PushMotor1 is On')
             else:
                 self.push_deactivate1()
-
-
 
 class PushMotor2(Thread):
     def __init__(self):
@@ -291,13 +326,11 @@ class PushMotor2(Thread):
             else:
                 self.push_deactivate2()
 
-
-
 class IRSensor1(Thread):
     def __init__(self, M2Cque, C2Mque):
         Thread.__init__(self, name='IRSensor1')
         self.port = 16 # 36
-
+        self.running = 0
         self.C2Mque = C2Mque
         self.M2Cque = M2Cque
         GPIO.setup(self.port, GPIO.IN)
@@ -305,24 +338,29 @@ class IRSensor1(Thread):
     def __del__( self ):
         print( "Closing IRSensor1" )
 
+    def change_running(self, a):
+        self.running = a
+
     def run(self):
         global Check1
-        while True:
-            if GPIO.input(self.port) == 0:
-                Check1 = 1
-                self.M2Cque.put(Check1)
-                print('active Put')
-                time.sleep(2)
-                Check1 = 0                
+        while True: 
+            if self.running == 1:
+                if GPIO.input(self.port) == 0:
+                    Check1 = 1
+                    self.M2Cque.put(Check1)
+                    print('active Put')
+                    time.sleep(2)
+                    Check1 = 0                
+                else:
+                    Check1 = 0
             else:
-                Check1 = 0 
-
-
+                time.sleep(1)
+                continue
 
 class IRSensor2(Thread):
     def __init__(self, C2Mque, item_list):
         Thread.__init__(self, name='IRSensor2')
-
+        self.Reject_Item1 = 0
         self.port = 21 # 40
         self.C2Mque = C2Mque
         self.item_list = item_list
@@ -330,6 +368,9 @@ class IRSensor2(Thread):
 
     def __del__( self ):
         print( "Closing IRSensor2" )
+
+    def Get_Reject_Item1(self, Rj_Item1):
+        self.Reject_Item1 = Rj_Item1
 
     def run(self):
         global Check2
@@ -340,24 +381,22 @@ class IRSensor2(Thread):
                 else:
                     Check_type = self.C2Mque.get(timeout=100) # get Output value from Queue( Camera to Machine )
                     print('CheckType : {}'.format(Check_type)) # just test code
-                    if Check_type == 'A':
+                    if Check_type == self.Reject_Item1:
                         Check2 = 1 # if Check type is 'A', PushMotor1 is On
-                        print('Type A Sensed')
+                        print('Reject_Item1 Sensed')
                         
                     else:
                         self.item_list.put(Check_type) # B or C case
-                        print('Not Type A')
+                        print('Not Type Reject_Item1')
                         Check2 = 0
             else:
                 Check2 = 0
             time.sleep(1)
 
-
-
 class IRSensor3(Thread):
     def __init__(self, C2Mque, item_list):
         Thread.__init__(self, name='IRSensor3')
-
+        self.Reject_Item2 = 0
         self.port = 20 # 38
         self.C2Mque = C2Mque
         self.item_list = item_list
@@ -365,6 +404,9 @@ class IRSensor3(Thread):
 
     def __del__( self ):
         print( "Closing IRSensor3" )
+
+    def Get_Reject_Item2(self, Rj_Item2):
+        self.Reject_Item2 = Rj_Item2
 
     def run(self):
         global Check3
@@ -377,12 +419,9 @@ class IRSensor3(Thread):
                     Check_type = self.item_list.get(timeout=100)
                     print('CheckType : {}'.format(Check_type)) # just test code
                     print('New Check3 : {}'.format(Check3))
-                    if Check_type == 'B':
+                    if Check_type == self.Reject_Item2:
                         Check3 = 1
-                        print('Type B Sensed')
-                    elif Check_type == 'C':
-                        Check3 = 0
-                        print('Type C Sensed')
+                        print('Reject_Item2 Sensed')
                     else:
                         Check3 = 0
                         print('Error Type Sensed')
@@ -391,74 +430,190 @@ class IRSensor3(Thread):
                 Check3 = 0
             time.sleep(1)
 
-class TurnOff(Conveyor_main, Conveyor1, Conveyor2, PushMotor1, PushMotor2):
-    def __init__(self):
-        Conveyor_main.__init__(self)
-    
-        Conveyor1.__init__(self)
-        Conveyor2.__init__(self)
-        PushMotor1.__init__(self)
-        PushMotor2.__init__(self)
-    def __del__(self):
-        print('Turn Off All Motor')
-
-    def AllOff(self):
-        self.main_conveyor_Off()
-        self.con1_Off()
-        self.con2_Off()
-        self.push_deactivate1()
-        self.push_deactivate2()
-        
-
-
-class MachineProcess( Process, TurnOff ):
+class MachineProcess(Process):
     def __init__( self, M2Cque, C2Mque):
-
+        # Process.__init__(self, name='MachineProcess')
         self.M2Cque = M2Cque
         self.C2Mque = C2Mque
         self.item_list = Queue()
-        Process.__init__( self, name = "MachineProcess" )
-        TurnOff.__init__(self)
+        self.running = 0
+        self.running2 = 0
+        self.Reject_Item1 = 0
+        self.Reject_Item2 = 0
+        self.conveyor_main = Conveyor_main()
+        self.conveyor1 = Conveyor1()
+        self.conveyor2 = Conveyor2()
+        self.push1 = PushMotor1()
+        self.push2 = PushMotor2()
+        self.IR1 = IRSensor1(self.M2Cque, self.C2Mque)
+        self.IR2 = IRSensor2(self.C2Mque, self.item_list)
+        self.IR3 = IRSensor3(self.C2Mque, self.item_list)
         print( '[MachineProcess __init__]' )
 
     def __del__( self ):
-        self.AllOff()
+        GPIO.cleanup()
         print( '[MachineProcess __del__]' )
 
     def run(self):
-
-
-        # make object
-        conveyor_main = Conveyor_main()
-        conveyor1 = Conveyor1()
-        conveyor2 = Conveyor2()
-        push1 = PushMotor1()
-        push2 = PushMotor2()
-        IR1 = IRSensor1(self.M2Cque, self.C2Mque)
-        IR2 = IRSensor2(self.C2Mque, self.item_list)
-        IR3 = IRSensor3(self.C2Mque, self.item_list)
-
         # thread start
-        conveyor_main.start()
-        conveyor1.start()
-        conveyor2.start()
-        push1.start()
-        push2.start()
-        IR1.start()
-        IR2.start()
-        IR3.start()        
+        self.conveyor_main.start()
+        self.conveyor1.start()
+        self.conveyor2.start()
+        self.push1.start()
+        self.push2.start()
+        self.IR1.start()
+        self.IR2.start()
+        self.IR3.start()
+
+    def change_running(self, change_num1):
+        self.running = change_num1
+        self.IR1.change_running(change_num1)
+
+    def change_running2(self, change_num2):
+        self.running2 = change_num2
+        self.conveyor_main.change_running2(change_num2)
+
+    def Get_Reject_Item1(self, Rj_Item1):
+        self.Reject_Item1 = Rj_Item1
+        self.IR2.Get_Reject_Item1(Rj_Item1)
+       
+    def Get_Reject_Item2(self, Rj_Item2):
+        self.Reject_Item2 = Rj_Item2
+        self.IR3.Get_Reject_Item2(Rj_Item2)
+
+    #화면을 띄우는데 사용되는 Class 선언
+class WindowClass(QMainWindow, Ui_Dialog) :
+    def __init__(self, M2Cque, C2Mque) :
+        super().__init__()
+        self.setupUi(self)
+        self.initUI()
+        self.start = 0
+        self.setting = 0
+        self.M2Cque = M2Cque
+        self.C2Mque = C2Mque
+        self.running = 0
+        self.TMP = MachineProcess(self.M2Cque, self.C2Mque)
+        Process(target=self.TMP.run())
+        # self.TMP.start()
+
+        print( '[WindowClass __init__]' )
+        
+        #버튼에 기능을 연결하는 코드
+        self.btn_1.clicked.connect(self.button1Function)
+        self.btn_2.clicked.connect(self.button2Function)
+        self.btn_3.clicked.connect(self.button3Function)
+        
+        self.type_1.currentIndexChanged.connect(self.combo1Function)
+        self.type_2.currentIndexChanged.connect(self.combo2Function)
+        
+        self.qPixmapFileVar = QPixmap()
+        self.qPixmapFileVar.load("conveyor1.png")
+        self.qPixmapFileVar = self.qPixmapFileVar.scaled(580,440)
+        self.conveyor.setPixmap(QtGui.QPixmap(self.qPixmapFileVar))#image path
+        
+        self.pushButton.clicked.connect(self.addComboBoxItem)
+        self.pushButton_2.clicked.connect(self.deleteComboBoxItem)
+        
+    def __del__( self ):
+        print( '[WindowClass __del__]' )
+        os._exit(0)
+        
+    def initUI(self):
+        self.setWindowTitle('ARAF')
+        self.setWindowIcon(QIcon('raspi.png'))
+        self.show()
+
+    #btn_1이 눌리면 작동할 함수
+    def button1Function(self) :
+        self.textEdit.append('Start')
+        self.btn_1.setEnabled(False)
+        self.type_1.setEnabled(False)
+        self.type_2.setEnabled(False)
+        self.Add_item.setEnabled(False)
+        self.pushButton.setEnabled(False)
+        self.pushButton_2.setEnabled(False)
+        self.Delete_combobox.setEnabled(False)
+
+        self.running = 1
+        self.TMP.change_running(self.running)
+        self.TMP.change_running2(self.running)
+        self.btn_2.setEnabled(True)
         
 
+    #btn_2가 눌리면 작동할 함수
+    def button2Function(self) :
+        self.btn_2.setEnabled(False)
+        self.running = 0
+        self.TMP.change_running(self.running)
+        time.sleep(0.1)
+        self.textEdit.append('It stops in five seconds.')
+        for i in range (5,-1,-1):
+            self.textEdit.append('{}'.format(i))
+            QApplication.processEvents()
+            time.sleep(1)
+        self.TMP.change_running2(self.running)
+        self.btn_1.setEnabled(True)
+        self.type_1.setEnabled(True)
+        self.type_2.setEnabled(True)
+        self.btn_2.setEnabled(False)
+        self.Add_item.setEnabled(True)
+        self.pushButton.setEnabled(True)
+        self.pushButton_2.setEnabled(True)
+        self.Delete_combobox.setEnabled(True)
+        self.conveyor.setPixmap(QtGui.QPixmap(self.qPixmapFileVar))#image path
+       
+        #btn_3가 눌리면 작동할 함수
+    def button3Function(self) :
+        print("exit")
+        self.running = 0
+        self.TMP.change_running(self.running)
+        self.TMP.change_running2(self.running)
+        GPIO.cleanup()
+        time.sleep(0.5)
+        os._exit(0)
 
+    def combo1Function(self) :
+        global Item_Dictionary, Item1
+        Item1 = self.type_1.currentIndex()
+        Item1_1 = self.type_1.currentText()
+        self.textEdit.append('{}_Select'.format(Item1_1))
+        self.TMP.Get_Reject_Item1(Item1)
+        Item_Dictionary[Item1] = Item1_1
+
+    def combo2Function(self) :
+        global Item_Dictionary, Item2
+        Item2 = self.type_2.currentIndex()
+        Item2_1 = self.type_2.currentText()
+        self.textEdit.append('{}_Select'.format(Item2_1))
+        self.TMP.Get_Reject_Item2(Item2)
+        Item_Dictionary[Item2] = Item2_1
+        
+    def addComboBoxItem(self) :
+        item_text = self.Add_item.toPlainText()
+        self.type_1.addItem(item_text)
+        self.type_2.addItem(item_text)
+        self.Delete_combobox.addItem(item_text)
+        index = self.Delete_combobox.findText(item_text)
+        Item_Dictionary[index] = item_text
+        self.textEdit.append("Item Added")
+
+    def deleteComboBoxItem(self) :
+        self.delidx = self.Delete_combobox.currentIndex()
+        self.type_1.removeItem(self.delidx)
+        self.type_2.removeItem(self.delidx)
+        self.Delete_combobox.removeItem(self.delidx)
+        self.textEdit.append("Item Deleted")
 
 class CameraProcess( Process, WindowClass, NetFunc):
     def __init__( self, host, port, M2Cque, C2Mque):
         Process.__init__(self, name='CameraProcess')
-        WindowClass.__init__(self, M2Cque)
+        WindowClass.__init__(self, M2Cque, C2Mque)
         NetFunc.__init__( self, host, port )
         
         self.M2Cque = M2Cque
         self.C2Mque = C2Mque
+        self.cal = 'ADD'
+        self.count = 1
         print( '[CameraProcess __init__]' )
 
     def __del__( self ):
@@ -486,6 +641,7 @@ class CameraProcess( Process, WindowClass, NetFunc):
         
 
     def predictType( self, model, bytesData ):
+        global Item_Dictionary, Item1, Item2
         imgdata = np.frombuffer(bytesData, dtype='uint8')
 
         # img decode
@@ -515,56 +671,43 @@ class CameraProcess( Process, WindowClass, NetFunc):
         data[0] = normalized_image_array
 
         prediction = model.predict(data)
-
-        class_1 = prediction[0][0]
-        class_2 = prediction[0][1]
-        class_3 = prediction[0][2]
-        class_4 = prediction[0][3]
-        class_5 = prediction[0][4]
         predict_class = max(prediction[0])
-
         if predict_class < 0.8:
             print("[ Cannot Distinguish ]")
             predict_type = 'ERR_001'
-            classification = 'E'
+            classification = '0'
         else:
-            if class_1 == predict_class:
-                print('prediction result : Dinosaur')
-                predict_type = 'DSR_001'
-                classification = 'A'
+            for i in range(len(prediction[0])):
+                if prediction[0][i] == predict_class:
+                    classification = i
+                    predict_type = Item_Dictionary.get(i)
+                    print(classification)
+                    print(predict_type)
+                    break
+        
+        if Item1 == classification:
+            self.count = 2
+        elif Item2 == classification:
+            self.count = 3
+        else:
+            self.count = 4
+        
+        img = "conveyor{}.png".format(str(self.count))
+        img_change = QPixmap()
+        img_change.load(img)
+        img_change = img_change.scaled(580,440)
+        self.conveyor.setPixmap(QtGui.QPixmap(img_change))#image path
+        QApplication.processEvents()
+        self.C2Mque.put(classification)
 
-            elif class_2 == predict_class:
-                print('prediction result : Airplane')
-                predict_type = 'APL_001'
-                classification = 'C'
-
-            elif class_3 == predict_class:
-                print('prediction result : Whale')
-                predict_type = 'WAL_001'
-                classification = 'B'
-
-            elif class_4 == predict_class:
-                print('prediction result : CAR')
-                predict_type = 'CAR_001'
-                classification = 'A'
-
-            elif class_5 == predict_class:
-                print('prediction result : Empty')
-                predict_type = 'ERR_001'
-                classification = 'E'
-
-            self.C2Mque.put(classification)
-
-
-        cal = 'ADD'
         now = datetime.datetime.now()
         capdate = now.strftime( '%Y-%m-%d' )
         captime = now.strftime( '%H:%M:%S' )
 
-        product_info = predict_type + cal + capdate + captime
+        product_info = "{0}{1}{2}{3}".format(predict_type,self.cal,capdate,captime)
         product_data = product_info.encode()
 
-        self.textEdit.append('Predict Type : ' + predict_type)
+        self.textEdit.append('Predict Type : {}'.format(predict_type))
         self.textEdit.append('Date : {}'.format(capdate))
         self.textEdit.append('Time : {}'.format(captime))
         self.textEdit.append('Product ADD Complete')
@@ -581,8 +724,12 @@ class CameraProcess( Process, WindowClass, NetFunc):
         cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 
-        # load model.
-        model = load_model('15-0.0194.hdf5')
+        json_file = open("model.json", 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        model = model_from_json(loaded_model_json)
+        model.load_weights("model.h5")
+
         try:
             while True:
                 ret, img_color = cap.read()
@@ -612,6 +759,7 @@ class CameraProcess( Process, WindowClass, NetFunc):
 
                     ''' ### send image data to server ### '''
                     self.sendImg2Server(model, img_roi)
+                    print(Item_Dictionary.items())
     
                     print(self.M2Cque.get(timeout=100))
                     
@@ -632,11 +780,7 @@ if __name__ == '__main__':
     C2Mque = Queue() # CameraProcess to MachineProcess Queue
 
     app = QApplication(sys.argv)
-    MP = MachineProcess( M2Cque, C2Mque )
-    MP.start()
     CP = CameraProcess(server_ip, server_port, M2Cque, C2Mque)
     CP.show()
-    app.exec_()
-            
-            
-
+    CP.run()
+    app.exec_()    
