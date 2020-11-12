@@ -22,10 +22,11 @@ var BarsChart = (function() {
 		var ordersChart = new Chart($chart, {
 			type: 'bar',
 			data: {
-				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				//제품명으로 수정
+				labels: ['Air', 'Dino', 'Car', 'Whal'],
 				datasets: [{
-					label: 'Sales',
-					data: [25, 20, 30, 22, 17, 29]
+					label: 'Prod',
+					data: [15, 10, 20, 12, 7, 19]
 				}]
 			}
 		});
