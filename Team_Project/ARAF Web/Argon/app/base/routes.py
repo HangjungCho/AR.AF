@@ -20,36 +20,34 @@ from app.base.util import verify_pass
 
 @blueprint.route('/')
 def route_default():
-    return render_template("index.html")
+    return redirect(url_for('base_blueprint.login'))
 
 ## Login & Registration
-
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    #login_form = LoginForm(request.form)
-    #if 'login' in request.form:
+    login_form = LoginForm(request.form)
+    if 'login' in request.form:
         
-    #    # read form data
-    #    username = request.form['username']
-    #    password = request.form['password']
+        # read form data
+        username = request.form['username']
+        password = request.form['password']
 
-    #    # Locate user
-    #    user = User.query.filter_by(username=username).first()
+        # Locate user
+        user = User.query.filter_by(username=username).first()
         
-    #    # Check the password
-    #    if user and verify_pass( password, user.password):
+        # Check the password
+        if user and verify_pass( password, user.password):
 
-    #        login_user(user)
-    #        return redirect(url_for('base_blueprint.route_default'))
+            login_user(user)
+            return redirect(url_for('base_blueprint.route_default'))
 
-    #    # Something (user or pass) is not ok
-    #    return render_template( 'accounts/login.html', msg='Wrong user or password', form=login_form)
+        # Something (user or pass) is not ok
+        return render_template( 'accounts/login.html', msg='Wrong user or password', form=login_form)
 
-    #if not current_user.is_authenticated:
-    #    return render_template( 'accounts/login.html',
-    #                            form=login_form)
-    #return redirect(url_for('home_blueprint.index'))
-    return render_template("index.html")
+    if not current_user.is_authenticated:
+        return render_template( 'accounts/login.html',
+                                form=login_form)
+    return redirect(url_for('home_blueprint.index'))
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -81,10 +79,11 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return render_template( 'accounts/register.html', 
-                                msg='User created please <a href="/login">login</a>', 
-                                success=True,
-                                form=create_account_form)
+        #return render_template( 'accounts/register.html', 
+        #                        msg='User created please <a href="/login">login</a>', 
+        #                        success=True,
+        #                        form=create_account_form)
+        return redirect(url_for('base_blueprint.login'))
 
     else:
         return render_template( 'accounts/register.html', form=create_account_form)
