@@ -76,7 +76,7 @@ class Product(db2.Model):
     
     id = db2.Column(db2.Integer, primary_key = True) # 시퀀스 추가
     author_id = db2.Column(db2.Integer) # 글쓴 사람의 id index로 회원가입한  user table의 name이 아니라 user table의 id임. 절때 헷갈리지 말것!! 이렇게 해야 db끼리 연결이 됩니다 ㅜㅜ
-    title = db2.Column(db2.String) # 제품명
+    title = db2.Column(db2.String)# 제품명hjghjk
     picture = db2.Column(db2.String) # 업로드한 사진의 경로
     start_val = db2.Column(db2.String) # 시작가
     current_val = db2.Column(db2.String) # 현재가
