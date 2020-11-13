@@ -282,7 +282,7 @@ class PushMotor1(Thread):
 
     def push_activate1(self):
         GPIO.output(self.ports, False)
-        time.sleep(5.73)
+        time.sleep(5.65)
         GPIO.output(self.ports, True)
     
     def push_deactivate1(self):
@@ -309,7 +309,7 @@ class PushMotor2(Thread):
 
     def push_activate2(self):
         GPIO.output(self.ports, False)
-        time.sleep(5.73)
+        time.sleep(5.65)
         GPIO.output(self.ports, True)
 
     def push_deactivate2(self):
