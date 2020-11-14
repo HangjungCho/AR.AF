@@ -583,7 +583,7 @@ var Charts = (function() {
     },
     theme: {
       'default': '#172b4d',
-      'primary': '#5e72e4',
+      'primary': '#5e72e4',  //차트 가장 기본적인 컬러
       'secondary': '#f4f5f7',
       'info': '#11cdef',
       'success': '#2dce89',
@@ -975,7 +975,6 @@ var OrdersChart = (function() {
   //
   // Methods
   //
-
   // Init chart
   function initChart($chart) {
 
@@ -1073,7 +1072,7 @@ var SalesChart = (function() {
             ticks: {
               callback: function(value) {
                 if (!(value % 10)) {
-                  return '$' + value + 'k';
+                  return value + 'k';
                 }
               }
             }
@@ -1100,7 +1099,7 @@ var SalesChart = (function() {
         labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
           label: 'Performance',
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
+          data: [0, 20, 80, 30, 15, 40, 20, 60, 60]
         }]
       }
     });
