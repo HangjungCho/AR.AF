@@ -124,10 +124,6 @@ def query_db(query, args=(), one=False):
 def before_request():
     """http 요청이 올 때마다 실행 : db연결하고 전역 객체 g에 저장하고 세션에 userid가 저장되어 있는지 체크해서 user 테이블로부터 user 정보 조회 한 후에 전역 객체 g에 저장 """
     g.db=connect_db()
-    
-# 여기서 말해두지만 g.db와 db2는 엄연히 다른 방식입니다.. 
-# g.db는 minitwit에서 끌어다가 쓴 방식이고
-# db2 는 박혜정쌤이 게시판 만들때 쓰던 방식입니다 개인적으로 db2 방식이 더 쉬워서 많이썼어요 ㅎㅎ 이 위에있는 두 query_db, before_request 함수는 minitwit에서 쓰는 방식을 가져온 것입니다.
 
 """ 날짜함수 Method """
 def format_datetime(timestamp):
@@ -138,42 +134,17 @@ app.jinja_env.filters['datetimeformat'] = format_datetime
 """ jinja 템플릿 엔진에 filter로 등록 => html페이지에서 필터처리할 때 사용됨"""
 # template engine jinja에 이름을 지정(datetimeformat)하고 format_datetime(우리가 위에서 만든 함수)를 넣어준다
 
-""""
-자 이제 time 을 Integer로 쓰는 이유를 설명하겠습니다. 협정세계시  UTC 기준으로 날짜를 계산하게 되는데 어떤 방식이냐면, UTC에 대해서 먼저 알아야 합니다.
-UTC란? : 1972년 1월 1일부터 시행된 협정세계시에서는 1967년 국제도량형총회가 정한 세슘원자의 진동수에 따른 초의 길이가 그 기준으로 쓰인다.
-
-즉, 1972년 1월 1일부터 1초간 꾸준히 2020년 현재날짜 까지  계속 1초단위를 세어 온 것이죠  time.time()을 출력하는 순간 나오는 숫자들이 바로 1972년 부터 1초씩 쭉 세어온 초 입니다.
-근데 이때 출력되는 값은 string 값으로 int로 자료형 변환 해 주어야 합니다. 따라서 제가 앞으로 시간을 쓸 때 int(time.time()) 을 자주 쓸 것입니다. String으로 해도 되는데 굳이 Int로 했던 이유는 python에서는 String도 사칙연산이 가능하지만
-JavaScript는 그렇지 않기 때문이죠, 값을 넘겨줄때 string형 날짜를 보내주면 연산을 못하기 때문에 python에서 미리 int로 변환해 주어 보냈습니다.
-이 때문에 굳이굳이 초 단위로, 자료형은 굳이굳이  Integer형으로 한것입니다.
-"""
 
 ###################################### Method Tool End ###############################################
 
 
 
 ###################################### Route Method ###############################################
-"""
-밑에 뷰 함수들을 설명하기 전에 앞서 GET 방식과 POST 방식의 차이에 대해서 알아야 합니다.
-GET : HTML 에서 정보를  "받아옴". 정보를 보낼수는 있으나 정보들이 도메인에 노출되고(정보의노출) 보내는 정보량에도 제한이 있어서 좋지 않다.
-POST " HTML 에서 정보를 받아오고(이는 GET방식이 default기 때문) 다시 HTML에 정보를 보내고 싶을 때 써줍니다. 정보들이 숨겨져서 보내지고 정보량 제한도 없어서 정보를 보낼때 쓰임!
-"""
-# d = datetime.date(2020, 11, 13) 
-# d.strftime('%A')  
-                                                      
-# import locale                                                           
-# locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')                    
-# d.strftime('%A')                                                       
+                                                   
 
 
 
 '''메인페이지 '''
-# @app.route()는 무엇이냐? 사이트의 경로랑 연결지어주는 역할을 합니다. "/" 라고 되어있으므로 "http://(사이트도메인)/" 의 경로에 접속하게 되면 실행되게 경로설정을 해주는 것이지요.
-# 저의경우는 http://192.168.25.50:5000/ 에 접속하면 실행되네요 이때 get, post 두가지 방식으로 정보를 받아오는데 아무것도 쓰지 않으면 default(기본값)으로 get 방식을 쓰게 됩니다.
-# 아무것도 쓰지 않았기 때문에 지금은 get 방식이겠지요?
-# 정리를 하면, http://(사이트도메인)/"의 경로에 사용자가 접속하면 뷰 함수를 호출하는데 method를 표시하지 않았으므로 get 방식으로 이 함수를 호출합니다.
-    
- 
 @app.route("/", methods=['GET','POST'])
 def login():
     if request.method=='GET':
@@ -235,27 +206,9 @@ def errorProduct():
 
 
 
-""" 제품상세페이지  """
-@app.route("/single-product/<int:productid>")
-def viewProduct(productid=None): # 자 이제 본인이 지정한 변수명을 None값으로 초기화 하여 선언 해 주어야 함수 안에서 활용 할 수 있다. 나는 productid라고 지정해 뒀으니 productid=None 으로 써두자
-    user_data = []
-    product_data = Product.query.filter_by(id=productid).first() # 위에서 productid를 그렇게 강조했는데 어디서 쓰이냐? 바로 여기서 쓰인다. 현재 보고있는 상품의 id값이 저장되어 있으므로 그 상품의 정보를 가져와 준다.
-    author_user = User.query.filter_by(id=product_data.author_id).first() # 상품의 id만 있으면 이렇게 제품을 등록한 유저의 정보도 가져올 수 있고,
-    message_data = Message.query.filter_by(product_id=productid).order_by(desc(Message.pub_date)).all() # 특정 상세제품의 minitwit에 내용들도 모두 가져올 수 있다.
-    heart_data = Heart.query.filter_by(product_id=productid).first() # 당연히 좋아요 관련 데이터도 가져올 수 있다
-    sp_long = len(message_data) # 굳이 message_data가 몇개있는지 별도의 변수에 저장한 이유는, html에서는 len함수를 쓸수 없기 때문에 여기서 따로 변수에 저장해 두었다. (html에서 for문을 쓰기 위해서 갯수를 저장해둠)
-    for i in range(sp_long): #sp_long은 바로 위에 있으니 참고
-        user_data.append(User.query.filter_by(id=message_data[i].author_id).first())
-        # user_data에 minitwit을 쓴 사람의 id정보를 담아주는 for문으로 순전히 minitwit에 어떤사람이 썼는지 보여주기 위해 만든 user_data임.
-    return render_template("single-product.html", messages=message_data, product = product_data, now_time = int(time.time()+time_seoul), user=user_data, sp_long=sp_long, author_user=author_user, heart=heart_data)
-    # render_templat은 위에서 설명했으므로 앞으로는 설명을 생략하도록 하겠다.
-
-
-
 """ 회원가입 """
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    """get방식  요청은 reighter.html 응답 전송 post 방식 요청은 db에 회원 정보 추가하고 login페이지로 redirect시킵니다"""
     if request.method=='POST': #회원가입 페이지에 회원가입 누르면 모든 정보들을 저장해 줍니다. 
         # User Class 기반의 내용들을 이용하여 저장
         new_user = User(user_id= request.form['email'],
@@ -323,4 +276,4 @@ if __name__ == '__main__':
     app.debug=True # Debug 활성화
 #     db2.create_all() #테이블이 생성되고 나서는 주석처리해줌
     app.secret_key = '1234567890'
-    app.run(host='0.0.0.0') #본인의 ip로 접속할 수 있게 해줍니다.
+    app.run(debug=False, host='0.0.0.0') #본인의 ip로 접속할 수 있게 해줍니다.
