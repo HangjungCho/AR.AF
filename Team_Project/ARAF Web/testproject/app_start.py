@@ -184,7 +184,7 @@ def login():
         try:
             user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
             if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
-                session['user_id']=user_data.user_id
+                session['user_id']=user_data.ID
                 session['logged_in']=True
  
 #                 productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
@@ -201,8 +201,8 @@ def home():
     if not session['logged_in']: # session['logged_in'] 은 로그인 페이지에서 저장해 뒀던것을 기억하나요? 로그인 되어있다면 이 값은 True로 되어있을 것 입니다.
         return render_template("login.html")
     else:
-#         user_data2=[]
-#         user_data=User.query.filter_by(id=session['user_id']).first()
+
+        user_data=User.query.filter_by(ID=session['user_id']).first()
 #         product_data = Product.query.filter_by(id=productid).first()
 #         author_user=User.query.filter_by(id=product_data.author_id).first()
 #         heart_data = Heart.query.filter_by(product_id=productid).first()
@@ -217,15 +217,20 @@ def home():
 #             for i in range(sp_long):
 #                 user_data2.append(User.query.filter_by(id=message_data[i].author_id).first()) # message_data를 토대로 minitwit 작성한 회원들의 정보를 모두 저장해줍니다.
 #             return render_template('single-product.html', product = product_data, now_time = int(time.time()+time_seoul), messages=message_data, user= user_data2, sp_long=sp_long, author_user=author_user, heart=heart_data)
-        return render_template("index.html")
+        return render_template("index.html", user=user_data)
             # 모든 변수를 single-product.html에 넘겨줍니다. 이 정보들을 활용하는 것은 single-product.html에서 쓰기 나름인데 html 보시면 어떻게 썼는지 보실수 있습니다. 이해하는데는 별로 어렵지 않으니 한번 보세요 ㅎㅎ
 #         else: #get 방식으로 들어온 경우는 347줄에 있는 viewProduct 함수를 실행해 줍니다.
 #             return redirect(url_for("viewProduct"))
     
 
 
-
-
+@app.route('/error')
+def errorProduct():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+    else:
+        user_data = User.query.filter_by(ID = session['user_id']).first()
+        return render_template("errorProduct.html", user=user_data)
 
 
 

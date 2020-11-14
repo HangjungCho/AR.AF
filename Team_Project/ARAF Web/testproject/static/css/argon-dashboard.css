@@ -20677,4 +20677,11 @@ pre>code.highlight {
   margin-left: 1rem;
 }
 
+/* 테이블 스크롤바 및 테이블 크기 설정 */
+.tm-product-table-container {
+  max-height: 500px;
+  margin-bottom: 15px;
+  overflow-y: scroll;
+}
+
 /*# sourceMappingURL=dashboard-free.css.map */
