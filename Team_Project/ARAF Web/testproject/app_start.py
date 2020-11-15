@@ -208,11 +208,11 @@ def home():
     else:
 
         user_data=User.query.filter_by(ID=session['user_id']).first()
-        product_data = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
-        for product in product_data:
-            print(product.p_type)
+        product_data = g.db.execute(''' select * from Count where NOT p_type = ? ''', ('ERR_001',))
+        list_product = list(product_data)
+        print(list_product)
  
-        return render_template("index.html", user=user_data, products = product_data)
+        return render_template("index.html", user=user_data, products = list_product)
     
 
 
