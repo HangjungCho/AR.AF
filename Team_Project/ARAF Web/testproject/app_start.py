@@ -208,11 +208,12 @@ def home():
     else:
 
         user_data=User.query.filter_by(ID=session['user_id']).first()
-        product_data = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
+        product_count_data = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
+        product_data = Quantity.query.filter_by(p_type='ERR_001').all()
         for product in product_data:
             print(product.p_type)
  
-        return render_template("index.html", user=user_data, products = product_data)
+        return render_template("index.html", user=user_data, products_count = product_count_data, products = product_data)
     
 
 

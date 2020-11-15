@@ -231,24 +231,24 @@
                     <!-- Card stats -->
                     <div class="row">
                         
-                        {% for product in products %}
+                        {% for product_count in products_count %}
                         <div class="col-xl-3 col-lg-6">
                             <div class="card card-stats mb-4 mb-xl-0">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 class="card-title text-uppercase text-muted mb-0">{{product.p_type}}</h5>
-                                            <span class="h2 font-weight-bold mb-0">Total : {{product.num}}</span>
+                                            <h5 class="card-title text-uppercase text-muted mb-0">{{product_count.p_type}}</h5>
+                                            <span class="h2 font-weight-bold mb-0">Total : {{product_count.num}}</span>
                                         </div>
                                         <div class="col-auto">
                                             <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                <img class="pic" height="40" width="40" src="{{url_for('static', filename =product.img)}}" style="margin-right: 1px; margin-top: 10px">
+                                                <img class="pic" height="40" width="40" src="{{url_for('static', filename =product_count.img)}}" style="margin-right: 1px; margin-top: 10px">
                                             <!-- product's imgs in "static/img/product" fld -->
                                             </div>
                                         </div>
                                     </div>
                                     <p class="mt-3 mb-0 text-muted text-sm">
-                                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{product.nun}}%</span>
+                                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{product_count.num}}%</span>
                                         <span class="text-nowrap">목표 수량까지 달성률</span>
                                     </p>
                                 </div>
@@ -477,16 +477,20 @@
 
             chart.data = [
 	        	{
-	        		country: '{{products[0].p_type}}',
-	        		value: {{products[0].num}}
+	        		country: '{{products_count[0].p_type}}',
+	        		value: {{products_count[0].num}}
 	        	},
 	        	{
-	        		country: '{{products[1].p_type}}',
-	        		value: {{products[1].num}}
+                    country: '{{products_count[1].p_type}}',
+	        		value: {{products_count[1].num}}
 	        	},
 	        	{
-	        		country: '{{products[2].p_type}}',
-	        		value: {{products[2].num}}
+                    country: '{{products_count[2].p_type}}',
+	        		value: {{products_count[2].num}}
+	        	},
+                {
+                    country: 'test',
+                    value: 30
 	        	}
             ];
 
@@ -494,8 +498,8 @@
             series.dataFields.value = "value";
             series.dataFields.radiusValue = "value";
             series.dataFields.category = "country";
-            series.slices.template.cornerRadius = 3;
-            series.colors.step = 3;
+            series.slices.template.cornerRadius = 4;W
+            series.colors.step =3;
 
             series.hiddenState.properties.endAngle = -90;
 
