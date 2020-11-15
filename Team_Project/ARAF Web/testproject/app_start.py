@@ -254,7 +254,7 @@ def register():
         new_user = User(user_id= request.form['email'],
                         user_name=request.form['username'],
                         password = request.form['password'])
-        if (request.form['username'] and request.form['password'] and request.form['email']) == '':
+        if (request.form['username'] and request.form['password'] and request.form['email'] and request.form['checkagree'] != 'on') == '':
             if  request.form['username'] == '':
                 error = "ID는 필수 입력 사항입니다."
                 return render_template("register.html", error=error)
@@ -264,6 +264,10 @@ def register():
             elif (request.form['email']) == '' :
                 error = "E-mail은 필수 입력 사항입니다."
                 return render_template("register.html", error=error)
+            elif (request.form['checkagree']) != 'on':
+                error = "개인 정보 보호 정책에 동의하여 주세요."
+                return render_template("register.html", error=error)
+
         # 각종 에러처리, 회원ID를 입력 안했건, 비밀번호를 입력하지 않았건, email을 입력하지 않았건 회원가입하지 못하게 해줍시다!
         
         if request.form['password']==request.form['confirmpassword']: # 비밀번호 확인이 일치하면 commit 시킨다. 
