@@ -239,7 +239,7 @@
 
         <div class="container mt-5">
             <!-- function: search -->
-            <input type="text" id="search" placeholder="Type to search">
+            <input type="text" id="search" placeholder="Element to search">
             <div class="row tm-content-row">
                 <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
                     <div class="card-header border-0">
@@ -579,10 +579,11 @@
         });
     </script>
     <script>
-        $.each($els, function (el) {
-            $tableBody.append(<td>$els</td>);
+        $(document).ready(function () {
+            $('#table').DataTable();
         });
     </script>
+   
     
 
 </body>
