@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Getitem</title>
+	<link rel="icon" href="{{ url_for('static', filename = 'img/Fevicon.png')}}" type="image/png">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/bootstrap/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/fontawesome/css/all.min.css')}}">
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/themify-icons/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/linericon/style.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/owl-carousel/owl.theme.default.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/nice-select/nice-select.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'vendors/nouislider/nouislider.min.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
+</head>
+<body>
+	<!--================ Start Header Menu Area =================-->
+	<header class="header_area">
+		<div class="main_menu">
+		  <nav class="navbar navbar-expand-lg navbar-light">
+			<div class="container">
+			  <a class="navbar-brand logo_h" href="/"><img src="static/img/logo.png" alt=""></a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+				<ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+				  <li class="nav-item submenu dropdown">
+					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+					
+					<!-- 검색창 start  -->
+	               <div class="input-group">
+	               <form class = "search_product" action="/search", id="search_form" method="POST">                                  
+	                  <div class="input-group-append">                  
+	                  
+	                     <input class="form-control" type="text" placeholder="검색어를 입력하세요" id="search" name="search" style="width:400px;">
+	                        <button type="submit" value="submit" class="btn btn-secondary" style="background-color: #384aeb; border-color:#384aeb ">
+	                      <i class="fa fa-search"></i>
+	                      </button>
+	                  </div>
+	                  </form>
+	                </div>
+	                <!--  검색창 end -->
+					 
+					</a>
+					</ul>
+				 </div>
+
+	
+				<ul class="nav-shop">
+	            {% if session['logged_in'] %}
+	            <li><button type="button" onclick="location.href = '/mypage'">
+	                 <img class="user_icon" src="static/img/user_icon.png"
+	                width="25" height="25"  alt="마이페이지" title="마이페이지"></button></li>
+	            <li><button type="button" onclick="location.href = '/favorite_list'">
+	               <img class="heart_icon" src="static/img/heart_icon.png"
+	               width="32" height="32"  alt="내가 찜한 상품" title="내가 찜한 상품"></button> </li>
+				<li><button type="button" onclick="location.href = '/myboard'" >
+              	<img class="question_icon" src="{{ url_for('static', filename='img/question_icon.png')}}"
+              	width="28" height="28"  alt="고객 센터" title="고객 센터"></button></li>
+	                 <li><button type="button" onclick="location.href = '/logout'">
+                 <img class="logout_icon" src="static/img/logout_icon.png"
+                 width="28" height="28"  alt="로그아웃" title="로그아웃"></button></li>     
+	                 <li class="nav-item"></li>
+	            {% else %}
+	            <li><button type="button" onclick="location.href = '/login'">
+	            	<img class="heart_icon" src="static/img/login.png"
+	            	height="32"  alt="로그인" title="로그인"></button></li>
+	               
+	            <li><button type="button" onclick="location.href = '/register'">
+	            	<img class="heart_icon" src="static/img/register.png"
+	            	height="32"  alt="회원가입" title="회원가입"></button> </li>
+	            <li class="nav-item"></li>
+	            {% endif %}
+				</ul>
+			  </div>
+			</div>
+		  </nav>
+		</div>
+	  </header>
+	<!--================ End Header Menu Area =================-->
+  
+  <!-- ================ start banner area ================= -->	
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>로그인</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a ="#">홈</a></li>
+              <li class="breadcrumb-item active" aria-current="page">로그인</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+  
+  <!--================Login Box Area =================-->
+	<section class="login_box_area section-margin">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+							<a class="button button-account" href="/register">Create an Account</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Log in to enter</h3>
+						
+						
+						
+						{% if session['user_id'] %}
+						<p>로그인한 사용자에게는 제공되는 페이지가 아닙니다.</p>
+						{% else %}
+						<form class="row login_form" action="/login" id="contactForm" method = "POST">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="name" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							</div>
+							<div style="top: 10px;" class="col-md-12 form-group">
+								<button type="submit" value="submit" class="button button-login w-100">Log In</button>
+							</div>
+						</form>
+						{% endif %}
+						{% if error %}
+   						<div class=error><strong>{{ error }}</strong></div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Login Box Area =================-->
+
+
+
+  <!--================ Start footer Area  =================-->	
+	<footer class="footer">
+		<div class="footer-area">
+			<div class="container">
+				<div class="row section_gap" style=" color:#ffffff;">
+            <p style="margin-left: 2%; margin-right: 2%;">이용약관</p>
+            <p>|</p>
+            <p style="margin-left: 2%; margin-right: 2%;">안전거래 가이드</p>
+            <p>|</p>
+            <p style="margin-left: 2%; margin-right: 2%;">전자금융거래 이용약관</p>
+            <p>|</p>
+            <p style="margin-left: 2%; margin-right: 2%;">개인정보 처리방침</p>
+            <p>|</p>
+            <p style="margin-left: 2%; margin-right: 2%;">청소년 보호정책</p>
+            <p>|</p>
+            <p style="margin-left: 2%; margin-right: 2%;">책임의 한계와 법적고지</p>
+            <p>|</p>
+            <p style="margin-left: 2%;">고객센터</p>
+            <p style="margin-left: 10%; color:#706f6f">GETITEM은 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
+              상품, 상품정보, 거래에 관한 의무와 책임은 판매자에게 있습니다.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;또한 판매자와 구매자간의 직거래에 대하여 당사는 관여하지 않기 때문에 거래에 대해서는 책임을 지지 않습니다.</p>
+            
+        
+          <p style="margin-left: 15%; margin-right: 2%;">사업자등록번호:123-45-67890</p>
+          <p>|</p>
+          <p style="margin-left: 2%; margin-right: 2%;">통신판매업신고번호:제2020-서울가산-2222호</p>
+          <p>|</p>
+          <p style="margin-left: 2%;" >대표이사:조항정</p>
+         
+          
+        <p style="margin-left: 35%;"> 주소 : 서울특별시 금천구 가산동 371-28</p>
+        </div>
+            
+			</div>
+		</div>
+
+		<div class="footer-bottom">
+			<div class="container">
+				<div class="row d-flex">
+					<p class="col-lg-12 footer-text text-center">
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>GETITEM</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!--================ End footer Area  =================-->
+
+
+
+  <script src="{{ url_for('static', filename = 'vendors/jquery/jquery-3.2.1.min.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'vendors/bootstrap/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'vendors/skrollr.min.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'vendors/owl-carousel/owl.carousel.min.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'vendors/nice-select/jquery.nice-select.min.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'vendors/jquery.ajaxchimp.min.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'vendors/mail-script.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'js/main.js')}}"></script>
+</body>
+</html>
