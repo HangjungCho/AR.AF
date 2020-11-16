@@ -124,26 +124,41 @@ class ClientImgProcess( Process ):
         img_name = product_type + '_' + now_date+'.png'
         img_location = './img_file/'+img_name
         cv2.imwrite(img_location, imgdata)
+        web_img_name = 'img/product/' + product_type + '.png'
 
 
         # ADD count
         if count == []:
-            # 없던 항목이었다면 Count table의 column에 추가해주자
+            # 없던 항목이었다면 Count 와 ErrStat table의 레코드에 추가해주자
             with conn:
                 cursor = conn.cursor()
-                cursor.execute( 'INSERT INTO Count(p_type, num) VALUES(?, ?)', (product_type, 1) )
+                cursor.execute( 'INSERT INTO Count(p_type, num, img) VALUES(?, ?, ?)', (product_type, 0, web_img_name) )
+                cursor.execute( 'INSERT INTO ErrStat(p_type, num) VALUES(?, ?)', (product_type, 0) )
                 conn.commit()
-            count = 1
-        else:
-            count = count[0][0] + 1
 
-        data = product_type, cal, count, realdate, realtime, img_location
+
+        cursor.execute( 'SELECT num FROM ErrStat WHERE p_type = ?', (product_type,))
+        err_cnt = cursor.fetchall()
+        
+        error = 0 # 임시로 error을 0으로 두었으나 이건 Machine_Control에서 판명해서 데이터전송을 통해 전달해줘야 하는 정보임.
+        # 그러나 제품이 에러가난 경우를 판별하는 기준이 갖추어 있지 않으므로 여기서 임의로 에러가 없다는 0값을 집어넣어준것 뿐임
+        
+        data = product_type, cal, count, error, realdate, realtime, img_location
         
 
         with conn:
             cursor = conn.cursor()
-            cursor.execute( 'INSERT INTO Quantity(p_type, cal, count, date, time, img) VALUES(?, ?, ?, ?, ?, ?)', data )
-            cursor.execute( 'UPDATE  Count SET num = ? WHERE p_type = ? ', (count, product_type) )
+            # 에러가 발생할 경우 Count 테이블은 카운트하지 않고 Quantity 테이블의 count항목도 증가하면 안된다.
+            if error == 1:
+                cursor.execute( 'UPDATE ErrStat SET num = ? WHERE p_type = ?', (err_cnt[0][0]+1, product_type))
+                cursor.execute( 'INSERT INTO Quantity(p_type, cal, count, error, date, time, img) VALUES(?, ?, ?, ?, ?, ?, ?)', product_type, cal, count, error, realdate, realtime, img_location )
+            
+            elif error == 0:
+                # 에러가 발생할 경우 Count 테이블과 Quantity 테이블의 수량 항목이 증가해야 한다.
+                cursor.execute( 'UPDATE  Count SET num = ? WHERE p_type = ? ', (count[0][0]+1, product_type) )
+                cursor.execute( 'INSERT INTO Quantity(p_type, cal, count, error, date, time, img) VALUES(?, ?, ?, ?, ?, ?, ?)', product_type, cal, count[0][0]+1, error, realdate, realtime, img_location )
+
+            
             conn.commit()
 
     def run( self ):

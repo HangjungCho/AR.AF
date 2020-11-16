@@ -36,7 +36,6 @@
         #donutchart_1 {
             height: 300px;
         }
-
     </style>
 </head>
 
@@ -138,7 +137,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="/error">
+                        <a class="nav-link " href="/productmanagement">
                             <i class="ni ni-planet text-blue"></i> Product Management
                         </a>
                     </li>
@@ -229,37 +228,38 @@
             <div class="container-fluid">
                 <div class="header-body">
                     <!-- Card stats -->
+                    
                     <div class="row">
-                        
-                        {% for product in products %}
+
+                        {% for product_count in products_count %}
                         <div class="col-xl-3 col-lg-6">
                             <div class="card card-stats mb-4 mb-xl-0">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 class="card-title text-uppercase text-muted mb-0">{{product.p_type}}</h5>
-                                            <span class="h2 font-weight-bold mb-0">Total : {{product.num}}</span>
+                                            <h5 class="card-title text-uppercase text-muted mb-0">{{product_count.p_type}}</h5>
+                                            <span class="h2 font-weight-bold mb-0">Total : {{product_count.num}}</span>
                                         </div>
                                         <div class="col-auto">
                                             <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                                <img class="pic" height="40" width="40" src="{{url_for('static', filename =product.img)}}" style="margin-right: 1px; margin-top: 10px">
-                                            <!-- product's imgs in "static/img/product" fld -->
+                                                <img class="pic" height="40" width="40" src="{{url_for('static', filename =product_count.img)}}" style="margin-right: 1px; margin-top: 10px">
+                                                <!-- product's imgs in "static/img/product" fld -->
                                             </div>
                                         </div>
                                     </div>
                                     <p class="mt-3 mb-0 text-muted text-sm">
-                                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{product.nun}}%</span>
-                                        <span class="text-nowrap">목표 수량까지 달성률</span>
+                                        <strong><span class="text-nowrap">목표 수량까지 달성률</span></strong>
+                                        <!--<span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{product_count.num}}%</span>-->
+                                        <strong><span class="text-success mr-2">{{product_count.num}}%</span></strong>
                                     </p>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
-
                     </div>
                 </div>
-            </div>
         </div>
+    </div>
         <div class="container-fluid mt--7">
             <div class="row">
                 <div class="col-xl-7 mb-5 mb-xl-0">
@@ -325,11 +325,11 @@
                                     <h3 class="mb-0">Error Detection</h3>
                                 </div>
                                 <div class="col text-right">
-                                    <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                                    <a href="#!" class="btn btn-sm btn-primary">Download</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        <div class="tm-product-table-container">
                             <!-- Projects table -->
                             <table class="table align-items-center table-flush">
                                 <thead class="thead-light">
@@ -338,23 +338,27 @@
                                         <th scope="col">Product Type</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Time</th>
+                                        <th scope="col">Confirm</th>
                                     </tr>
                                 </thead>
                                 <!--11-12-->
-                                {% for product in products %}
+                                {% for error_product in error_products %}
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            {{product.ID}}
+                                            {{error_product.ID}}
                                         </th>
                                         <td>
-                                            {{product.p_type}}
+                                            {{error_product.p_type}}
                                         </td>
                                         <td>
-                                            {{product.date}}
+                                            {{error_product.date}}
                                         </td>
                                         <td>
-                                            {{product.time}} &nbsp;&nbsp;&nbsp;&nbsp; <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                                            {{error_product.time}}
+                                        </td>
+                                        <td>
+                                            <a href="#!" class="btn btn-sm btn-primary">Detail</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -370,9 +374,9 @@
                                 <div class="col">
                                     <h3 class="mb-0">Error Stats</h3>
                                 </div>
-                                <div class="col text-right">
+                                <!--<div class="col text-right">
                                     <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -385,22 +389,22 @@
                                         <th scope="col">rate</th>
                                     </tr>
                                 </thead>
-                                {% for product in products %}
+                                {% for i in range(product_len) %}
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            {{product.p_type}}
+                                            {{error_states[i].p_type}}
                                         </th>
                                         <td>
-                                            {{product.count}}
+                                            {{error_states[i].num}}
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <!--11-12-->
-                                                <span class="mr-2">60%</span>
+                                                <span class="mr-2">{{ "{:.01f}".format( ((error_states[i].num)*100)/((error_states[i].num)+(products_count[i].num)) ) }}%</span>
                                                 <div>
                                                     <div class="progress">
-                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{((error_states[i].num)*100)/((error_states[i].num)+(products_count[i].num))}}%;"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -474,20 +478,14 @@
             // Create chart
             var chart = am4core.create("donutchart_1", am4charts.PieChart);
             chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
+			
             chart.data = [
-	        	{
-	        		country: '{{products[0].p_type}}',
-	        		value: {{products[0].num}}
+	        	{% for product_count in products_count %}
+            	{
+	        		country: '{{product_count.p_type}}',
+	        		value: {{product_count.num}}
 	        	},
-	        	{
-	        		country: '{{products[1].p_type}}',
-	        		value: {{products[1].num}}
-	        	},
-	        	{
-	        		country: '{{products[2].p_type}}',
-	        		value: {{products[2].num}}
-	        	}
+            	{% endfor %}
             ];
 
             var series = chart.series.push(new am4charts.PieSeries());
@@ -495,7 +493,7 @@
             series.dataFields.radiusValue = "value";
             series.dataFields.category = "country";
             series.slices.template.cornerRadius = 3;
-            series.colors.step = 3;
+            series.colors.step =3;
 
             series.hiddenState.properties.endAngle = -90;
 
