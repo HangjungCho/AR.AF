@@ -74,20 +74,22 @@ class Quantity(db2.Model):
     p_type = db2.Column(db2.String)
     cal = db2.Column(db2.String)
     count = db2.Column(db2.Integer)
+    error = db2.Column(db2.Integer)
     date = db2.Column(db2.String)
     time = db2.Column(db2.String)
     img = db2.Column(db2.String)
 
-    def __init__(self, p_type, cal, count, date, time, img):
+    def __init__(self, p_type, cal, count, error, date, time, img):
         self.p_type = ptype
         self.cal = cal
         self.count = count
+        self.error = error
         self.date = date
         self.time = time
         self.img = img
 
     def __repr__(self):
-        return"<Quantity('%s', '%s', '%d', '%s', '%s', '%s')>" % (self.p_type, self.cal, self.count, self.date, self.time, self.img)
+        return"<Quantity('%s', '%s', '%d', '%d', '%s', '%s', '%s')>" % (self.p_type, self.cal, self.count, self.error, self.date, self.time, self.img)
 # =============================================================================================
 
 # ======================================== Count ==============================================
@@ -106,7 +108,23 @@ class Count(db2.Model):
    
     def __repr__(self):
         return"<Count('%s', '%d', '%s')>" % (self.p_type, self.num, self.img)
-# =============================================================================================       
+# =============================================================================================   
+
+# ======================================== ErrStat ==============================================
+class ErrStat(db2.Model):
+    __tablename__='ErrStat'
+
+    ID = db2.Column(db2.Integer, primary_key=True)
+    p_type = db2.Column(db2.String)
+    num = db2.Column(db2.Integer)
+
+    def __init__(self, p_type, num):
+        self.p_type = p_type
+        self.num = num
+    
+    def __repr__(self):
+        return"<ErrStat('%s', '%d')>" % (self.p_type, self.num)
+# ============================================================================================= 
 
 ###################################### Table Class end ###############################################
 
@@ -185,7 +203,6 @@ def login():
         u_passwd=request.form['password']
 #         try:
         user_data = User.query.filter_by(user_id=u_id, password=u_passwd).first()
-#         product_data = g.db.execute(''' select * from Count where NOT p_type = ? ''', ('ERR_001',))
 
         if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
             session['user_id']=user_data.ID
@@ -210,20 +227,32 @@ def home():
         user_data=User.query.filter_by(ID=session['user_id']).first()
         product_count_data = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
         product_data = Quantity.query.filter_by(p_type='ERR_001').all()
-        for product in product_data:
-            print(product.p_type)
+        error_products = Quantity.query.filter_by(error=1).all()
+        error_states = ErrStat.query.filter_by().all()
+        product_len = len(error_states)
+
  
-        return render_template("index.html", user=user_data, products_count = product_count_data, products = product_data)
+        return render_template("index.html", user=user_data,
+                                             products_count = product_count_data,
+                                             products = product_data,
+                                             error_products = error_products,
+                                             error_states = error_states,
+                                             product_len=product_len)
     
 
 
-@app.route('/error')
-def errorProduct():
+@app.route('/productmanagement')
+def productManagement():
     if not session['logged_in']:
         return redirect(url_for('login'))
     else:
         user_data = User.query.filter_by(ID = session['user_id']).first()
-        return render_template("errorProduct.html", user=user_data)
+        product_data = Quantity.query.filter_by(error=0).all()
+        categories = Count.query.filter().all()
+        # categories = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
+        return render_template("product_management.html", user=user_data,
+                                                          products = product_data,
+                                                          categories = categories)
 
 
 
@@ -254,7 +283,8 @@ def register():
         new_user = User(user_id= request.form['email'],
                         user_name=request.form['username'],
                         password = request.form['password'])
-        if (request.form['username'] and request.form['password'] and request.form['email'] and request.form['checkagree'] != 'on') == '':
+
+        if (request.form['username'] and request.form['password'] and request.form['email']) == '':
             if  request.form['username'] == '':
                 error = "ID는 필수 입력 사항입니다."
                 return render_template("register.html", error=error)
@@ -264,9 +294,7 @@ def register():
             elif (request.form['email']) == '' :
                 error = "E-mail은 필수 입력 사항입니다."
                 return render_template("register.html", error=error)
-            elif (request.form['checkagree']) != 'on':
-                error = "개인 정보 보호 정책에 동의하여 주세요."
-                return render_template("register.html", error=error)
+
 
         # 각종 에러처리, 회원ID를 입력 안했건, 비밀번호를 입력하지 않았건, email을 입력하지 않았건 회원가입하지 못하게 해줍시다!
         
