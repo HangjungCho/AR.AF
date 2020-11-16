@@ -230,7 +230,7 @@
                 <div class="header-body">
                     <!-- Card stats -->
                     <div class="row">
-                        
+
                         {% for product_count in products_count %}
                         <div class="col-xl-3 col-lg-6">
                             <div class="card card-stats mb-4 mb-xl-0">
@@ -243,7 +243,7 @@
                                         <div class="col-auto">
                                             <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                                 <img class="pic" height="40" width="40" src="{{url_for('static', filename =product_count.img)}}" style="margin-right: 1px; margin-top: 10px">
-                                            <!-- product's imgs in "static/img/product" fld -->
+                                                <!-- product's imgs in "static/img/product" fld -->
                                             </div>
                                         </div>
                                     </div>
@@ -256,8 +256,6 @@
                             </div>
                         </div>
                         {% endfor %}
-
-                    </div>
                 </div>
             </div>
         </div>
