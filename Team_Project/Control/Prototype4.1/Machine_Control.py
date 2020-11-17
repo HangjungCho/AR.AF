@@ -791,6 +791,11 @@ if __name__ == '__main__':
     M2Cque = Queue() # MachineProcess to CameraProcess Queue
     C2Mque = Queue() # CameraProcess to MachineProcess Queue
 
+    Run1que = Queue()
+    Run1que = Queue()
+    Item1que = Queue()
+    Item2que = Queue()
+    
     app = QApplication(sys.argv)
     CP = CameraProcess(server_ip, server_port, M2Cque, C2Mque)
     CP.show()
