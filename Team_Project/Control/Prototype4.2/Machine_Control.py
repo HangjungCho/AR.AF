@@ -523,6 +523,7 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         
     def __del__( self ):
         print( '[WindowClass __del__]' )
+        sys.exit(MP.close())
         os._exit(0)
         
     def initUI(self):
@@ -574,7 +575,7 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         self.Run2que.put(0)
         GPIO.cleanup()
         time.sleep(0.5)
-        os._exit(0)
+        # os._exit(0)
         sys.exit()
         
     def combo1Function(self) :
@@ -729,12 +730,12 @@ class CameraProcess( Process, WindowClass, NetFunc):
         cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 
-        json_file = open("model.json", 'r')
-        loaded_model_json = json_file.read()
-        json_file.close()
-        model = model_from_json(loaded_model_json)
-        model.load_weights("model.h5")
-        # model = load_model("17-0.0001.hdf5")
+        # json_file = open("model.json", 'r')
+        # loaded_model_json = json_file.read()
+        # json_file.close()
+        # model = model_from_json(loaded_model_json)
+        # model.load_weights("model.h5")
+        model = load_model("13-0.0434.hdf5")
 
         try:
             while True:
