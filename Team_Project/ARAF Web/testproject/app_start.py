@@ -9,7 +9,7 @@ from pip._vendor.appdirs import user_data_dir
 from sqlalchemy import desc
 
 # 우리는 타이머 기능을 사용하기 때문에 필요하기도 하지만 날짜를 계산하기 위해서 필요하다.
-from datetime import datetime 
+import datetime
 import time
 
 from sqlalchemy.sql.expression import null
@@ -180,7 +180,8 @@ POST " HTML 에서 정보를 받아오고(이는 GET방식이 default기 때문)
 """
 # d = datetime.date(2020, 11, 13) 
 # d.strftime('%A')  
-                                                      
+                         
+
 # import locale                                                           
 # locale.setlocale(locale.LC_ALL, 'ko_KR.UTF-8')                    
 # d.strftime('%A')                                                       
@@ -188,12 +189,6 @@ POST " HTML 에서 정보를 받아오고(이는 GET방식이 default기 때문)
 
 
 '''메인페이지 '''
-# @app.route()는 무엇이냐? 사이트의 경로랑 연결지어주는 역할을 합니다. "/" 라고 되어있으므로 "http://(사이트도메인)/" 의 경로에 접속하게 되면 실행되게 경로설정을 해주는 것이지요.
-# 저의경우는 http://192.168.25.50:5000/ 에 접속하면 실행되네요 이때 get, post 두가지 방식으로 정보를 받아오는데 아무것도 쓰지 않으면 default(기본값)으로 get 방식을 쓰게 됩니다.
-# 아무것도 쓰지 않았기 때문에 지금은 get 방식이겠지요?
-# 정리를 하면, http://(사이트도메인)/"의 경로에 사용자가 접속하면 뷰 함수를 호출하는데 method를 표시하지 않았으므로 get 방식으로 이 함수를 호출합니다.
-    
- 
 @app.route("/", methods=['GET','POST'])
 def login():
     if request.method=='GET':
@@ -223,21 +218,44 @@ def home():
     if not session['logged_in']: # session['logged_in'] 은 로그인 페이지에서 저장해 뒀던것을 기억하나요? 로그인 되어있다면 이 값은 True로 되어있을 것 입니다.
         return redirect(url_for('login'))
     else:
+        datelist = []
+        chart_data = []
+        # 오늘 기준 14일 전까지의 날짜 값들 정리
+        
+        now = datetime.datetime.now()
+        for j in range(15):
+            buf=now-datetime.timedelta(days=j)#j 일 전
+            datelist.append(buf.strftime('%Y-%m-%d'))
 
+        # 이제 오늘 기준 14일 전까지의 날짜를 년-월-일 형식으로 datelist에 저장하였다.
+
+
+        
         user_data=User.query.filter_by(ID=session['user_id']).first()
         product_count_data = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
         product_data = Quantity.query.filter_by(p_type='ERR_001').all()
         error_products = Quantity.query.filter_by(error=1).all()
-        error_states = ErrStat.query.filter_by().all()
-        product_len = len(error_states)
+        error_stats = ErrStat.query.filter(ErrStat.p_type.isnot('ERR_001')).all()
+        product_len = len(error_stats)
 
- 
+        for product_count in product_count_data:
+            buf_ptype = []
+            for i in range(15):
+                buf_data = Quantity.query.filter_by(p_type=product_count.p_type, date=datelist[i]).filter(Quantity.error.isnot(1)).all()
+                buf_ptype.append(len(buf_data)) # 0번 인덱스:오늘 -> 14번 인덱스:14일전 
+            chart_data.append(buf_ptype[::-1]) # product_data 갯수만큼 (p_type 만큼) 데이터의 날짜별 제품개수가 저장된다.
+
+  
         return render_template("index.html", user=user_data,
+                                             products_count_first = product_count_data[0],
+                                             products_count_else = product_count_data[1:],
                                              products_count = product_count_data,
+                                             chart_count = len(product_count_data[1:]),
                                              products = product_data,
                                              error_products = error_products,
-                                             error_states = error_states,
-                                             product_len=product_len)
+                                             error_stats = error_stats,
+                                             product_len=product_len,
+                                             chart_data = chart_data)
     
 
 
@@ -247,35 +265,56 @@ def productManagement():
         return redirect(url_for('login'))
     else:
         user_data = User.query.filter_by(ID = session['user_id']).first()
-        product_data = Quantity.query.filter_by(error=0).all()
+        product_data = Quantity.query.filter_by(error=0, cal='ADD').all()
         categories = Count.query.filter().all()
         # categories = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
         return render_template("product_management.html", user=user_data,
                                                           products = product_data,
                                                           categories = categories)
 
+"""제품 이미지 보기"""
+@app.route("/main/view_img/<int:productid>", methods=['GET','POST'])
+def view_image(productid=None):
+    product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
+    return render_template("view_img.html", product = product_data)
+
+
 
 """제품 자세히 보기"""
-@app.route("/main/view_detail/<int:productid>", methods=['GET','POST'])
+@app.route("/view_detail/<int:productid>", methods=['GET','POST'])
 def view_detail(productid=None):
     product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
     return render_template("view.html", product = product_data)
+
+"""제품 에러 보고"""
+@app.route("/view_detail/<int:productid>/report", methods=['GET','POST'])
+def report(productid=None):
+    product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
+    count_data = Count.query.filter_by(p_type=product_data.p_type).first()
+    err_stat = ErrStat.query.filter_by(p_type=product_data.p_type).first()
+    product_data.error = 1
+    err_stat.num += 1
+    count_data.num -= 1
+    db2.session.commit()
+
+    return redirect(url_for('productManagement'))
 
 
 """제품 출고"""
 @app.route("/productmanagement/release", methods=['GET', 'POST'])
 def release():
-    if not session['logged_in']:
-        return redirect(url_for('login'))
-    else:
-        release_product_info = request.form['release_list']
-        for product in release_product_info:
-             product_data = Quantity.query.filter_by(p_type = product).first()
-             db2.session.delete(product_data)
-        return redirect(url_for('productManagement'))
+    release_product_ID = request.form.getlist('checkrow') 
+    
+    for product_ID in release_product_ID:
+        product_data = Quantity.query.filter_by(ID=product_ID).first()
+        count_data = Count.query.filter_by(p_type=product_data.p_type).first()
+        product_data.cal = 'SUB'
+        count_data.num -= 1
+        db2.session.commit()
+    return redirect(url_for('productManagement'))
 
-""" 카테코리 삭제 """
-@app.route("/productmanagement/<int:category_id>", methods=['GET', 'POST'])
+""" 카테고리 삭제 """
+@app.route("/productmanagement/<int:category_id>/delete", methods=['GET', 'POST'])
 def del_category(category_id=None):
     if not session['logged_in']:
         return redirect(url_for('login'))
@@ -283,15 +322,40 @@ def del_category(category_id=None):
         category_data = Count.query.filter_by(ID=category_id).first()
         product_data = Quantity.query.filter_by(p_type=category_data.p_type).all()
         errstat_data = ErrStat.query.filter_by(p_type=category_data.p_type).first()
-        print(product_data)
-        print(errstat_data)
         db2.session.delete(category_data)
         for product in product_data:  
             db2.session.delete(product)
         db2.session.delete(errstat_data)
         db2.session.commit()
-        
         return redirect(url_for('productManagement'))
+
+""" 카테고리 추가 """
+@app.route("/productmanagement/addcategory", methods=['GET', 'POST'])
+def addCategory():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+    else:
+        if request.method=='GET':
+            pass
+        else:
+            user_data = User.query.filter_by(ID = session['user_id']).first()
+            product_data = Quantity.query.filter_by(error=0).all()
+            categories = Count.query.filter().all()
+            category_name = request.form['newcategory']
+            if category_name == '':
+                error = "카테고리 값을 입력하여 주세요."
+                return render_template("product_management.html", user=user_data,
+                                                          products = product_data,
+                                                          categories = categories,
+                                                          error = error)
+            else:
+                img_route = 'img/product/'+ category_name +'.png'
+                add_count = Count(p_type=category_name, num=0, img=img_route)
+                add_errtable = ErrStat(p_type=category_name, num=0)
+                db2.session.add(add_count)
+                db2.session.add(add_errtable)
+                db2.session.commit()
+                return redirect(url_for('productManagement'))
         
 # """에러 리포트"""
 # @app.route("/productmanagement/report", methods=['GET', 'POST'])

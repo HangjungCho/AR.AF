@@ -17,21 +17,21 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>
-    Argon Dashboard - Free Dashboard for Bootstrap 4 by Creative Tim
-  </title>
-  <!-- Favicon -->
-  <link href="{{ url_for('static', filename='./img/brand/favicon.png')}}" rel="icon" type="image/png">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-  <!-- Icons -->
-  <link href="{{ url_for('static', filename='./js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
-  <link href="{{ url_for('static', filename='./js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
-  <!-- CSS Files -->
-  <link href="{{ url_for('static', filename='./css/argon-dashboard.css')}}" rel="stylesheet" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        Argon Dashboard - Free Dashboard for Bootstrap 4 by Creative Tim
+    </title>
+    <!-- Favicon -->
+    <link href="{{ url_for('static', filename='./img/brand/favicon.png')}}" rel="icon" type="image/png">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <!-- Icons -->
+    <link href="{{ url_for('static', filename='./js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='./js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="{{ url_for('static', filename='./css/argon-dashboard.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
 </head>
 
 
@@ -44,7 +44,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Brand -->
-            <a class="navbar-brand pt-0" href="/">
+            <a class="navbar-brand pt-0" href="/main">
                 <img src="{{ url_for('static', filename='/img/brand/araflogo.png')}}" class="navbar-brand-img" alt="...">
             </a>
             <!-- User -->
@@ -102,7 +102,7 @@
                 <div class="navbar-collapse-header d-md-none">
                     <div class="row">
                         <div class="col-6 collapse-brand">
-                            <a href="/">
+                            <a href="/main">
                                 <img src="{{ url_for('static', filename='img/brand/blue.png')}}">
                             </a>
                         </div>
@@ -157,7 +157,7 @@
         <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
             <div class="container-fluid">
                 <!-- Brand -->
-                <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="/">Product Management</a>
+                <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="/productmanagement">Product Management</a>
                 <!-- Form -->
                 <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
                     <div class="form-group mb-0">
@@ -245,48 +245,50 @@
                         </div>
                     </div>
                     <div class="tm-bg-primary-dark tm-block tm-block-products">
-                        <div class="tm-product-table-container">
-                            <!-- <table class="table align-items-center table-flush">\ -->
-                            <table class="table table-hover tm-table-small tm-product-table" id="table">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">&nbsp;</th>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">PRODUCT NAME</th>
-                                        <th scope="col">In Stock Date</th>
-                                        <th scope="col">In Stock Time</th>
-                                        <th scope="col">View Detail</th>
-                                        <th scope="col">&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product in products %}
-                                    <tr>
-                                        <th scope="row"><input type="checkbox" /></th>
-                                        <td>{{product.ID}}</td>
-                                        <td class="tm-product-name">{{product.p_type}}</td>
-                                        <td>{{product.date}}</td>
-                                        <td>{{product.time}}</td>
-                                        <td>
-                                            <a href="#!" class="btn btn-sm btn-primary" onClick="window.open('/view_detail/{{product.ID}}','detail','width=791, height=411, scrollbars=no, resizable=no')">Detail</a>
-                                            <!--<a href="#" class="tm-product-delete-link">
-                                            <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                        <form  action="/productmanagement/release"; id="takeout_form" method="POST">
+                            <div class="tm-product-table-container">
+                                <!-- <table class="table align-items-center table-flush">\ -->
+                                <table class="table table-hover tm-table-small tm-product-table" id="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">&nbsp;</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">PRODUCT NAME</th>
+                                            <th scope="col">In Stock Date</th>
+                                            <th scope="col">In Stock Time</th>
+                                            <th scope="col">View Detail</th>
+                                            <th scope="col">&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in products %}
+                                        <tr>
+                                            <th scope="row"><input type="checkbox" id="checkrow" name="checkrow" value="{{product.ID}}"/></th>
+                                            <td>{{product.ID}}</td>
+                                            <td class="tm-product-name">{{product.p_type}}</td>
+                                            <td>{{product.date}}</td>
+                                            <td>{{product.time}}</td>
+                                            <td>
+                                                <a style=" color: #ffffff;" class="btn btn-sm btn-primary" onClick="window.open('/view_detail/{{product.ID}}','detail','width=700, height=400, scrollbars=no, resizable=no')">Detail</a>
+                                                <!--<a href="#" class="tm-product-delete-link">
+                            <i class="far fa-trash-alt tm-product-delete-icon"></i>
 
-                                            </a>-->
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    
+                            </a>-->
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
 
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- table container -->
-                        <!--<a href="add-product.html"
-                           class="btn btn-primary btn-block text-uppercase mb-3">Add new product</a>-->
-                        <button class="btn btn-primary btn-block text-uppercase">
-                            Delete selected products
-                        </button>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- table container -->
+                            <!--<a href="add-product.html"
+        class="btn btn-primary btn-block text-uppercase mb-3">Add new product</a>-->
+                            <button class="btn btn-primary btn-block text-uppercase">
+                                Take out selected products
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-8 col-xl-4 tm-block-col">
@@ -305,7 +307,7 @@
                                     <tr>
                                         <td class="tm-product-name">{{category.p_type}}</td>
                                         <td class="text-center">
-                                            <a href="#" class="tm-product-delete-link">
+                                            <a href="/productmanagement/{{category.ID}}/delete" class="tm-product-delete-link">
                                                 <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                             </a>
                                         </td>
@@ -316,77 +318,87 @@
                             </table>
                         </div>
                         <!-- table container -->
-                        <input type="text" id="search" placeholder="New category name">
-                        <br ><br />
-                    
-                        <button class="btn btn-primary btn-block text-uppercase mb-3">
-                            Add new category
-                        </button>
+                        <div class="tm-product-table-container">
+                            <!--<form class="search_product" action="/productmanagement/addcategory", id="search_form" method="POST">-->
+                            <form class="search_product" action="/productmanagement/addcategory" ; id="search_form" method="POST">
+                                <div class="input-group-append">
+
+                                    <input class="form-control" type="text" id="newcategory" name="newcategory" placeholder="New Category Name" style="width:400px;">
+                                    <button type="submit" value="submit" class="btn btn-secondary" style="background-color: #5E72E4; border-color:#5E72E4">
+                                        <i class="fa fa-plus" style="color:white"></i>
+                                    </button>
+                                </div>
+                            </form>
+                            {% if error %}
+                            <strong>{{error}}</strong>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="row align-items-center justify-content-xl-between">
+                    <div class="col-xl-6">
+                        <div class="copyright text-center text-xl-left text-muted">
+                            &copy; 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Team ARAF</a>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <ul class="nav nav-footer justify-content-center justify-content-xl-end">
+                            <li class="nav-item">
+                                <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="row align-items-center justify-content-xl-between">
-                <div class="col-xl-6">
-                    <div class="copyright text-center text-xl-left text-muted">
-                        &copy; 2018 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Creative Tim</a>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <ul class="nav nav-footer justify-content-center justify-content-xl-end">
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
-    </div>
-    
-    <!--   Core   -->
-    <script src="{{ url_for('static', filename='js/plugins/jquery/dist/jquery.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-    <!--   Optional JS   -->
-    <script src="{{ url_for('static', filename='js/plugins/chart.js/dist/Chart.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/plugins/chart.js/dist/Chart.extension.js')}}"></script>
-    <!--   Argon JS   -->
-    <script src="{{ url_for('static', filename='js/argon-dashboard.min.js')}}"></script>
-    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
-    <script>
-        window.TrackJS &&
-            TrackJS.install({
-                token: "ee6fab19c5a04ac1a32a645abde4613a",
-                application: "argon-dashboard-free"
+        <!--   Core   -->
+        <script src="{{ url_for('static', filename='js/plugins/jquery/dist/jquery.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+        <!--   Optional JS   -->
+        <script src="{{ url_for('static', filename='js/plugins/chart.js/dist/Chart.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/plugins/chart.js/dist/Chart.extension.js')}}"></script>
+        <!--   Argon JS   -->
+        <script src="{{ url_for('static', filename='js/argon-dashboard.min.js')}}"></script>
+        <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+        <script>
+            window.TrackJS &&
+                TrackJS.install({
+                    token: "ee6fab19c5a04ac1a32a645abde4613a",
+                    application: "argon-dashboard-free"
+                });
+        </script>
+        <!--fucntion: search-->
+        <script>
+            var $rows = $('#table tr');
+            $('#search').keyup(function () {
+
+                var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+                    reg = RegExp(val, 'i'),
+                    text;
+
+                $rows.show().filter(function () {
+                    text = $(this).text().replace(/\s+/g, ' ');
+                    return !reg.test(text);
+                }).hide();
             });
-    </script>
-    <!--fucntion: search-->
-    <script>
-        var $rows = $('#table tr');
-        $('#search').keyup(function () {
+        </script>
 
-            var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
-                reg = RegExp(val, 'i'),
-                text;
 
-            $rows.show().filter(function () {
-                text = $(this).text().replace(/\s+/g, ' ');
-                return !reg.test(text);
-            }).hide();
-        });
-    </script>
-   
+
 
 
 </body>

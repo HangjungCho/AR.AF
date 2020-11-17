@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>ARAF</title>
+	<link rel="icon" href="{{url_for('static', filename='img/Fevicon.png')}}" type="image/png">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/bootstrap/bootstrap.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/fontawesome/css/all.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/themify-icons/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/linericon/style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/nice-select/nice-select.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.theme.default.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.carousel.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+
+	<!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="{{ url_for('static', filename='./js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='./js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{{ url_for('static', filename='./css/argon-dashboard.css')}}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700"/>
+
+	<style type="text/css">
+		#timer {
+			background-color: transparent;
+			color: #000000;
+			text-align: center;
+			font-size: 18px;
+			border: none;
+		}
+
+		.red-btn {
+			display: block;
+			height: 40px;
+			width: 85%;
+			line-height: 38px !important;
+			padding: 0px 38px;
+			text-transform: uppercase;
+			background: red;
+			margin-right: 10px;
+			margin-bottom: 5px;
+			border-radius: 30px;
+			color: #fff;
+			font-weight: 500;
+			border: none;
+			text-align: center;
+		}
+
+		.gray-btn {
+			display: block;
+			height: 40px;
+			width: 50%;
+			line-height: 38px !important;
+			padding: 0px 38px;
+			background: gray;
+			margin-right: 10px;
+			margin-bottom: 5px;
+			border-radius: 30px;
+			color: #fff;
+			font-weight: 500;
+			border: none;
+			text-align: center;
+		}
+
+		.star-rating {
+			width: 304px;
+		}
+
+			.star-rating, .star-rating span {
+				display: inline-block;
+				height: 55px;
+				overflow: hidden;
+				background: url(../static/img/star.png)no-repeat;
+			}
+
+				.star-rating span {
+					background-position: left bottom;
+					line-height: 0;
+					vertical-align: top;
+				}
+	</style>
+
+	<!--<script type="text/javascript">
+	function QCreate(){
+		f.action="/view_product/{product.id}}/add_message";
+		f.submit();
+	</script>-->
+
+	
+
+	<style>
+		#topbt {
+			position: fixed;
+			z-index: 1000;
+			right: 50px;
+			bottom: 50px;
+			width: 50px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body style="
+	overflow-x: hidden;
+	overflow-y: hidden">
+
+
+
+	<!--================Single Product Area =================-->
+	<div class="row s_product_inner">
+		<div>
+			<!--<div class="owl-carousel owl-theme s_Product_carousel">
+			<div class="single-prd-item">-->
+			<img class="img-fluid" src="{{url_for('static', filename = product.img)}}" style="width: 410px; height: auto; "> <!--상품 이미지 표시-->
+			<!--</div>
+			</div>-->
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		
+	</div>
+
+
+
+
+</body>
+</html>
