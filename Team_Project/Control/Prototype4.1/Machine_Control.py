@@ -669,7 +669,18 @@ class CameraProcess( Process, WindowClass, NetFunc):
 
         # Load the image into the array
         data[0] = normalized_image_array
+        
 
+        # 에러 기준 변경 필요
+        # 1. 인공지능 예측 확률이 80% 미만일 경우에 제품 타입은 그대로 셋팅하되, error 라는 Boolean type의 변수를 True로 셋팅하도록 한다.
+        # 2. ERR_001은 앞으로 예측 확률이 기준이 아닌, 들어와서 안되는 제품을 기준으로 판단한다. 예를들면 '말'을 학습시켜서 분류될 품목이 아닌데 '말'이 인식되면 Undefin로 처리한다.
+        # 요약 : error는 인식률이 떨어지는 애들을 제품 타입과 error=True 형태로 반환, 등록되어 있는 제품이나 분류될 제품이 아닐경우 ERR_001로 처리함.
+
+        # 추가 아이디어? A, B, C 박스가 있으면 A에 비행기, 공룡등이 들어올수 있으므로 Box Table을 추가하여 레코드를 다음과 같이 추가함
+        # - Table : Box
+        #     Box_type   product_1   product_2   product_3  
+        #        A           2          1           3      
+        
         prediction = model.predict(data)
         predict_class = max(prediction[0])
         if predict_class < 0.8:
