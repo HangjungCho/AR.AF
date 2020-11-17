@@ -98,11 +98,11 @@ history = model.fit_generator(train_generator,
                     validation_steps=4,
                     callbacks=[early_stopping_callback, checkpointer])
 
-model.save_weights('model.h5')
-model_json = model.to_json()
-with open('model.json', "w") as json_file:
-    json_file.write(model_json)
-json_file.close()
+# model.save_weights('model.h5')
+# model_json = model.to_json()
+# with open('model.json', "w") as json_file:
+#     json_file.write(model_json)
+# json_file.close()
 
 # load part 
 # from keras.models import model_from_json

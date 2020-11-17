@@ -17,35 +17,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>
-        Argon Dashboard - Free Dashboard for Bootstrap 4 by Creative Tim
-    </title>
-    <!-- Favicon -->
-    <link href="{{ url_for('static', filename='./img/brand/favicon.png')}}" rel="icon" type="image/png">
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <!-- Icons -->
-    <link href="{{ url_for('static', filename='./js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='./js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
-    <!-- CSS Files -->
-    <link href="{{ url_for('static', filename='./css/argon-dashboard.css')}}" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    Argon Dashboard - Free Dashboard for Bootstrap 4 by Creative Tim
+  </title>
+  <!-- Favicon -->
+  <link href="{{ url_for('static', filename='./img/brand/favicon.png')}}" rel="icon" type="image/png">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="{{ url_for('static', filename='./js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='./js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{{ url_for('static', filename='./css/argon-dashboard.css')}}" rel="stylesheet" />
 
     <style>
         #donutchart_1 {
             height: 300px;
         }
-
-        #chartdiv {
-            width: 100%;
-            height: 365px;
-        }
     </style>
 </head>
-
-
-<!-- Styles -->
 
 <body class="">
     <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
@@ -55,7 +47,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Brand -->
-            <a class="navbar-brand pt-0" href="/main">
+            <a class="navbar-brand pt-0" href="/">
                 <img src="{{ url_for('static', filename='/img/brand/araflogo.png')}}" class="navbar-brand-img" alt="...">
             </a>
             <!-- User -->
@@ -114,7 +106,7 @@
                 <div class="navbar-collapse-header d-md-none">
                     <div class="row">
                         <div class="col-6 collapse-brand">
-                            <a href="/main">
+                            <a href="/">
                                 <img src="{{ url_for('static', filename='img/brand/blue.png')}}">
                             </a>
                         </div>
@@ -160,7 +152,13 @@
                 <hr class="my-3">
                 <!-- Heading -->
 
-
+                <ul class="navbar-nav">
+                    <li class="nav-item active active-pro">
+                        <a class="nav-link" href="./examples/upgrade.html">
+                            <i class="ni ni-send text-dark"></i> Upgrade to PRO
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -230,14 +228,12 @@
             <div class="container-fluid">
                 <div class="header-body">
                     <!-- Card stats -->
-
+                    
                     <div class="row">
 
                         {% for product_count in products_count %}
                         <div class="col-xl-3 col-lg-6">
                             <div class="card card-stats mb-4 mb-xl-0">
-
-
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
@@ -257,15 +253,13 @@
                                         <strong><span class="text-success mr-2">{{product_count.num}}%</span></strong>
                                     </p>
                                 </div>
-
-
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-            </div>
         </div>
+    </div>
         <div class="container-fluid mt--7">
             <div class="row">
                 <div class="col-xl-7 mb-5 mb-xl-0">
@@ -274,9 +268,9 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                                    <h2 class="text-white mb-0">날짜별 입고 수량</h2>
+                                    <h2 class="text-white mb-0">Sales value</h2>
                                 </div>
-                                <!--<div class="col">
+                                <div class="col">
                                     <ul class="nav nav-pills justify-content-end">
                                         <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$" data-suffix="k">
                                             <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
@@ -291,15 +285,14 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </div>-->
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <!-- Chart -->
-                            <!--<div id="chartdiv" style="color:#fff"></div>-->
-                            <div id="chartdiv" ">
-                                <!--Chart wrapper-->
-                                <!--<canvas id="chart-sales" class="chart-canvas"></canvas>-->
+                            <div class="chart">
+                                <!-- Chart wrapper -->
+                                <canvas id="chart-sales" class="chart-canvas"></canvas>
                             </div>
                         </div>
                     </div>
@@ -311,7 +304,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                                    <h2 class="mb-0">제품별 재고 비율</h2>
+                                    <h2 class="mb-0">Total orders</h2>
                                 </div>
                             </div>
                         </div>
@@ -329,7 +322,7 @@
                         <div class="card-header border-0">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h3 class="mb-0">결함 감지</h3>
+                                    <h3 class="mb-0">Error Detection</h3>
                                 </div>
                                 <div class="col text-right">
                                     <a href="#!" class="btn btn-sm btn-primary">Download</a>
@@ -365,7 +358,7 @@
                                             {{error_product.time}}
                                         </td>
                                         <td>
-                                            <a style=" color: #ffffff;" onClick="window.open('/main/view_img/{{error_product.ID}}','err_img','width=450, height=450, scrollbars=no, resizable=no')" class="btn btn-sm btn-primary">Image</a>
+                                            <a style=" color: #ffffff;" onClick="window.open('/main/view_detail/{{error_product.ID}}','detail','width=450, height=450, scrollbars=no, resizable=no')" class="btn btn-sm btn-primary">Detail</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -379,7 +372,7 @@
                         <div class="card-header border-0">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h3 class="mb-0">제품별 결함 발생률</h3>
+                                    <h3 class="mb-0">Error Stats</h3>
                                 </div>
                                 <!--<div class="col text-right">
                                     <a href="#!" class="btn btn-sm btn-primary">See all</a>
@@ -400,18 +393,18 @@
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            {{error_stats[i].p_type}}
+                                            {{error_states[i].p_type}}
                                         </th>
                                         <td>
-                                            {{error_stats[i].num}}
+                                            {{error_states[i].num}}
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <!--11-12-->
-                                                <span class="mr-2">{{ "{:.01f}".format( ((error_stats[i].num)*100)/((error_stats[i].num)+(products_count[i].num)+0.001) ) }}%</span>
+                                                <span class="mr-2">{{ "{:.01f}".format( ((error_states[i].num)*100)/((error_states[i].num)+(products_count[i].num)) ) }}%</span>
                                                 <div>
                                                     <div class="progress">
-                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{((error_stats[i].num)*100)/((error_stats[i].num)+(products_count[i].num)+0.001)}}%;"></div>
+                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{((error_states[i].num)*100)/((error_states[i].num)+(products_count[i].num))}}%;"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -429,7 +422,7 @@
                 <div class="row align-items-center justify-content-xl-between">
                     <div class="col-xl-6">
                         <div class="copyright text-center text-xl-left text-muted">
-                            &copy; 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Team ARAF</a>
+                            &copy; 2018 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Creative Tim</a>
                         </div>
                     </div>
                     <div class="col-xl-6">
@@ -485,7 +478,7 @@
             // Create chart
             var chart = am4core.create("donutchart_1", am4charts.PieChart);
             chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
+			
             chart.data = [
 	        	{% for product_count in products_count %}
             	{
@@ -508,162 +501,7 @@
 
         }); // end am4core.ready()
     </script>
-
-
-
-
-
-    <!-- Chart code -->
-
-    <script>
-        am4core.ready(function () {
-
-            // Themes begin
-            am4core.useTheme(am4themes_dark);
-            // Themes end
-
-            // Create chart instance
-            var chart = am4core.create("chartdiv", am4charts.XYChart);
-
-            //
-
-            // Increase contrast by taking evey second color
-            chart.colors.step = 2;
-
-            // Add data
-            chart.data = generateChartData();
-
-            // Create axes
-            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-            dateAxis.renderer.minGridDistance = 50;
-
-            // Create series
-            function createAxisAndSeries(field, name, opposite, bullet) {
-                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-                if (chart.yAxes.indexOf(valueAxis) != 0) {
-                    valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
-                }
-
-                var series = chart.series.push(new am4charts.LineSeries());
-                series.dataFields.valueY = field;
-                series.dataFields.dateX = "date";
-                series.strokeWidth = 2;
-                series.yAxis = valueAxis;
-                series.name = name;
-                series.tooltipText = "{name}: [bold]{valueY}[/]";
-                series.tensionX = 0.8;
-                series.showOnInit = true;
-
-                var interfaceColors = new am4core.InterfaceColorSet();
-
-                switch (bullet) {
-                    case "triangle":
-                        var bullet = series.bullets.push(new am4charts.Bullet());
-                        bullet.width = 12;
-                        bullet.height = 12;
-                        bullet.horizontalCenter = "middle";
-                        bullet.verticalCenter = "middle";
-
-                        var triangle = bullet.createChild(am4core.Triangle);
-                        triangle.stroke = interfaceColors.getFor("background");
-                        triangle.strokeWidth = 2;
-                        triangle.direction = "top";
-                        triangle.width = 12;
-                        triangle.height = 12;
-                        break;
-                    case "rectangle":
-                        var bullet = series.bullets.push(new am4charts.Bullet());
-                        bullet.width = 10;
-                        bullet.height = 10;
-                        bullet.horizontalCenter = "middle";
-                        bullet.verticalCenter = "middle";
-
-                        var rectangle = bullet.createChild(am4core.Rectangle);
-                        rectangle.stroke = interfaceColors.getFor("background");
-                        rectangle.strokeWidth = 2;
-                        rectangle.width = 10;
-                        rectangle.height = 10;
-                        break;
-                    default:
-                        var bullet = series.bullets.push(new am4charts.CircleBullet());
-                        bullet.circle.stroke = interfaceColors.getFor("background");
-                        bullet.circle.strokeWidth = 2;
-                        break;
-                }
-
-                valueAxis.renderer.line.strokeOpacity = 1;
-                valueAxis.renderer.line.strokeWidth = 2;
-                valueAxis.renderer.line.stroke = series.stroke;
-                valueAxis.renderer.labels.template.fill = series.stroke;
-                valueAxis.renderer.opposite = opposite;
-            }
-
-
-            
-
-            createAxisAndSeries("{{products_count_first.p_type}}", "{{products_count_first.p_type}}", false, "circle");
-
-            {% for product_count in products_count_else %}
-            createAxisAndSeries("{{product_count.p_type}}", "{{product_count.p_type}}", true, "circle");
-            {% endfor %}
-
-
-            // Add legend
-            chart.legend = new am4charts.Legend();
-
-            // Add cursor
-            chart.cursor = new am4charts.XYCursor();
-
-            // generate some random data, quite different range
-            function generateChartData() {
-                var chartData = [];
-                var firstDate = new Date();
-                firstDate.setDate(firstDate.getDate() - 15);
-                firstDate.setHours(0, 0, 0, 0);
-
-                var {{products_count_first.p_type}} = 0;
-
-                {% for product_count in products_count_else %}
-                var {{ product_count.p_type }} = 0;
-                {% endfor %}
-
-                var i = 1;
-
-                {% for i in range(15) %}
-
-                    // we create date objects here. In your data, you can have date strings
-                    // and then set format of your dates using chart.dataDateFormat property,
-                    // however when possible, use date objects, as this will speed up chart rendering.
-                    var newDate = new Date(firstDate);
-                    newDate.setDate(newDate.getDate() + i);
-                    {{ products_count_first.p_type }} = {{ chart_data[0][i] }};
-                    {% for product_count in products_count_else %}
-                        {{ product_count.p_type }} = {{chart_data[(product_count.ID)-2][i]}};
-                    {% endfor %}
-
-
-                    chartData.push({
-                        date: newDate,
-                        {{ products_count_first.p_type }}: {{ products_count_first.p_type }},
-                        {% for product_count in products_count_else %}
-                            {{ product_count.p_type }} : {{ product_count.p_type }},
-                        {% endfor %}
-                    });
-                i+=1
-                {% endfor %}
-
-                
-                return chartData;
-            }
-
-        }); // end am4core.ready()
-    </script>
     {% endblock %}
-
-    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/themes/dark.js"></script>
-
 </body>
 
 </html>
