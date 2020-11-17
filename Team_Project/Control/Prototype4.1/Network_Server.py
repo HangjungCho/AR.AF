@@ -203,7 +203,7 @@ class ClientImgProcess( Process ):
         #     sys.exit()
 
 if __name__ == '__main__':
-    server_ip = '192.168.0.125'
+    server_ip = '192.168.0.84'
     server_port = 9000
     serverManageProcess = ReceptionProcess( server_ip, server_port )
     serverManageProcess.start()
