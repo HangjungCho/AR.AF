@@ -254,28 +254,55 @@ def productManagement():
                                                           products = product_data,
                                                           categories = categories)
 
+
 """제품 자세히 보기"""
-@app.route("/view_detail/<int:productid>", methods=['GET','POST'])
+@app.route("/main/view_detail/<int:productid>", methods=['GET','POST'])
 def view_detail(productid=None):
     product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
     return render_template("view.html", product = product_data)
 
 
-""" 제품상세페이지  """
-@app.route("/single-product/<int:productid>")
-def viewProduct(productid=None): # 자 이제 본인이 지정한 변수명을 None값으로 초기화 하여 선언 해 주어야 함수 안에서 활용 할 수 있다. 나는 productid라고 지정해 뒀으니 productid=None 으로 써두자
-    user_data = []
-    product_data = Product.query.filter_by(id=productid).first() # 위에서 productid를 그렇게 강조했는데 어디서 쓰이냐? 바로 여기서 쓰인다. 현재 보고있는 상품의 id값이 저장되어 있으므로 그 상품의 정보를 가져와 준다.
-    author_user = User.query.filter_by(id=product_data.author_id).first() # 상품의 id만 있으면 이렇게 제품을 등록한 유저의 정보도 가져올 수 있고,
-    message_data = Message.query.filter_by(product_id=productid).order_by(desc(Message.pub_date)).all() # 특정 상세제품의 minitwit에 내용들도 모두 가져올 수 있다.
-    heart_data = Heart.query.filter_by(product_id=productid).first() # 당연히 좋아요 관련 데이터도 가져올 수 있다
-    sp_long = len(message_data) # 굳이 message_data가 몇개있는지 별도의 변수에 저장한 이유는, html에서는 len함수를 쓸수 없기 때문에 여기서 따로 변수에 저장해 두었다. (html에서 for문을 쓰기 위해서 갯수를 저장해둠)
-    for i in range(sp_long): #sp_long은 바로 위에 있으니 참고
-        user_data.append(User.query.filter_by(id=message_data[i].author_id).first())
-        # user_data에 minitwit을 쓴 사람의 id정보를 담아주는 for문으로 순전히 minitwit에 어떤사람이 썼는지 보여주기 위해 만든 user_data임.
-    return render_template("single-product.html", messages=message_data, product = product_data, now_time = int(time.time()+time_seoul), user=user_data, sp_long=sp_long, author_user=author_user, heart=heart_data)
-    # render_templat은 위에서 설명했으므로 앞으로는 설명을 생략하도록 하겠다.
+"""제품 출고"""
+@app.route("/productmanagement/release", methods=['GET', 'POST'])
+def release():
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+    else:
+        release_product_info = request.form['release_list']
+        for product in release_product_info:
+             product_data = Quantity.query.filter_by(p_type = product).first()
+             db2.session.delete(product_data)
+        return redirect(url_for('productManagement'))
 
+""" 카테코리 삭제 """
+@app.route("/productmanagement/<int:category_id>", methods=['GET', 'POST'])
+def del_category(category_id=None):
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+    else:
+        category_data = Count.query.filter_by(ID=category_id).first()
+        product_data = Quantity.query.filter_by(p_type=category_data.p_type).all()
+        errstat_data = ErrStat.query.filter_by(p_type=category_data.p_type).first()
+        print(product_data)
+        print(errstat_data)
+        db2.session.delete(category_data)
+        for product in product_data:  
+            db2.session.delete(product)
+        db2.session.delete(errstat_data)
+        db2.session.commit()
+        
+        return redirect(url_for('productManagement'))
+        
+# """에러 리포트"""
+# @app.route("/productmanagement/report", methods=['GET', 'POST'])
+# def report():
+#     if not session['logged_in']:
+#         return redirect(url_for('login'))
+#     else:
+#         report_product_info = request.form['release_list']
+#         for product in report_product_info:
+#             product_data = Quantity.query.filter_by(p_type=product).first()
+#             product_data.error = 1
 
 
 """ 회원가입 """
