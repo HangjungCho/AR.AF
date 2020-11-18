@@ -576,7 +576,8 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         GPIO.cleanup()
         time.sleep(0.5)
         # os._exit(0)
-        sys.exit()
+        sys.exit(app.exec_())
+        sys.exit(MP.close())
         
     def combo1Function(self) :
         global Item_Dictionary, Item1
@@ -735,7 +736,7 @@ class CameraProcess( Process, WindowClass, NetFunc):
         # json_file.close()
         # model = model_from_json(loaded_model_json)
         # model.load_weights("model.h5")
-        model = load_model("13-0.0434.hdf5")
+        model = load_model("initial_model.hdf5")
 
         try:
             while True:
