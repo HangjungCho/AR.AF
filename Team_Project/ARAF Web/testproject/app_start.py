@@ -255,7 +255,7 @@ def productManagement():
                                                           categories = categories)
 
 
-"""제품 자세히 보기"""
+"""제품 자세히 보기"""4
 @app.route("/main/view_detail/<int:productid>", methods=['GET','POST'])
 def view_detail(productid=None):
     product_data = Quantity.query.filter_by(ID=productid).first() # 해당 물품정보를 DB에서 가져옴
