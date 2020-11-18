@@ -92,17 +92,17 @@ model.summary()
 
 # run training
 history = model.fit_generator(train_generator,
-                    steps_per_epoch=50, 
-                    epochs=25,
+                    steps_per_epoch=2, 
+                    epochs=2,
                     validation_data=test_generator,
                     validation_steps=4,
                     callbacks=[early_stopping_callback, checkpointer])
 
-# model.save_weights('model.h5')
-# model_json = model.to_json()
-# with open('model.json', "w") as json_file:
-#     json_file.write(model_json)
-# json_file.close()
+model.save_weights('model.h5')
+model_json = model.to_json()
+with open('model.json', "w") as json_file:
+    json_file.write(model_json)
+json_file.close()
 
 # load part 
 # from keras.models import model_from_json
@@ -128,4 +128,12 @@ plt.legend(loc='upper right')
 plt.grid()
 plt.xlabel('epoch')
 plt.ylabel('loss/acc')
+
+
+plt.draw()
+fig = plt.gcf()
+fig.savefig( MODEL_DIR+'/accuracy_graph.png', dpi=fig.dpi)
 plt.show()
+
+
+

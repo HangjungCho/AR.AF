@@ -123,7 +123,7 @@ class Ui_Dialog(object):
         qp.drawText(510, 390, 'Class Name:')
     # ---------------------------------- #
 
-#화면을 띄우는데 사용되는 Class 선언
+# Define WindowClass to display Window
 class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
     def __init__(self, host, port) :
         # super().__init__()
@@ -134,7 +134,7 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
         self.initUI()
 
         
-        #메뉴툴바
+        # Menu Tool Bar
         # self.mainMenu = self.menuBar()      # Menu bar
         # exitAction = QAction('&Exit', self)
         # exitAction.setShortcut('Ctrl+Q')
@@ -142,12 +142,12 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
         # self.fileMenu = self.mainMenu.addMenu('&File')
         # self.fileMenu.addAction(exitAction)
 
-        # 텍스트 입력창
+        # Input Text Window
         # self.lineedit_Test.textChanged.connect(self.lineeditTextFunction)
         # self.lineedit_Test.returnPressed.connect(self.printTextFunction)
         # self.btn_changeText.clicked.connect(self.changeTextFunction)
 
-        #버튼에 기능을 연결하는 코드
+        # Connet Button with Function
         self.btn_1.clicked.connect(self.button1Function) # start
         self.btn_2.clicked.connect(self.button2Function) # exit
         self.btn_3.clicked.connect(self.button3Function) # capture
@@ -205,7 +205,7 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
         global start
         global count
         global generator_type
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(-1)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
         while running:
@@ -252,7 +252,7 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
 
 
 
-    #btn_1이 눌리면 작동할 함수
+    #btn_1 Function
     def button1Function(self) :
         self.btn_1.setEnabled(False)
         self.btn_2.setEnabled(True)
@@ -262,7 +262,7 @@ class WindowClass(QMainWindow, Ui_Dialog, NetFunc) :
         th = threading.Thread(target=self.run())
         th.start()
 
-        #btn_2가 눌리면 작동할 함수
+    # btn_2 Function
     def button2Function(self) :
         print("exit")
         global running
