@@ -152,7 +152,7 @@ class Ui_Dialog(object):
         self.Delete_combobox.addItem("")
         self.Delete_combobox.addItem("")
         self.ARAF = QtWidgets.QLabel(Dialog)
-        self.ARAF.setGeometry(QtCore.QRect(1360, 420, 180, 78))
+        self.ARAF.setGeometry(QtCore.QRect(1360, 450, 180, 48))
         self.ARAF.setText("")
         self.ARAF.setObjectName("ARAF")
         self.retranslateUi(Dialog)
@@ -213,7 +213,7 @@ class Conveyor_main(Thread):
                 self.main_conveyor_On()
                 if (Check2 or Check3) == 1 :
                     self.main_conveyor_Off()
-                    time.sleep(2)
+                    time.sleep(5)
             else:
                 self.main_conveyor_Off()
                 
@@ -470,33 +470,44 @@ class MachineProcess(Process):
         self.Run2que = Run2que
         self.Item1que = Item1que
         self.Item2que = Item2que
+        self.conveyor_main = Conveyor_main()
+        self.conveyor1 = Conveyor1()
+        self.conveyor2 = Conveyor2()
+        self.push1 = PushMotor1()
+        self.push2 = PushMotor2()
+        self.IR1 = IRSensor1(self.M2Cque, self.C2Mque)
+        self.IR2 = IRSensor2(self.C2Mque, self.item_list)
+        self.IR3 = IRSensor3(self.C2Mque, self.item_list)
+        self.CG = Change_Global(self.Run1que, self.Run2que, self.Item1que, self.Item2que)
         print( '[MachineProcess __init__]' )
 
     def __del__( self ):
+        self.conveyor_main.join()
+        self.conveyor1.join()
+        self.conveyor2.join()
+        self.push1.join()
+        self.push2.join()
+        self.IR1.join()
+        self.IR2.join()
+        self.IR3.join()
+        self.CG.join()
+        print(self.conveyor_main.is_alive())
         print( '[MachineProcess __del__]' )
 
     def run(self):
 
-        conveyor_main = Conveyor_main()
-        conveyor1 = Conveyor1()
-        conveyor2 = Conveyor2()
-        push1 = PushMotor1()
-        push2 = PushMotor2()
-        IR1 = IRSensor1(self.M2Cque, self.C2Mque)
-        IR2 = IRSensor2(self.C2Mque, self.item_list)
-        IR3 = IRSensor3(self.C2Mque, self.item_list)
-        CG = Change_Global(self.Run1que, self.Run2que, self.Item1que, self.Item2que)
+
 
         # thread start
-        conveyor_main.start()
-        conveyor1.start()
-        conveyor2.start()
-        push1.start()
-        push2.start()
-        IR1.start()
-        IR2.start()
-        IR3.start()
-        CG.start()
+        self.conveyor_main.start()
+        self.conveyor1.start()
+        self.conveyor2.start()
+        self.push1.start()
+        self.push2.start()
+        self.IR1.start()
+        self.IR2.start()
+        self.IR3.start()
+        self.CG.start()
 
 
     #화면을 띄우는데 사용되는 Class 선언
@@ -529,8 +540,8 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         self.pushButton_2.clicked.connect(self.deleteComboBoxItem)
 
         self.qPixmapFileVar2 = QPixmap()
-        self.qPixmapFileVar2.load("ARAF_Logo.png")
-        self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(180,78)
+        self.qPixmapFileVar2.load("ARAF_Logo2.png")
+        self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(180,48)
         self.ARAF.setPixmap(QtGui.QPixmap(self.qPixmapFileVar2))#image path
         
     def __del__( self ):
@@ -587,11 +598,14 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         self.Run2que.put(0)
         GPIO.cleanup()
         time.sleep(0.5)
+        # os.system('taskkill /f /im python')
+        # sys.exit(app.exec_())
+        # sys.exit(MP.close())
         # os._exit(0)
-        process = subprocess.Popen(cmd, shell=True)
+        process = subprocess.Popen("MachineProcess", shell=True)
         os.kill(process.pid, signal.SIGINT)
         sys.exit(app.exec_())
-        sys.exit(MP.kill())
+        os._exit(0)
         
     def combo1Function(self) :
         global Item_Dictionary, Item1
