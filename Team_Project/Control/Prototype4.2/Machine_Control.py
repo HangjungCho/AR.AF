@@ -18,6 +18,9 @@ import sys
 import os
 import RPi.GPIO as GPIO
 
+import subprocess
+import signal
+
 # Machine Process global variations
 Check1 = 0
 Check2 = 0
@@ -148,6 +151,10 @@ class Ui_Dialog(object):
         self.Delete_combobox.addItem("")
         self.Delete_combobox.addItem("")
         self.Delete_combobox.addItem("")
+        self.ARAF = QtWidgets.QLabel(Dialog)
+        self.ARAF.setGeometry(QtCore.QRect(1360, 420, 180, 78))
+        self.ARAF.setText("")
+        self.ARAF.setObjectName("ARAF")
         self.retranslateUi(Dialog)
         self.type_1.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -520,6 +527,11 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         
         self.pushButton.clicked.connect(self.addComboBoxItem)
         self.pushButton_2.clicked.connect(self.deleteComboBoxItem)
+
+        self.qPixmapFileVar2 = QPixmap()
+        self.qPixmapFileVar2.load("ARAF_Logo.png")
+        self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(180,78)
+        self.ARAF.setPixmap(QtGui.QPixmap(self.qPixmapFileVar2))#image path
         
     def __del__( self ):
         print( '[WindowClass __del__]' )
@@ -576,8 +588,10 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         GPIO.cleanup()
         time.sleep(0.5)
         # os._exit(0)
+        process = subprocess.Popen(cmd, shell=True)
+        os.kill(process.pid, signal.SIGINT)
         sys.exit(app.exec_())
-        sys.exit(MP.close())
+        sys.exit(MP.kill())
         
     def combo1Function(self) :
         global Item_Dictionary, Item1
@@ -602,14 +616,15 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         self.Delete_combobox.addItem(item_text)
         index = self.Delete_combobox.findText(item_text)
         Item_Dictionary[index] = item_text
-        self.textEdit.append("Item Added")
+        self.textEdit.append("{} Added".format(item_text))
 
     def deleteComboBoxItem(self) :
         self.delidx = self.Delete_combobox.currentIndex()
+        del_text = self.Delete_combobox.currentText()
         self.type_1.removeItem(self.delidx)
         self.type_2.removeItem(self.delidx)
         self.Delete_combobox.removeItem(self.delidx)
-        self.textEdit.append("Item Deleted")
+        self.textEdit.append("{} Deleted".format(del_text))
 
 class CameraProcess( Process, WindowClass, NetFunc):
     def __init__( self, host, port, M2Cque, C2Mque, Run1que, Run2que, Item1que, Item2que):
