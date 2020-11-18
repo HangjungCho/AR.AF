@@ -738,7 +738,7 @@ class CameraProcess( Process, WindowClass, NetFunc):
         # json_file.close()
         # model = model_from_json(loaded_model_json)
         # model.load_weights("model.h5")
-        model = load_model("model.hdf5")
+        model = load_model("initial_model.hdf5")
 
         try:
             while True:

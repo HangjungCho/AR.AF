@@ -89,10 +89,11 @@ early_stopping_callback = EarlyStopping(monitor='val_loss', patience=10)
 
 model.summary()
 
+
 # run training
 history = model.fit_generator(train_generator,
-                    steps_per_epoch=50, 
-                    epochs=25,
+                    steps_per_epoch=2, 
+                    epochs=2,
                     validation_data=test_generator,
                     validation_steps=4,
                     callbacks=[early_stopping_callback, checkpointer])
