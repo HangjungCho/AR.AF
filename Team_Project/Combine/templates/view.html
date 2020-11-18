@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>ARAF</title>
+	<link rel="icon" href="{{url_for('static', filename='img/Fevicon.png')}}" type="image/png">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/bootstrap/bootstrap.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/fontawesome/css/all.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/themify-icons/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/linericon/style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/nice-select/nice-select.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.theme.default.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='vendors/owl-carousel/owl.carousel.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+
+	<!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <!-- Icons -->
+  <link href="{{ url_for('static', filename='./js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='./js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="{{ url_for('static', filename='./css/argon-dashboard.css')}}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700"/>
+
+	<style type="text/css">
+		#timer {
+			background-color: transparent;
+			color: #000000;
+			text-align: center;
+			font-size: 18px;
+			border: none;
+		}
+
+		.red-btn {
+			display: block;
+			height: 40px;
+			width: 85%;
+			line-height: 38px !important;
+			padding: 0px 38px;
+			text-transform: uppercase;
+			background: red;
+			margin-right: 10px;
+			margin-bottom: 5px;
+			border-radius: 30px;
+			color: #fff;
+			font-weight: 500;
+			border: none;
+			text-align: center;
+		}
+
+		.gray-btn {
+			display: block;
+			height: 40px;
+			width: 50%;
+			line-height: 38px !important;
+			padding: 0px 38px;
+			background: gray;
+			margin-right: 10px;
+			margin-bottom: 5px;
+			border-radius: 30px;
+			color: #fff;
+			font-weight: 500;
+			border: none;
+			text-align: center;
+		}
+
+		.star-rating {
+			width: 304px;
+		}
+
+			.star-rating, .star-rating span {
+				display: inline-block;
+				height: 55px;
+				overflow: hidden;
+				background: url(../static/img/star.png)no-repeat;
+			}
+
+				.star-rating span {
+					background-position: left bottom;
+					line-height: 0;
+					vertical-align: top;
+				}
+	</style>
+
+	<!--<script type="text/javascript">
+	function QCreate(){
+		f.action="/view_product/{product.id}}/add_message";
+		f.submit();
+	</script>-->
+
+	
+
+	<style>
+		#topbt {
+			position: fixed;
+			z-index: 1000;
+			right: 50px;
+			bottom: 50px;
+			width: 50px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body style="
+	overflow-x: hidden;
+	overflow-y: hidden">
+
+
+
+	<!--================Single Product Area =================-->
+	<div class="row s_product_inner">
+		<div>
+			<!--<div class="owl-carousel owl-theme s_Product_carousel">
+			<div class="single-prd-item">-->
+			<img class="img-fluid" src="{{url_for('static', filename = product.img)}}" style="width: 410px; height: auto; "> <!--상품 이미지 표시-->
+			<!--</div>
+			</div>-->
+		</div>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<form style="margin-left:-23px;" class="row login_form" action="/view_detail/{{product.ID}}" id="register_form" method="POST">
+			<div style="border:1px solid #dfdfdf; background-color:#f7f7f7; padding:20px; padding-top:10px; text-align:left;" width="530" height="500">
+				<table cellpadding="0" cellspacing="0" style="width:100%; margin-left:40px">
+					<tbody>
+						<div style="font-size:30px; color:#333333; margin-bottom:15px; margin-left:40px">상세 정보</div> <!--원래 상품명 표시-> 제목으로 변경-->
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>번호</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.count }}</span></span> </strong></td>
+							<!--수량에서 번호 코드 바꿀 것-->
+						</tr>
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>상품명</strong></td><!--상품명 = 제품 타입-->
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.p_type }}</span></span> </strong></td>
+						</tr>
+
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>날짜</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.date }}</span></span> </strong></td>
+						</tr>
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>시간</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.time }}</span></span> </strong></td>
+						</tr>
+						<tr>
+							<td style="color:#333333; height:40px;" class="font_16"><strong>상태</strong></td>
+							<td class="font_11"><strong><span style="color:#333333;" class="font_add_1 font_20"><span class="baro_price_print">{{ product.cal }}</span></span> </strong></td>
+						</tr>
+					</tbody> <!--수정완료-->
+				</table>
+				<hr style="color:black; width:350px; height:1px">
+				{% if product.p_type=='ERR_001' or product.cal=='SUB'%}
+				<button type="submit" value="submit" class="btn btn-primary btn-block text-uppercase mb-3" style="width:60%; margin-left: 20%; background-color: gray; border-color:#808080">※Report Error</button>
+				
+				{% elif product.p_type != 'ERR_001' and product.cal=='ADD' %}
+				<button type="submit" value="submit" onclick="report();" class="btn btn-primary btn-block text-uppercase mb-3" style="width:60%; margin-left: 20%; background-color: #337ab7; border-color:#2e6da4">※Report Error</button>
+				
+				{% endif %}
+
+
+
+				<button type="submit" value="submit" onclick="close_window();return false;" class="btn btn-primary btn-block text-uppercase mb-3" style="width: 60%; margin-left: 20%; margin-top: 5%; background-color: gray; border-color:#808080 ">Close</button>
+
+			</div>
+		</form>
+	</div>
+
+<script type="text/javascript">
+	function close_window() {
+        window.close();
+	}
+
+	function checkout() {
+		if (confirm("출고 하시겠습니까?") == true) {
+            opener.location.href = "/view_detail/{{product.ID}}/checkout";
+            window.close();
+		} else {
+			return false;
+        }
+	}
+    //if (confirm(" [ " + {{ product.p_type }}+" ] 을 [ ERR_001 ]로 수정합니다.") == true) {
+	function report() {
+		if (confirm("[ ERR_001 ]로 수정합니다.") == true) {
+			opener.location.href = "/view_detail/{{product.ID}}/report";
+			window.close();
+        } else {
+			return false;
+        }
+    }
+
+
+</script>
+
+
+
+
+</body>
+</html>

@@ -782,7 +782,7 @@ class CameraProcess( Process, WindowClass, NetFunc):
             print('Finally Closed')
                 
 if __name__ == '__main__':
-    server_ip = '192.168.0.84'
+    server_ip = '192.168.0.125'
     server_port = 9000
     M2Cque = Queue() # MachineProcess to CameraProcess Queue
     C2Mque = Queue() # CameraProcess to MachineProcess Queue
