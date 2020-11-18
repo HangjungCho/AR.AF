@@ -181,7 +181,7 @@
 	}
     //if (confirm(" [ " + {{ product.p_type }}+" ] 을 [ ERR_001 ]로 수정합니다.") == true) {
 	function report() {
-		if (confirm("[ ERR_001 ]로 수정합니다.") == true) {
+		if (confirm("제품 결함을 보고하시겠습니까?") == true) {
 			opener.location.href = "/view_detail/{{product.ID}}/report";
 			window.close();
         } else {
