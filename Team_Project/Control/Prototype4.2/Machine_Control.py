@@ -213,7 +213,7 @@ class Conveyor_main(Thread):
                 self.main_conveyor_On()
                 if (Check2 or Check3) == 1 :
                     self.main_conveyor_Off()
-                    time.sleep(5)
+                    time.sleep(3)
             else:
                 self.main_conveyor_Off()
                 
@@ -470,44 +470,33 @@ class MachineProcess(Process):
         self.Run2que = Run2que
         self.Item1que = Item1que
         self.Item2que = Item2que
-        self.conveyor_main = Conveyor_main()
-        self.conveyor1 = Conveyor1()
-        self.conveyor2 = Conveyor2()
-        self.push1 = PushMotor1()
-        self.push2 = PushMotor2()
-        self.IR1 = IRSensor1(self.M2Cque, self.C2Mque)
-        self.IR2 = IRSensor2(self.C2Mque, self.item_list)
-        self.IR3 = IRSensor3(self.C2Mque, self.item_list)
-        self.CG = Change_Global(self.Run1que, self.Run2que, self.Item1que, self.Item2que)
         print( '[MachineProcess __init__]' )
 
     def __del__( self ):
-        self.conveyor_main.join()
-        self.conveyor1.join()
-        self.conveyor2.join()
-        self.push1.join()
-        self.push2.join()
-        self.IR1.join()
-        self.IR2.join()
-        self.IR3.join()
-        self.CG.join()
-        print(self.conveyor_main.is_alive())
         print( '[MachineProcess __del__]' )
 
     def run(self):
 
-
+        conveyor_main = Conveyor_main()
+        conveyor1 = Conveyor1()
+        conveyor2 = Conveyor2()
+        push1 = PushMotor1()
+        push2 = PushMotor2()
+        IR1 = IRSensor1(self.M2Cque, self.C2Mque)
+        IR2 = IRSensor2(self.C2Mque, self.item_list)
+        IR3 = IRSensor3(self.C2Mque, self.item_list)
+        CG = Change_Global(self.Run1que, self.Run2que, self.Item1que, self.Item2que)
 
         # thread start
-        self.conveyor_main.start()
-        self.conveyor1.start()
-        self.conveyor2.start()
-        self.push1.start()
-        self.push2.start()
-        self.IR1.start()
-        self.IR2.start()
-        self.IR3.start()
-        self.CG.start()
+        conveyor_main.start()
+        conveyor1.start()
+        conveyor2.start()
+        push1.start()
+        push2.start()
+        IR1.start()
+        IR2.start()
+        IR3.start()
+        CG.start()
 
 
     #화면을 띄우는데 사용되는 Class 선언
@@ -760,12 +749,12 @@ class CameraProcess( Process, WindowClass, NetFunc):
         cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 
-        # json_file = open("model.json", 'r')
-        # loaded_model_json = json_file.read()
-        # json_file.close()
-        # model = model_from_json(loaded_model_json)
-        # model.load_weights("model.h5")
-        model = load_model("initial_model.hdf5")
+        json_file = open("model.json", 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        model = model_from_json(loaded_model_json)
+        model.load_weights("model.h5")
+        # model = load_model("13-0.0434.hdf5")
 
         try:
             while True:
