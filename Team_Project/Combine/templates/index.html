@@ -43,7 +43,7 @@
         }
     </style>
 
-    <!--<meta http-equiv="refresh" content="5">-->
+    <meta http-equiv="refresh" content="10">
 
 
 </head>
@@ -671,7 +671,7 @@
     <script>
         function autoRefresh_sample_div() {
             var currentLocation = window.location;
-            $("#chartdiv").fadeOut('slow').load(currentLocation + ' #chartdiv').fadeIn("slow");
+            $("#reset").fadeOut('slow').load(currentLocation + ' #reset').fadeIn("slow");
         }
         setInterval('autoRefresh_sample_div()', 3000); //3초 후 새로고침
     </script>
