@@ -127,6 +127,7 @@
                 </form>
                 <!-- Navigation -->
                 <ul class="navbar-nav">
+                    {% if session['user_id'] == 1 %}
                     <li class="nav-item  active ">
                         <a class="nav-link  active " href="/main">
                             <i class="ni ni-tv-2 text-primary"></i> Dashboard
@@ -143,6 +144,19 @@
                             <span class="nav-link-text">Logout</span>
                         </a>
                     </li>
+                    {% elif session['user_id'] == 3 %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="/productmanagement">
+                            <i class="ni ni-planet text-blue"></i> Product Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./logout">
+                            <i class="ni ni-user-run text-red"></i>
+                            <span class="nav-link-text">Logout</span>
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <!-- Divider -->
                 <hr class="my-3">
