@@ -18,6 +18,9 @@ import sys
 import os
 import RPi.GPIO as GPIO
 
+import subprocess
+import signal
+
 # Machine Process global variations
 Check1 = 0
 Check2 = 0
@@ -148,6 +151,10 @@ class Ui_Dialog(object):
         self.Delete_combobox.addItem("")
         self.Delete_combobox.addItem("")
         self.Delete_combobox.addItem("")
+        self.ARAF = QtWidgets.QLabel(Dialog)
+        self.ARAF.setGeometry(QtCore.QRect(1360, 450, 180, 48))
+        self.ARAF.setText("")
+        self.ARAF.setObjectName("ARAF")
         self.retranslateUi(Dialog)
         self.type_1.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -206,7 +213,7 @@ class Conveyor_main(Thread):
                 self.main_conveyor_On()
                 if (Check2 or Check3) == 1 :
                     self.main_conveyor_Off()
-                    time.sleep(2)
+                    time.sleep(3)
             else:
                 self.main_conveyor_Off()
                 
@@ -520,6 +527,11 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         
         self.pushButton.clicked.connect(self.addComboBoxItem)
         self.pushButton_2.clicked.connect(self.deleteComboBoxItem)
+
+        self.qPixmapFileVar2 = QPixmap()
+        self.qPixmapFileVar2.load("ARAF_Logo2.png")
+        self.qPixmapFileVar2 = self.qPixmapFileVar2.scaled(180,48)
+        self.ARAF.setPixmap(QtGui.QPixmap(self.qPixmapFileVar2))#image path
         
     def __del__( self ):
         print( '[WindowClass __del__]' )
@@ -575,11 +587,14 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         self.Run2que.put(0)
         GPIO.cleanup()
         time.sleep(0.5)
-        
-        sys.exit(MP.close())
-        #sys.exit(app.exec_())
+        # os.system('taskkill /f /im python')
+        sys.exit(app.exec_())
+        # sys.exit(MP.close())
         os._exit(0)
-        
+        # process = subprocess.Popen("MachineProcess", shell=True)
+        # os.kill(process.pid, signal.SIGINT)
+        # sys.exit(app.exec_())
+        # os._exit(0)
         
     def combo1Function(self) :
         global Item_Dictionary, Item1
@@ -604,14 +619,15 @@ class WindowClass(QMainWindow, Ui_Dialog) :
         self.Delete_combobox.addItem(item_text)
         index = self.Delete_combobox.findText(item_text)
         Item_Dictionary[index] = item_text
-        self.textEdit.append("Item Added")
+        self.textEdit.append("{} Added".format(item_text))
 
     def deleteComboBoxItem(self) :
         self.delidx = self.Delete_combobox.currentIndex()
+        del_text = self.Delete_combobox.currentText()
         self.type_1.removeItem(self.delidx)
         self.type_2.removeItem(self.delidx)
         self.Delete_combobox.removeItem(self.delidx)
-        self.textEdit.append("Item Deleted")
+        self.textEdit.append("{} Deleted".format(del_text))
 
 class CameraProcess( Process, WindowClass, NetFunc):
     def __init__( self, host, port, M2Cque, C2Mque, Run1que, Run2que, Item1que, Item2que):
@@ -738,7 +754,7 @@ class CameraProcess( Process, WindowClass, NetFunc):
         # json_file.close()
         # model = model_from_json(loaded_model_json)
         # model.load_weights("model.h5")
-        model = load_model("initial_model.hdf5")
+        model = load_model("test.hdf5")
 
         try:
             while True:
