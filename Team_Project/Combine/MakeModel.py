@@ -93,7 +93,7 @@ model.summary()
 # run training
 history = model.fit_generator(train_generator,
                     steps_per_epoch=2, 
-                    epochs=2,
+                    epochs=20,
                     validation_data=test_generator,
                     validation_steps=4,
                     callbacks=[early_stopping_callback, checkpointer])
