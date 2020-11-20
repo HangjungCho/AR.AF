@@ -202,7 +202,15 @@ def login():
         if user_data is not None : # 정상적으로 로그인이 된 경우 실행되는 창
             session['user_id']=user_data.ID
             session['logged_in']=True
-    
+            if session['user_id'] == 3:
+                user_data = User.query.filter_by(ID = session['user_id']).first()
+                product_data = Quantity.query.filter_by(error=0, cal='ADD').all()
+                categories = Count.query.filter().all()
+                # categories = Count.query.filter(Count.p_type.isnot('ERR_001')).all()
+                return render_template("product_management.html", user=user_data,
+                                                                  products = product_data,
+                                                                  categories = categories)
+
     #           productlist = db2.session.query(Quantity).filter(Quantity.p_type.like('%')).all()
             return redirect(url_for('home'))
 #             return render_template("index.html", user=user_data, products = product_data)
