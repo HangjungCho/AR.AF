@@ -114,7 +114,7 @@ class ClientImgProcess( Process ):
             cursor = conn.cursor()
             cursor.execute( 'SELECT num FROM Count WHERE p_type = ?', (product_type,))
             count = cursor.fetchall()
-
+        print(count)
 
         # depart information
         cal = product[7:10]
@@ -140,6 +140,8 @@ class ClientImgProcess( Process ):
                 cursor.execute( 'INSERT INTO Count(p_type, num, img) VALUES(?, ?, ?)', (product_type, 0, web_img_name) )
                 cursor.execute( 'INSERT INTO ErrStat(p_type, num) VALUES(?, ?)', (product_type, 0) )
                 conn.commit()
+                count.append([])
+                count[0].append(0)
 
 
         cursor.execute( 'SELECT num FROM ErrStat WHERE p_type = ?', (product_type,))
@@ -160,7 +162,7 @@ class ClientImgProcess( Process ):
             
             elif error == 0:
                 data = product_type, cal, (count[0][0]+1), error, realdate, realtime, db_img
-                print('data : {}'.format(data))
+                
                 # 에러가 발생할 경우 Count 테이블과 Quantity 테이블의 수량 항목이 증가해야 한다.
                 cursor.execute( 'UPDATE  Count SET num = ? WHERE p_type = ? ', (count[0][0]+1, product_type) )
                 cursor.execute( 'INSERT INTO Quantity(p_type, cal, count, error, date, time, img) VALUES(?, ?, ?, ?, ?, ?, ?)', data )
@@ -210,7 +212,7 @@ class ClientImgProcess( Process ):
         #     sys.exit()
 
 if __name__ == '__main__':
-    server_ip = '192.168.0.125'
+    server_ip = '192.168.0.84'
     server_port = 9000
     serverManageProcess = ReceptionProcess( server_ip, server_port )
     serverManageProcess.start()
